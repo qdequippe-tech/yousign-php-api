@@ -1,0 +1,37 @@
+{
+    "name": "qdequippe/yousign-php-api",
+    "description": "PHP Yousign Client",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Quentin Dequippe",
+            "email": "quentin@dequippe.tech"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Qdequippe\\Yousign\\Api\\": "generated/"
+        }
+    },
+    "require": {
+        "php": ">= 7.2",
+        "jane-php/open-api-runtime": "~6.3.0",
+        "psr/http-client-implementation": "*",
+        "php-http/client-common": "^1.9 || ^2.0",
+        "php-http/discovery": "^1.7",
+        "php-http/multipart-stream-builder": "^1.1"
+    },
+    "require-dev": {
+        "jane-php/open-api-2": "~6.3.0",
+        "symfony/http-client": "^4.3.3 || ^5.1",
+        "nyholm/psr7": "^1.2",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "symfony/phpunit-bridge": "^5.2",
+        "opis/json-schema": "^1.0",
+        "symfony/console": "^5.1",
+        "symfony/contracts": "^2.1",
+        "symfony/process": "^5.1",
+        "symfony/string": "^5.1"
+    }
+}
