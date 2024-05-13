@@ -1,30 +1,35 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Qdequippe\Yousign\Api\Runtime\Normalizer;
 
-use Jane\JsonSchemaRuntime\Reference;
+use Jane\Component\JsonSchemaRuntime\Reference;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ReferenceNormalizer implements NormalizerInterface
-{
-    /**
-     * {@inheritdoc}
-     */
-    public function normalize($object, $format = null, array $context = [])
+if (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR_VERSION === 6 && Kernel::MINOR_VERSION === 4) {
+    class ReferenceNormalizer implements NormalizerInterface
     {
-        $ref = [];
-        $ref['$ref'] = (string) $object->getReferenceUri();
+        public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+        {
+            return ['$ref' => (string) $object->getReferenceUri()];
+        }
 
-        return $ref;
+        public function supportsNormalization($data, $format = null, array $context = []): bool
+        {
+            return $data instanceof Reference;
+        }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsNormalization($data, $format = null)
+} else {
+    class ReferenceNormalizer implements NormalizerInterface
     {
-        return $data instanceof Reference;
+        public function normalize($object, $format = null, array $context = []): string|int|float|bool|\ArrayObject|array|null
+        {
+            return ['$ref' => (string) $object->getReferenceUri()];
+        }
+
+        public function supportsNormalization($data, $format = null, array $context = []): bool
+        {
+            return $data instanceof Reference;
+        }
     }
 }

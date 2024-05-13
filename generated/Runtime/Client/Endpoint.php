@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Qdequippe\Yousign\Api\Runtime\Client;
 
 use Psr\Http\Message\ResponseInterface;
@@ -14,6 +12,8 @@ interface Endpoint
      *
      * Return value consist of an array where the first item will be a list of headers to add on the request (like the Content Type)
      * And the second value consist of the body object.
+     *
+     * @param mixed|null $streamFactory
      */
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array;
 

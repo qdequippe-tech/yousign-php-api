@@ -1,11 +1,9 @@
 <?php
 
-$directory = __DIR__ . '/generated/';
-
 return [
-    'openapi-file' => 'https://swagger.yousign.com/swagger.json',
+    'openapi-file' => 'https://developers.yousign.com/openapi/60c6f824bd87e600229f054b',
     'namespace' => 'Qdequippe\Yousign\Api',
-    'directory' => $directory,
+    'directory' =>  __DIR__ . '/generated/',
     'reference' => true,
     'strict' => false,
     'clean-generated' => true,

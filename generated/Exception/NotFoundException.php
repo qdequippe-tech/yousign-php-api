@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Qdequippe\Yousign\Api\Exception;
 
 class NotFoundException extends \RuntimeException implements ClientException

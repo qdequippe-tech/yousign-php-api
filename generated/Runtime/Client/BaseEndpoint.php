@@ -1,15 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Qdequippe\Yousign\Api\Runtime\Client;
 
 use Http\Message\MultipartStream\MultipartStreamBuilder;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\SerializerInterface;
 
 abstract class BaseEndpoint implements Endpoint
 {
+    protected $formParameters = [];
     protected $queryParameters = [];
     protected $headerParameters = [];
     protected $body;
@@ -22,7 +22,7 @@ abstract class BaseEndpoint implements Endpoint
 
     abstract public function getAuthenticationScopes(): array;
 
-    abstract protected function transformResponseBody(string $body, int $status, SerializerInterface $serializer, ?string $contentType = null);
+    abstract protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null);
 
     protected function getExtraHeaders(): array
     {
@@ -33,7 +33,7 @@ abstract class BaseEndpoint implements Endpoint
     {
         $optionsResolved = $this->getQueryOptionsResolver()->resolve($this->queryParameters);
         $optionsResolved = array_map(function ($value) {
-            return null !== $value ? $value : '';
+            return $value ?? '';
         }, $optionsResolved);
 
         return http_build_query($optionsResolved, '', '&', \PHP_QUERY_RFC3986);

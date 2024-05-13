@@ -1,22 +1,33 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Qdequippe\Yousign\Api\Endpoint;
 
-class GetWorkspaces extends \Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint implements \Qdequippe\Yousign\Api\Runtime\Client\Endpoint
+use Psr\Http\Message\ResponseInterface;
+use Qdequippe\Yousign\Api\Exception\GetWorkspacesBadRequestException;
+use Qdequippe\Yousign\Api\Exception\GetWorkspacesForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetWorkspacesUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetWorkspaces200Response;
+use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
+use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
+use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class GetWorkspaces extends BaseEndpoint implements Endpoint
 {
-    use \Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
+    use EndpointTrait;
 
     /**
-     * @param array $headerParameters {
+     * @param array $queryParameters {
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @var string $after After cursor (pagination)
+     *             }
      */
-    public function __construct(array $headerParameters = [])
+    public function __construct(array $queryParameters = [])
     {
-        $this->headerParameters = $headerParameters;
+        $this->queryParameters = $queryParameters;
     }
 
     public function getMethod(): string
@@ -29,7 +40,7 @@ class GetWorkspaces extends \Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint i
         return '/workspaces';
     }
 
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         return [[], null];
     }
@@ -39,31 +50,46 @@ class GetWorkspaces extends \Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint i
         return ['Accept' => ['application/json']];
     }
 
-    protected function getHeadersOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
+    protected function getQueryOptionsResolver(): OptionsResolver
     {
-        $optionsResolver = parent::getHeadersOptionsResolver();
-        $optionsResolver->setDefined(['Authorization']);
-        $optionsResolver->setRequired(['Authorization']);
+        $optionsResolver = parent::getQueryOptionsResolver();
+        $optionsResolver->setDefined(['after']);
+        $optionsResolver->setRequired([]);
         $optionsResolver->setDefaults([]);
-        $optionsResolver->setAllowedTypes('Authorization', ['string']);
+        $optionsResolver->addAllowedTypes('after', ['string']);
 
         return $optionsResolver;
     }
 
     /**
-     * {@inheritdoc}
+     * @return GetWorkspaces200Response|null
      *
-     * @return \Qdequippe\Yousign\Api\Model\WorkspaceOutput[]|null
+     * @throws GetWorkspacesBadRequestException
+     * @throws GetWorkspacesUnauthorizedException
+     * @throws GetWorkspacesForbiddenException
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
-        if (200 === $status) {
-            return $serializer->deserialize($body, 'Qdequippe\\Yousign\\Api\\Model\\WorkspaceOutput[]', 'json');
+        $status = $response->getStatusCode();
+        $body = (string) $response->getBody();
+        if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            return $serializer->deserialize($body, GetWorkspaces200Response::class, 'json');
         }
+        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetWorkspacesBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetWorkspacesUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+        }
+        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetWorkspacesForbiddenException($response);
+        }
+
+        return null;
     }
 
     public function getAuthenticationScopes(): array
     {
-        return [];
+        return ['bearerAuth'];
     }
 }

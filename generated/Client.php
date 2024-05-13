@@ -1,1178 +1,1429 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Qdequippe\Yousign\Api;
 
-class Client extends \Qdequippe\Yousign\Api\Runtime\Client\Client
+use Http\Client\Common\Plugin\AddHostPlugin;
+use Http\Client\Common\Plugin\AddPathPlugin;
+use Http\Client\Common\PluginClient;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
+use Psr\Http\Message\ResponseInterface;
+use Qdequippe\Yousign\Api\Endpoint\DeleteContactsContactId;
+use Qdequippe\Yousign\Api\Endpoint\DeleteCustomExperience;
+use Qdequippe\Yousign\Api\Endpoint\DeleteCustomExperienceLogo;
+use Qdequippe\Yousign\Api\Endpoint\DeleteElectronicSealImage;
+use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestId;
+use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdApproversApproverId;
+use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentId;
+use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId;
+use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdMetadata;
+use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdSignersSignerId;
+use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments;
+use Qdequippe\Yousign\Api\Endpoint\DeleteWebhooksWebhookId;
+use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealAuditTrail;
+use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealDocument;
+use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealImage;
+use Qdequippe\Yousign\Api\Endpoint\GetConsumptions;
+use Qdequippe\Yousign\Api\Endpoint\GetConsumptionsExport;
+use Qdequippe\Yousign\Api\Endpoint\GetContacts;
+use Qdequippe\Yousign\Api\Endpoint\GetContactsContactId;
+use Qdequippe\Yousign\Api\Endpoint\GetCustomExperiences;
+use Qdequippe\Yousign\Api\Endpoint\GetCustomExperiencesCustomExperienceId;
+use Qdequippe\Yousign\Api\Endpoint\GetElectronicSeal;
+use Qdequippe\Yousign\Api\Endpoint\GetElectronicSealAuditTrail;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequests;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestId;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdApproversApproverId;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdAuditTrailsDownload;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdDocuments;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdDocumentsDocumentId;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownload;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdDocumentsDownload;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdFollowers;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdMetadata;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdSigners;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId;
+use Qdequippe\Yousign\Api\Endpoint\GetSignersSignerIdAuditTrailsDownload;
+use Qdequippe\Yousign\Api\Endpoint\GetSignersSignersId;
+use Qdequippe\Yousign\Api\Endpoint\GetTemplates;
+use Qdequippe\Yousign\Api\Endpoint\GetUsers;
+use Qdequippe\Yousign\Api\Endpoint\GetWebhooks;
+use Qdequippe\Yousign\Api\Endpoint\GetWebhooksWebhookId;
+use Qdequippe\Yousign\Api\Endpoint\GetWorkspaces;
+use Qdequippe\Yousign\Api\Endpoint\ListElectronicSealImages;
+use Qdequippe\Yousign\Api\Endpoint\PatchContactsContactId;
+use Qdequippe\Yousign\Api\Endpoint\PatchCustomExperienceLogo;
+use Qdequippe\Yousign\Api\Endpoint\PatchCustomExperiencesCustomExperienceId;
+use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestId;
+use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdApproversApproverId;
+use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentId;
+use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdSignersSignerId;
+use Qdequippe\Yousign\Api\Endpoint\PatchWebhooksWebhookId;
+use Qdequippe\Yousign\Api\Endpoint\PostContact;
+use Qdequippe\Yousign\Api\Endpoint\PostCustomExperience;
+use Qdequippe\Yousign\Api\Endpoint\PostDocuments;
+use Qdequippe\Yousign\Api\Endpoint\PostElectronicSeals;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequests;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdApprovers;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdCancel;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdDocumentRequests;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdDocuments;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdFollowers;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdMetadata;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdReactivate;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignatures;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSigners;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder;
+use Qdequippe\Yousign\Api\Endpoint\PostWebhooksSubscriptions;
+use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdMetadata;
+use Qdequippe\Yousign\Api\Endpoint\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId;
+use Qdequippe\Yousign\Api\Model\CreateContact;
+use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
+use Qdequippe\Yousign\Api\Model\CreateDocument;
+use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
+use Qdequippe\Yousign\Api\Model\CreateFollowersInner;
+use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
+use Qdequippe\Yousign\Api\Model\CreateSignatureRequestMetadata;
+use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
+use Qdequippe\Yousign\Api\Model\CreateWebhookSubscription;
+use Qdequippe\Yousign\Api\Model\Document;
+use Qdequippe\Yousign\Api\Model\Follower;
+use Qdequippe\Yousign\Api\Model\PatchCustomExperienceLogoRequest;
+use Qdequippe\Yousign\Api\Model\PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest;
+use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdCancelRequest;
+use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest;
+use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdReactivateRequest;
+use Qdequippe\Yousign\Api\Model\Signer;
+use Qdequippe\Yousign\Api\Model\UpdateContact;
+use Qdequippe\Yousign\Api\Model\UpdateCustomExperience;
+use Qdequippe\Yousign\Api\Model\UpdateDocument;
+use Qdequippe\Yousign\Api\Model\UpdateSignatureRequest;
+use Qdequippe\Yousign\Api\Model\UpdateSignatureRequestMetadata;
+use Qdequippe\Yousign\Api\Model\UpdateSigner;
+use Qdequippe\Yousign\Api\Model\UpdateWebhookSubscription;
+use Qdequippe\Yousign\Api\Model\UploadElectronicSealDocument;
+use Qdequippe\Yousign\Api\Model\UploadElectronicSealImage;
+use Qdequippe\Yousign\Api\Model\WebhookSubscription;
+use Qdequippe\Yousign\Api\Normalizer\JaneObjectNormalizer;
+use Symfony\Component\Serializer\Encoder\JsonDecode;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Serializer;
+
+class Client extends Runtime\Client\Client
 {
     /**
-     * @param array $headerParameters {
+     * @param array $queryParameters {
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @var string $status Filter by status
+     * @var string $after After cursor (pagination)
+     * @var int    $limit the limit of items count to retrieve
+     * @var string $external_id Filter by external_id
+     * @var array  $source[] Filter by source
+     * @var string $q Search on name
+     *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\OrganizationOutput[]|\Psr\Http\Message\ResponseInterface|null
+     * @return Model\GetSignatureRequests200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsBadRequestException
+     * @throws Exception\GetSignatureRequestsUnauthorizedException
+     * @throws Exception\GetSignatureRequestsForbiddenException
      */
-    public function getOrganizations(array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getSignatureRequests(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetOrganizations($headerParameters), $fetch);
+        return $this->executeEndpoint(new GetSignatureRequests($queryParameters), $fetch);
     }
 
     /**
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\WorkspaceOutput[]|\Psr\Http\Message\ResponseInterface|null
+     * @return Model\SignatureRequest|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsBadRequestException
+     * @throws Exception\PostSignatureRequestsUnauthorizedException
+     * @throws Exception\PostSignatureRequestsForbiddenException
+     * @throws Exception\PostSignatureRequestsNotFoundException
      */
-    public function getWorkspaces(array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequests(?CreateSignatureRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetWorkspaces($headerParameters), $fetch);
+        return $this->executeEndpoint(new PostSignatureRequests($requestBody), $fetch);
     }
 
     /**
-     * @param array $headerParameters {
+     * Delete or permanent delete a signature request (except in approval and ongoing status).
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @param string $signatureRequestId Signature Request Id
+     * @param array  $queryParameters    {
+     *
+     * @var bool $permanent_delete If true it will permanently delete the Signature Request. It will no longer be retrievable.
+     *           }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\UserOutput[]|\Psr\Http\Message\ResponseInterface|null
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdNotFoundException
      */
-    public function getUsers(array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function deleteSignatureRequestsSignatureRequestId(string $signatureRequestId, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetUsers($headerParameters), $fetch);
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestId($signatureRequestId, $queryParameters), $fetch);
     }
 
     /**
-     * @param \Qdequippe\Yousign\Api\Model\UserInput $body
-     * @param array                                  $headerParameters {
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
+     * @return Model\SignatureRequest|ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\UserOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdNotFoundException
      */
-    public function postUser(Model\UserInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getSignatureRequestsSignatureRequestId(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostUser($body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestId($signatureRequestId), $fetch);
     }
 
     /**
-     * @param array $headerParameters {
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @return Model\SignatureRequest|ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdBadRequestException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdUnauthorizedException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdForbiddenException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdNotFoundException
      */
-    public function deleteUserById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function patchSignatureRequestsSignatureRequestId(string $signatureRequestId, ?UpdateSignatureRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\DeleteUserById($id, $headerParameters), $fetch);
+        return $this->executeEndpoint(new PatchSignatureRequestsSignatureRequestId($signatureRequestId, $requestBody), $fetch);
     }
 
     /**
-     * @param array $headerParameters {
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @return Model\SignatureRequestActivated|ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\UserOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignaturesBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignaturesUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignaturesForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignaturesNotFoundException
      */
-    public function getUserById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequestsSignatureRequestIdSignatures(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetUserById($id, $headerParameters), $fetch);
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignatures($signatureRequestId), $fetch);
     }
 
     /**
-     * @param \Qdequippe\Yousign\Api\Model\UserInput $body
-     * @param array                                  $headerParameters {
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
+     * @return Model\SignatureRequest|ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\UserOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelNotFoundException
      */
-    public function putUserById(string $id, Model\UserInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequestsSignatureRequestIdCancel(string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdCancelRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PutUserById($id, $body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdCancel($signatureRequestId, $requestBody), $fetch);
     }
 
     /**
-     * @param array $headerParameters {
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @return Model\SignatureRequest|ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\UserGroup[]|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateNotFoundException
      */
-    public function getUserGroups(array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequestsSignatureRequestIdReactivate(string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdReactivateRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetUserGroups($headerParameters), $fetch);
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdReactivate($signatureRequestId, $requestBody), $fetch);
     }
 
     /**
-     * @param array $headerParameters {
+     * @param string $signatureRequestId Signature Request Id
+     * @param array  $queryParameters    {
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @var string $nature Filter by nature
+     *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\UserGroup|\Psr\Http\Message\ResponseInterface|null
+     * @return Document[]|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsNotFoundException
      */
-    public function getUserGroupById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getSignatureRequestsSignatureRequestIdDocuments(string $signatureRequestId, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetUserGroupById($id, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdDocuments($signatureRequestId, $queryParameters), $fetch);
     }
 
     /**
-     * Used to upload a file in base64 on our platform.
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @param \Qdequippe\Yousign\Api\Model\FileInput $body
-     * @param array                                  $headerParameters {
+     * @return Document|ResponseInterface|null
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\FileOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsNotFoundException
      */
-    public function postFile(Model\FileInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequestsSignatureRequestIdDocuments(string $signatureRequestId, ?CreateDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostFile($body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdDocuments($signatureRequestId, $requestBody), $fetch);
     }
 
     /**
-     * Returns all the information regarding the File but without its content (for performance issue).
+     * @param string $signatureRequestId Signature Request Id
+     * @param array  $queryParameters    {
      *
-     * @param array $headerParameters {
+     * @var string $version specify documents version to download, "completed" is only available when the signature request status is "done"
+     * @var bool   $archive Force zip archive download
+     *             }
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept Accept content header application/zip, application/pdf|application/json
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @return ResponseInterface|null
      *
-     * @return \Qdequippe\Yousign\Api\Model\FileOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadNotFoundException
      */
-    public function getFileById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getSignatureRequestsSignatureRequestIdDocumentsDownload(string $signatureRequestId, array $queryParameters = [], string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetFileById($id, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdDocumentsDownload($signatureRequestId, $queryParameters, $accept), $fetch);
     }
 
     /**
-     * Used to get the base64 content of a file.
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentId         Document Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @param array $headerParameters {
+     * @return ResponseInterface|null
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException
      */
-    public function getFilesByIdDownload(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function deleteSignatureRequestsSignatureRequestIdDocumentsDocumentId(string $signatureRequestId, string $documentId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetFilesByIdDownload($id, $headerParameters), $fetch);
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentId($signatureRequestId, $documentId), $fetch);
     }
 
     /**
-     * Duplicate a file. It will be create a clone of this file, with a new ID.
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentId         Document Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @param array $headerParameters {
+     * @return Document|ResponseInterface|null
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdDocumentsDocumentId(string $signatureRequestId, string $documentId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdDocumentsDocumentId($signatureRequestId, $documentId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentId         Document Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Document|ResponseInterface|null
+     *
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdBadRequestException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException
+     */
+    public function patchSignatureRequestsSignatureRequestIdDocumentsDocumentId(string $signatureRequestId, string $documentId, ?UpdateDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchSignatureRequestsSignatureRequestIdDocumentsDocumentId($signatureRequestId, $documentId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentId         Document Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept             Accept content header application/pdf|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownload(string $signatureRequestId, string $documentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownload($signatureRequestId, $documentId, $accept), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentId         Document Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Document|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace(string $signatureRequestId, string $documentId, ?PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace($signatureRequestId, $documentId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentId         Document ID
+     * @param array  $queryParameters    {
+     *
+     * @var array  $types[] Filter by Field type
+     * @var string $after After cursor (pagination)
+     *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\FileOutput|\Psr\Http\Message\ResponseInterface|null
+     * @return Model\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsNotFoundException
      */
-    public function postFilesByIdDuplicate(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields(string $signatureRequestId, string $documentId, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostFilesByIdDuplicate($id, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields($signatureRequestId, $documentId, $queryParameters), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentId         Document ID
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields(string $signatureRequestId, string $documentId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields($signatureRequestId, $documentId, $requestBody), $fetch);
+    }
+
+    /**
+     * Delete a document's field in a Signature Request (in draft status).
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentId         Document Id
+     * @param string $fieldId            Field Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId(string $signatureRequestId, string $documentId, string $fieldId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId($signatureRequestId, $documentId, $fieldId), $fetch);
+    }
+
+    /**
+     * Update a document's field in a Signature Request (in draft status).
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentId         Document Id
+     * @param string $fieldId            Field Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdBadRequestException
+     * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdUnauthorizedException
+     * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdForbiddenException
+     * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdNotFoundException
+     */
+    public function updateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId(string $signatureRequestId, string $documentId, string $fieldId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId($signatureRequestId, $documentId, $fieldId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\SignerDocumentRequest|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdDocumentRequests(string $signatureRequestId, ?CreateSignerDocumentRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdDocumentRequests($signatureRequestId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $signerDocumentId   Signer Document Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept             Accept content header application/pdf|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId(string $signatureRequestId, string $signerId, string $signerDocumentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId($signatureRequestId, $signerId, $signerDocumentId, $accept), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Signer[]|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSigners(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSigners($signatureRequestId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Signer|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdSigners(string $signatureRequestId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSigners($signatureRequestId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdSignersSignerId(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdSignersSignerId($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Signer|ResponseInterface|null
+     *
+     * @throws Exception\GetSignersSignersIdUnauthorizedException
+     * @throws Exception\GetSignersSignersIdForbiddenException
+     * @throws Exception\GetSignersSignersIdNotFoundException
+     */
+    public function getSignersSignersId(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignersSignersId($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Signer|ResponseInterface|null
+     *
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdBadRequestException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdUnauthorizedException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdForbiddenException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdNotFoundException
+     */
+    public function patchSignatureRequestsSignatureRequestIdSignersSignerId(string $signatureRequestId, string $signerId, ?UpdateSigner $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchSignatureRequestsSignatureRequestIdSignersSignerId($signatureRequestId, $signerId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept             Accept content header application/pdf|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadBadRequestException
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadUnauthorizedException
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadForbiddenException
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadNotFoundException
+     */
+    public function getSignersSignerIdAuditTrailsDownload(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetSignersSignerIdAuditTrailsDownload($signatureRequestId, $signerId, $accept), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\SignerAuditTrail|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Approver|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdApprovers(string $signatureRequestId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdApprovers($signatureRequestId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $approverId         Approver Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdApproversApproverId($signatureRequestId, $approverId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $approverId         Approver Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Approver|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdApproversApproverId($signatureRequestId, $approverId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $approverId         Approver Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Approver|ResponseInterface|null
+     *
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdBadRequestException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
+     */
+    public function patchSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, ?PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchSignatureRequestsSignatureRequestIdApproversApproverId($signatureRequestId, $approverId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetSignatureRequestsSignatureRequestIdFollowers200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdFollowersUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdFollowersForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdFollowersNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdFollowers(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdFollowers($signatureRequestId), $fetch);
+    }
+
+    /**
+     * @param string                      $signatureRequestId Signature Request Id
+     * @param CreateFollowersInner[]|null $requestBody
+     * @param string                      $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Follower[]|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdFollowers(string $signatureRequestId, ?array $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdFollowers($signatureRequestId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept             Accept content header application/zip, application/pdf|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdAuditTrailsDownload(string $signatureRequestId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdAuditTrailsDownload($signatureRequestId, $accept), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdMetadataForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdMetadataNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdMetadata($signatureRequestId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Metadata|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdMetadataForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdMetadataNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdMetadata($signatureRequestId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Metadata|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, ?CreateSignatureRequestMetadata $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdMetadata($signatureRequestId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Metadata|ResponseInterface|null
+     *
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataBadRequestException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataForbiddenException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataNotFoundException
+     */
+    public function putSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, ?UpdateSignatureRequestMetadata $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PutSignatureRequestsSignatureRequestIdMetadata($signatureRequestId, $requestBody), $fetch);
     }
 
     /**
      * @param array $queryParameters {
      *
-     *     @var string $status Return Procedure list based on the status for each Procedure
-     *     @var bool $template Used to get Procedure template list
-     *     @var array $members Get Procedure list for given members (paraph mode)
-     *     @var string $itemsPerPage Number of items per page for the pagination
-     *     @var bool $pagination Enable the pagination
-     *     @var int $page Page of the pagination
-     *     @var string $name Filter by name (contains)
-     *     @var string $members.firstname Filter by member firstname (contains)
-     *     @var string $members.lastname Filter by member lastname (contains)
-     *     @var string $members.phone Filter by member phone (contains)
-     *     @var string $members.email Filter by member email (contains)
-     *     @var string $files.name Filter by file name (contains)
-     *     @var array $createdAt Filter by creation date
-
-     *     @var array $updatedAt Filter by update date
-
-     *     @var array $expiresAt Filter by expire date
-
-     *     @var string $order[createdAt] Order by createdAt
-
-     * }
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @var string $after After cursor (pagination)
+     *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\ProcedureOutput[]|\Psr\Http\Message\ResponseInterface|null
+     * @return Model\GetCustomExperiences200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetCustomExperiencesBadRequestException
+     * @throws Exception\GetCustomExperiencesUnauthorizedException
+     * @throws Exception\GetCustomExperiencesForbiddenException
      */
-    public function getProcedures(array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getCustomExperiences(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetProcedures($queryParameters, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetCustomExperiences($queryParameters), $fetch);
     }
 
     /**
-     * @param \Qdequippe\Yousign\Api\Model\ProcedureInput $body
-     * @param array                                       $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @throws \Qdequippe\Yousign\Api\Exception\PostProcedureBadRequestException
+     * @return Model\CustomExperience|ResponseInterface|null
      *
-     * @return \Qdequippe\Yousign\Api\Model\ProcedureOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\PostCustomExperienceBadRequestException
+     * @throws Exception\PostCustomExperienceUnauthorizedException
+     * @throws Exception\PostCustomExperienceForbiddenException
      */
-    public function postProcedure(Model\ProcedureInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function postCustomExperience(?CreateCustomExperience $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostProcedure($body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new PostCustomExperience($requestBody), $fetch);
     }
 
     /**
-     * @param array $headerParameters {
+     * @param string $customExperienceId Custom Experience Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @return ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\DeleteCustomExperienceBadRequestException
+     * @throws Exception\DeleteCustomExperienceUnauthorizedException
+     * @throws Exception\DeleteCustomExperienceForbiddenException
+     * @throws Exception\DeleteCustomExperienceNotFoundException
      */
-    public function deleteProcedureById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function deleteCustomExperience(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\DeleteProcedureById($id, $headerParameters), $fetch);
+        return $this->executeEndpoint(new DeleteCustomExperience($customExperienceId), $fetch);
     }
 
     /**
-     * @param array $headerParameters {
+     * @param string $customExperienceId Custom Experience Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @return Model\CustomExperience|ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @throws \Qdequippe\Yousign\Api\Exception\GetProcedureByIdNotFoundException
-     *
-     * @return \Qdequippe\Yousign\Api\Model\ProcedureOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\GetCustomExperiencesCustomExperienceIdBadRequestException
+     * @throws Exception\GetCustomExperiencesCustomExperienceIdUnauthorizedException
+     * @throws Exception\GetCustomExperiencesCustomExperienceIdForbiddenException
+     * @throws Exception\GetCustomExperiencesCustomExperienceIdNotFoundException
      */
-    public function getProcedureById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getCustomExperiencesCustomExperienceId(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetProcedureById($id, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetCustomExperiencesCustomExperienceId($customExperienceId), $fetch);
     }
 
     /**
-     * @param \Qdequippe\Yousign\Api\Model\ProcedureInput $body
-     * @param array                                       $headerParameters {
+     * @param string $customExperienceId Custom Experience Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
+     * @return Model\CustomExperience|ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @throws \Qdequippe\Yousign\Api\Exception\PutProcedureByIdBadRequestException
-     * @throws \Qdequippe\Yousign\Api\Exception\PutProcedureByIdNotFoundException
-     *
-     * @return \Qdequippe\Yousign\Api\Model\ProcedureOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\PatchCustomExperiencesCustomExperienceIdBadRequestException
+     * @throws Exception\PatchCustomExperiencesCustomExperienceIdUnauthorizedException
+     * @throws Exception\PatchCustomExperiencesCustomExperienceIdForbiddenException
+     * @throws Exception\PatchCustomExperiencesCustomExperienceIdNotFoundException
      */
-    public function putProcedureById(string $id, Model\ProcedureInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function patchCustomExperiencesCustomExperienceId(string $customExperienceId, ?UpdateCustomExperience $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PutProcedureById($id, $body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new PatchCustomExperiencesCustomExperienceId($customExperienceId, $requestBody), $fetch);
     }
 
     /**
-     * @param \Qdequippe\Yousign\Api\Model\ProcedureDuplicateInput $body
-     * @param array                                                $headerParameters {
+     * @param string $customExperienceId Custom Experience Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
+     * @return ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @throws \Qdequippe\Yousign\Api\Exception\PostProceduresByIdDuplicateNotFoundException
-     *
-     * @return \Qdequippe\Yousign\Api\Model\ProcedureOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\DeleteCustomExperienceLogoBadRequestException
+     * @throws Exception\DeleteCustomExperienceLogoUnauthorizedException
+     * @throws Exception\DeleteCustomExperienceLogoForbiddenException
+     * @throws Exception\DeleteCustomExperienceLogoNotFoundException
      */
-    public function postProceduresByIdDuplicate(string $id, Model\ProcedureDuplicateInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function deleteCustomExperienceLogo(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostProceduresByIdDuplicate($id, $body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new DeleteCustomExperienceLogo($customExperienceId), $fetch);
     }
 
     /**
-     * @param array $queryParameters {
+     * @param string $customExperienceId Custom Experience Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $status Return Procedure list based on the status for each Procedure
-     *     @var string $name Filter by name (contains)
-     *     @var string $members.firstname Filter by member firstname (contains)
-     *     @var string $members.lastname Filter by member lastname (contains)
-     *     @var string $members.phone Filter by member phone (contains)
-     *     @var string $members.email Filter by member email (contains)
-     *     @var string $files.name Filter by file name (contains)
-     *     @var array $createdAt Filter by creation date
-
-     *     @var array $updatedAt Filter by update date
-
-     *     @var array $expiresAt Filter by expire date
-
-     *     @var string $order[createdAt] Order by attribut
-     * }
+     * @return Model\CustomExperience|ResponseInterface|null
      *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\PatchCustomExperienceLogoBadRequestException
+     * @throws Exception\PatchCustomExperienceLogoUnauthorizedException
+     * @throws Exception\PatchCustomExperienceLogoForbiddenException
      */
-    public function getExportProcedure(array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function patchCustomExperienceLogo(string $customExperienceId, ?PatchCustomExperienceLogoRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetExportProcedure($queryParameters, $headerParameters), $fetch);
+        return $this->executeEndpoint(new PatchCustomExperienceLogo($customExperienceId, $requestBody), $fetch);
     }
 
     /**
-     * @param \Qdequippe\Yousign\Api\Model\ProcedureRemindInput $body
-     * @param array                                             $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @throws \Qdequippe\Yousign\Api\Exception\PostProceduresByIdRemindNotFoundException
+     * @return Model\ElectronicSeal|ResponseInterface|null
      *
-     * @return \Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\PostElectronicSealsBadRequestException
+     * @throws Exception\PostElectronicSealsUnauthorizedException
+     * @throws Exception\PostElectronicSealsForbiddenException
      */
-    public function postProceduresByIdRemind(string $id, Model\ProcedureRemindInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function postElectronicSeals(?CreateElectronicSealPayload $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostProceduresByIdRemind($id, $body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new PostElectronicSeals($requestBody), $fetch);
     }
 
     /**
-     * Get a Procedure proof file.
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Psr\Http\Message\ResponseInterface|null
+     * @return Model\ElectronicSeal|ResponseInterface|null
+     *
+     * @throws Exception\GetElectronicSealUnauthorizedException
+     * @throws Exception\GetElectronicSealNotFoundException
      */
-    public function getProceduresByIdProof(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getElectronicSeal(string $electronicSealId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetProceduresByIdProof($id, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetElectronicSeal($electronicSealId), $fetch);
     }
 
     /**
-     * Returns the list of Members of a organization.
-     *
-     * @param array $queryParameters {
-     *
-     *     @var string $procedure
-     * }
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * Electronic Seal Audit Trail is only available when the Electronic Seal is "done".
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\MemberOutput[]|\Psr\Http\Message\ResponseInterface|null
+     * @return Model\ElectronicSealAuditTrail|ResponseInterface|null
+     *
+     * @throws Exception\GetElectronicSealAuditTrailBadRequestException
+     * @throws Exception\GetElectronicSealAuditTrailUnauthorizedException
+     * @throws Exception\GetElectronicSealAuditTrailForbiddenException
+     * @throws Exception\GetElectronicSealAuditTrailNotFoundException
      */
-    public function getMembers(array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getElectronicSealAuditTrail(string $electronicSealId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetMembers($queryParameters, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetElectronicSealAuditTrail($electronicSealId), $fetch);
     }
 
     /**
-     * Create a new member.
+     * Electronic Seal Audit Trail is only available when the Electronic Seal is "done".
      *
-     * @param \Qdequippe\Yousign\Api\Model\MemberInput $body
-     * @param array                                    $headerParameters {
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept Accept content header application/pdf|application/json
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
+     * @return ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\MemberOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\DownloadElectronicSealAuditTrailBadRequestException
+     * @throws Exception\DownloadElectronicSealAuditTrailUnauthorizedException
+     * @throws Exception\DownloadElectronicSealAuditTrailForbiddenException
+     * @throws Exception\DownloadElectronicSealAuditTrailNotFoundException
      */
-    public function postMember(Model\MemberInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function downloadElectronicSealAuditTrail(string $electronicSealId, string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostMember($body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new DownloadElectronicSealAuditTrail($electronicSealId, $accept), $fetch);
     }
 
     /**
-     * Delete a member.
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * Upload an Electronic Seal Document to use for creating an Electronic Seal (can be used for only one Electronic Seal).
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Psr\Http\Message\ResponseInterface|null
+     * @return Model\ElectronicSealDocument|ResponseInterface|null
+     *
+     * @throws Exception\UploadElectronicSealDocumentBadRequestException
+     * @throws Exception\UploadElectronicSealDocumentUnauthorizedException
+     * @throws Exception\UploadElectronicSealDocumentForbiddenException
      */
-    public function deleteMemberById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function uploadElectronicSealDocument(?UploadElectronicSealDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\DeleteMemberById($id, $headerParameters), $fetch);
+        return $this->executeEndpoint(new Endpoint\UploadElectronicSealDocument($requestBody), $fetch);
     }
 
     /**
-     * Edit a member.
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept Accept content header application/pdf|application/json
      *
-     * @param \Qdequippe\Yousign\Api\Model\MemberInput $body
-     * @param array                                    $headerParameters {
+     * @return ResponseInterface|null
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\MemberOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\DownloadElectronicSealDocumentUnauthorizedException
+     * @throws Exception\DownloadElectronicSealDocumentNotFoundException
      */
-    public function putMemberById(string $id, Model\MemberInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function downloadElectronicSealDocument(string $electronicSealDocumentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PutMemberById($id, $body, $headerParameters), $fetch);
-    }
-
-    /**
-     * Get a proof file of a member.
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @throws \Qdequippe\Yousign\Api\Exception\GetMembersByIdProofNotFoundException
-     *
-     * @return \Psr\Http\Message\ResponseInterface|null
-     */
-    public function getMembersByIdProof(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetMembersByIdProof($id, $headerParameters), $fetch);
-    }
-
-    /**
-     * Create a new fileObject.
-     *
-     * @param \Qdequippe\Yousign\Api\Model\FileObjectInput $body
-     * @param array                                        $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\FileObjectOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function postFileObject(Model\FileObjectInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostFileObject($body, $headerParameters), $fetch);
-    }
-
-    /**
-     * Delete a File Object.
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Psr\Http\Message\ResponseInterface|null
-     */
-    public function deleteFileObjectById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\DeleteFileObjectById($id, $headerParameters), $fetch);
-    }
-
-    /**
-     * Get a File Object.
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\FileObjectOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function getFileObjectById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetFileObjectById($id, $headerParameters), $fetch);
-    }
-
-    /**
-     * Update a File Object.
-     *
-     * @param \Qdequippe\Yousign\Api\Model\FileObjectInput $body
-     * @param array                                        $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\FileObjectOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function putFileObjectById(string $id, Model\FileObjectInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PutFileObjectById($id, $body, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param \Qdequippe\Yousign\Api\Model\OperationInput $body
-     * @param array                                       $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\OperationOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function postOperation(Model\OperationInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostOperation($body, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\OperationOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function getOperationById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetOperationById($id, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\AuthenticationInweboOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function getAuthenticationsInweboById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetAuthenticationsInweboById($id, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\AuthenticationInweboOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function putAuthenticationsInweboById(string $id, \stdClass $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PutAuthenticationsInweboById($id, $body, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\AuthenticationSmsOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function getAuthenticationsSmsById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetAuthenticationsSmsById($id, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @throws \Qdequippe\Yousign\Api\Exception\PutAuthenticationsSmsByIdBadRequestException
-     *
-     * @return \Qdequippe\Yousign\Api\Model\AuthenticationSmsOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function putAuthenticationsSmsById(string $id, \stdClass $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PutAuthenticationsSmsById($id, $body, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\AuthenticationEmailOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function getAuthenticationsEmailById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetAuthenticationsEmailById($id, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @throws \Qdequippe\Yousign\Api\Exception\PutAuthenticationsEmailByIdBadRequestException
-     *
-     * @return \Qdequippe\Yousign\Api\Model\AuthenticationEmailOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function putAuthenticationsEmailById(string $id, \stdClass $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PutAuthenticationsEmailById($id, $body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new DownloadElectronicSealDocument($electronicSealDocumentId, $accept), $fetch);
     }
 
     /**
      * @param array $queryParameters {
      *
-     *     @var string $member id of member (required for anonymous)
-     *     @var string $procedure id of procedure (required if the member attribut is not set)
-     * }
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @var string $after After cursor (pagination)
+     *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\ConsentProcessOutput[]|\Psr\Http\Message\ResponseInterface|null
+     * @return Model\ListElectronicSealImages200Response|ResponseInterface|null
+     *
+     * @throws Exception\ListElectronicSealImagesBadRequestException
+     * @throws Exception\ListElectronicSealImagesUnauthorizedException
+     * @throws Exception\ListElectronicSealImagesForbiddenException
      */
-    public function getConsentProcesses(array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function listElectronicSealImages(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetConsentProcesses($queryParameters, $headerParameters), $fetch);
+        return $this->executeEndpoint(new ListElectronicSealImages($queryParameters), $fetch);
     }
 
     /**
-     * @param \Qdequippe\Yousign\Api\Model\ConsentProcessInput $body
-     * @param array                                            $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
+     * Upload an Electronic Seal Image to use for creating an Electronic Seal (can be used for several Electronic Seals).
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\ConsentProcessOutput|\Psr\Http\Message\ResponseInterface|null
+     * @return Model\ElectronicSealImage|ResponseInterface|null
+     *
+     * @throws Exception\UploadElectronicSealImageBadRequestException
+     * @throws Exception\UploadElectronicSealImageUnauthorizedException
+     * @throws Exception\UploadElectronicSealImageForbiddenException
      */
-    public function postConsentProcess(Model\ConsentProcessInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function uploadElectronicSealImage(?UploadElectronicSealImage $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostConsentProcess($body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new Endpoint\UploadElectronicSealImage($requestBody), $fetch);
     }
 
     /**
-     * @param array $headerParameters {
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept Accept content header image/png|image/jpg|image/gif|application/json
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @return ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\DownloadElectronicSealImageUnauthorizedException
+     * @throws Exception\DownloadElectronicSealImageNotFoundException
      */
-    public function deleteConsentProcessById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function downloadElectronicSealImage(string $electronicSealImageId, string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\DeleteConsentProcessById($id, $headerParameters), $fetch);
+        return $this->executeEndpoint(new DownloadElectronicSealImage($electronicSealImageId, $accept), $fetch);
     }
 
     /**
-     * @param array $queryParameters {
-     *
-     *     @var string $member id of member (required for anonymous)
-     * }
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\ConsentProcessOutput|\Psr\Http\Message\ResponseInterface|null
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteElectronicSealImageUnauthorizedException
+     * @throws Exception\DeleteElectronicSealImageForbiddenException
+     * @throws Exception\DeleteElectronicSealImageNotFoundException
      */
-    public function getConsentProcessById(string $id, array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function deleteElectronicSealImage(string $electronicSealImageId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetConsentProcessById($id, $queryParameters, $headerParameters), $fetch);
+        return $this->executeEndpoint(new DeleteElectronicSealImage($electronicSealImageId), $fetch);
     }
 
     /**
-     * @param \Qdequippe\Yousign\Api\Model\ConsentProcessInput $body
-     * @param array                                            $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\ConsentProcessOutput|\Psr\Http\Message\ResponseInterface|null
+     * @return WebhookSubscription[]|ResponseInterface|null
+     *
+     * @throws Exception\GetWebhooksBadRequestException
+     * @throws Exception\GetWebhooksUnauthorizedException
+     * @throws Exception\GetWebhooksForbiddenException
      */
-    public function putConsentProcessById(string $id, Model\ConsentProcessInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getWebhooks(string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PutConsentProcessById($id, $body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetWebhooks(), $fetch);
     }
 
     /**
-     * @param array $queryParameters {
-     *
-     *     @var string $member id of member (required for anonymous)
-     * }
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\ConsentProcessValueOutput|\Psr\Http\Message\ResponseInterface|null
+     * @return WebhookSubscription|ResponseInterface|null
+     *
+     * @throws Exception\PostWebhooksSubscriptionsBadRequestException
+     * @throws Exception\PostWebhooksSubscriptionsUnauthorizedException
+     * @throws Exception\PostWebhooksSubscriptionsForbiddenException
+     * @throws Exception\PostWebhooksSubscriptionsNotFoundException
      */
-    public function getConsentProcessValueById(string $id, array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function postWebhooksSubscriptions(?CreateWebhookSubscription $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetConsentProcessValueById($id, $queryParameters, $headerParameters), $fetch);
+        return $this->executeEndpoint(new PostWebhooksSubscriptions($requestBody), $fetch);
     }
 
     /**
-     * @param array $queryParameters {
+     * @param string $webhookId Webhook Id
+     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $member id of member
-     * }
+     * @return ResponseInterface|null
      *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\ConsentProcessValueOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\DeleteWebhooksWebhookIdBadRequestException
+     * @throws Exception\DeleteWebhooksWebhookIdUnauthorizedException
+     * @throws Exception\DeleteWebhooksWebhookIdForbiddenException
+     * @throws Exception\DeleteWebhooksWebhookIdNotFoundException
      */
-    public function getConsentProcessValue(array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function deleteWebhooksWebhookId(string $webhookId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetConsentProcessValue($queryParameters, $headerParameters), $fetch);
+        return $this->executeEndpoint(new DeleteWebhooksWebhookId($webhookId), $fetch);
     }
 
     /**
-     * @param \Qdequippe\Yousign\Api\Model\ConsentProcessValueInput $body
-     * @param array                                                 $headerParameters {
+     * @param string $webhookId Webhook Id
+     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
+     * @return WebhookSubscription|ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\ConsentProcessValueOutput|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\GetWebhooksWebhookIdBadRequestException
+     * @throws Exception\GetWebhooksWebhookIdUnauthorizedException
+     * @throws Exception\GetWebhooksWebhookIdForbiddenException
+     * @throws Exception\GetWebhooksWebhookIdNotFoundException
      */
-    public function postConsentProcessValue(Model\ConsentProcessValueInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getWebhooksWebhookId(string $webhookId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostConsentProcessValue($body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetWebhooksWebhookId($webhookId), $fetch);
     }
 
     /**
-     * @param array $headerParameters {
+     * @param string $webhookId Webhook Id
+     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @return WebhookSubscription|ResponseInterface|null
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\SignatureUiOutput[]|\Psr\Http\Message\ResponseInterface|null
+     * @throws Exception\PatchWebhooksWebhookIdBadRequestException
+     * @throws Exception\PatchWebhooksWebhookIdUnauthorizedException
+     * @throws Exception\PatchWebhooksWebhookIdForbiddenException
+     * @throws Exception\PatchWebhooksWebhookIdNotFoundException
      */
-    public function getSignatureUis(array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function patchWebhooksWebhookId(string $webhookId, ?UpdateWebhookSubscription $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetSignatureUis($headerParameters), $fetch);
-    }
-
-    /**
-     * Here is the url format to build on your side to get a custom signature interface with your settings :.
-     *
-     * @param \Qdequippe\Yousign\Api\Model\SignatureUiInput $body
-     * @param array                                         $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\SignatureUiOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function postSignatureUi(Model\SignatureUiInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostSignatureUi($body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new PatchWebhooksWebhookId($webhookId, $requestBody), $fetch);
     }
 
     /**
      * @param array $queryParameters {
      *
-     *     @var string $id Id of the signature ui
-     * }
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
+     * @var string $after After cursor (pagination)
+     *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Psr\Http\Message\ResponseInterface|null
+     * @return Model\GetContacts200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetContactsBadRequestException
+     * @throws Exception\GetContactsUnauthorizedException
+     * @throws Exception\GetContactsForbiddenException
      */
-    public function deleteSignatureUiById(string $id, array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getContacts(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\DeleteSignatureUiById($id, $queryParameters, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetContacts($queryParameters), $fetch);
+    }
+
+    /**
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Contact|ResponseInterface|null
+     *
+     * @throws Exception\PostContactBadRequestException
+     * @throws Exception\PostContactUnauthorizedException
+     * @throws Exception\PostContactForbiddenException
+     * @throws Exception\PostContactNotFoundException
+     */
+    public function postContact(?CreateContact $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostContact($requestBody), $fetch);
+    }
+
+    /**
+     * @param string $contactId Contact Id
+     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteContactsContactIdUnauthorizedException
+     * @throws Exception\DeleteContactsContactIdForbiddenException
+     * @throws Exception\DeleteContactsContactIdNotFoundException
+     */
+    public function deleteContactsContactId(string $contactId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteContactsContactId($contactId), $fetch);
+    }
+
+    /**
+     * @param string $contactId Contact Id
+     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Contact|ResponseInterface|null
+     *
+     * @throws Exception\GetContactsContactIdNotFoundException
+     */
+    public function getContactsContactId(string $contactId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetContactsContactId($contactId), $fetch);
+    }
+
+    /**
+     * Update the information of a given contact.
+     *
+     * @param string $contactId Contact Id
+     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Contact|ResponseInterface|null
+     *
+     * @throws Exception\PatchContactsContactIdBadRequestException
+     * @throws Exception\PatchContactsContactIdUnauthorizedException
+     * @throws Exception\PatchContactsContactIdForbiddenException
+     * @throws Exception\PatchContactsContactIdNotFoundException
+     */
+    public function patchContactsContactId(string $contactId, ?UpdateContact $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchContactsContactId($contactId, $requestBody), $fetch);
+    }
+
+    /**
+     * Get signatures consumption by source.
+     *
+     * @param array $queryParameters {
+     *
+     * @var string $from The "from" date must not be more than 1 year in the past
+     * @var string $to The "to" date must be more recent than the "from" date
+     * @var string $authentication_key
+     *             }
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Consumption|ResponseInterface|null
+     *
+     * @throws Exception\GetConsumptionsBadRequestException
+     * @throws Exception\GetConsumptionsUnauthorizedException
+     * @throws Exception\GetConsumptionsForbiddenException
+     * @throws Exception\GetConsumptionsNotFoundException
+     */
+    public function getConsumptions(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetConsumptions($queryParameters), $fetch);
+    }
+
+    /**
+     * Get a binary .csv file containing all the consumption data of the underlying signatures.
+     *
+     * @param array $queryParameters {
+     *
+     * @var string $from The "from" date must not be more than 1 year in the past
+     * @var string $to The "to" date must be more recent than the "from" date
+     * @var string $authentication_key
+     *             }
+     *
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept Accept content header text/csv|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetConsumptionsExportBadRequestException
+     * @throws Exception\GetConsumptionsExportUnauthorizedException
+     * @throws Exception\GetConsumptionsExportForbiddenException
+     * @throws Exception\GetConsumptionsExportNotFoundException
+     */
+    public function getConsumptionsExport(array $queryParameters = [], string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetConsumptionsExport($queryParameters, $accept), $fetch);
     }
 
     /**
      * @param array $queryParameters {
      *
-     *     @var string $id id of a signature ui
-     * }
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
+     * @var string $after After cursor (pagination)
+     *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\SignatureUiOutput|\Psr\Http\Message\ResponseInterface|null
+     * @return Model\GetWorkspaces200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetWorkspacesBadRequestException
+     * @throws Exception\GetWorkspacesUnauthorizedException
+     * @throws Exception\GetWorkspacesForbiddenException
      */
-    public function getSignatureUiById(string $id, array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getWorkspaces(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetSignatureUiById($id, $queryParameters, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetWorkspaces($queryParameters), $fetch);
     }
 
     /**
      * @param array $queryParameters {
      *
-     *     @var string $id id of signature ui to update
-     * }
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
+     * @var string $after After cursor (pagination)
+     *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\SignatureUiInputUpdate|\Psr\Http\Message\ResponseInterface|null
+     * @return Model\GetUsers200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetUsersBadRequestException
+     * @throws Exception\GetUsersUnauthorizedException
      */
-    public function putSignatureUiById(string $id, array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getUsers(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PutSignatureUiById($id, $queryParameters, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetUsers($queryParameters), $fetch);
     }
 
     /**
-     * Only usefull if you use a filter with name or signatureUI.
-     *
-     * @param array $queryParameters {
-     *
-     *     @var string $name Filtering on name of signature ui labels
-     *     @var string $signatureUi Filtering on id of signature ui resource
-     * }
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Qdequippe\Yousign\Api\Model\SignatureUiLabelOutput[]|\Psr\Http\Message\ResponseInterface|null
+     * @return Document|ResponseInterface|null
+     *
+     * @throws Exception\PostDocumentsBadRequestException
+     * @throws Exception\PostDocumentsUnauthorizedException
+     * @throws Exception\PostDocumentsForbiddenException
      */
-    public function getSignatureUiLabels(array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function postDocuments(?CreateDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetSignatureUiLabels($queryParameters, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param \Qdequippe\Yousign\Api\Model\SignatureUiLabelInput $body
-     * @param array                                              $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\SignatureUiLabelOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function postSignatureUiLabel(Model\SignatureUiLabelInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostSignatureUiLabel($body, $headerParameters), $fetch);
+        return $this->executeEndpoint(new PostDocuments($requestBody), $fetch);
     }
 
     /**
      * @param array $queryParameters {
      *
-     *     @var string $id Id of signature ui label
-     * }
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @var string $after After cursor (pagination)
+     *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return \Psr\Http\Message\ResponseInterface|null
+     * @return Model\GetTemplates200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetTemplatesBadRequestException
+     * @throws Exception\GetTemplatesUnauthorizedException
+     * @throws Exception\GetTemplatesForbiddenException
      */
-    public function deleteSignatureUiLabelById(string $id, array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getTemplates(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\DeleteSignatureUiLabelById($id, $queryParameters, $headerParameters), $fetch);
+        return $this->executeEndpoint(new GetTemplates($queryParameters), $fetch);
     }
 
-    /**
-     * @param array $queryParameters {
-     *
-     *     @var string $id id of signature ui label
-     * }
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\SignatureUiLabelOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function getSignatureUiLabelById(string $id, array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetSignatureUiLabelById($id, $queryParameters, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param \Qdequippe\Yousign\Api\Model\SignatureUiLabelInput $body
-     * @param array                                              $queryParameters {
-     *
-     *     @var string $id Id of signature ui labels
-     * }
-     *
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\SignatureUiLabelOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function putSignatureUiLabelById(string $id, Model\SignatureUiLabelInput $body, array $queryParameters = [], array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PutSignatureUiLabelById($id, $body, $queryParameters, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param \Qdequippe\Yousign\Api\Model\ServerStampInput $body
-     * @param array                                         $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @throws \Qdequippe\Yousign\Api\Exception\PostServerStampBadRequestException
-     *
-     * @return \Qdequippe\Yousign\Api\Model\ServerStampOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function postServerStamp(Model\ServerStampInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostServerStamp($body, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @throws \Qdequippe\Yousign\Api\Exception\GetServerStampByIdNotFoundException
-     *
-     * @return \Qdequippe\Yousign\Api\Model\ServerStampOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function getServerStampById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetServerStampById($id, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param \Qdequippe\Yousign\Api\Model\CheckDocumentIdentitiesInput $body
-     * @param array                                                     $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\CheckDocumentIdentitiesOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function postCheckDocumentIdentity(Model\CheckDocumentIdentitiesInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostCheckDocumentIdentity($body, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\CheckDocumentIdentitiesOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function getCheckDocumentIdentityById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetCheckDocumentIdentityById($id, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param \Qdequippe\Yousign\Api\Model\CheckDocumentBankAccountsInput $body
-     * @param array                                                       $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     *     @var string $Content-Type The MIME type of the body of the request
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @throws \Qdequippe\Yousign\Api\Exception\PostCheckDocumentBankAccountBadRequestException
-     *
-     * @return \Qdequippe\Yousign\Api\Model\CheckDocumentBankAccountsOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function postCheckDocumentBankAccount(Model\CheckDocumentBankAccountsInput $body, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\PostCheckDocumentBankAccount($body, $headerParameters), $fetch);
-    }
-
-    /**
-     * @param array $headerParameters {
-     *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return \Qdequippe\Yousign\Api\Model\CheckDocumentBankAccountsOutput|\Psr\Http\Message\ResponseInterface|null
-     */
-    public function getCheckDocumentBankAccountById(string $id, array $headerParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new \Qdequippe\Yousign\Api\Endpoint\GetCheckDocumentBankAccountById($id, $headerParameters), $fetch);
-    }
-
-    public static function create($httpClient = null, array $additionalPlugins = [])
+    public static function create($httpClient = null, array $additionalPlugins = [], array $additionalNormalizers = []): static
     {
         if (null === $httpClient) {
-            $httpClient = \Http\Discovery\Psr18ClientDiscovery::find();
+            $httpClient = Psr18ClientDiscovery::find();
             $plugins = [];
-            $uri = \Http\Discovery\Psr17FactoryDiscovery::findUrlFactory()->createUri('https://api.yousign.com');
-            $plugins[] = new \Http\Client\Common\Plugin\AddHostPlugin($uri);
-            if (\count($additionalPlugins) > 0) {
+            $uri = Psr17FactoryDiscovery::findUriFactory()->createUri('https://api-sandbox.yousign.app/v3');
+            $plugins[] = new AddHostPlugin($uri);
+            $plugins[] = new AddPathPlugin($uri);
+            if ([] !== $additionalPlugins) {
                 $plugins = array_merge($plugins, $additionalPlugins);
             }
-            $httpClient = new \Http\Client\Common\PluginClient($httpClient, $plugins);
+            $httpClient = new PluginClient($httpClient, $plugins);
         }
-        $requestFactory = \Http\Discovery\Psr17FactoryDiscovery::findRequestFactory();
-        $streamFactory = \Http\Discovery\Psr17FactoryDiscovery::findStreamFactory();
-        $serializer = new \Symfony\Component\Serializer\Serializer([new \Symfony\Component\Serializer\Normalizer\ArrayDenormalizer(), new \Qdequippe\Yousign\Api\Normalizer\JaneObjectNormalizer()], [new \Symfony\Component\Serializer\Encoder\JsonEncoder(new \Symfony\Component\Serializer\Encoder\JsonEncode(), new \Symfony\Component\Serializer\Encoder\JsonDecode(['json_decode_associative' => true]))]);
+        $requestFactory = Psr17FactoryDiscovery::findRequestFactory();
+        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
+        $normalizers = [new ArrayDenormalizer(), new JaneObjectNormalizer()];
+        if ([] !== $additionalNormalizers) {
+            $normalizers = array_merge($normalizers, $additionalNormalizers);
+        }
+        $serializer = new Serializer($normalizers, [new JsonEncoder(new JsonEncode(), new JsonDecode(['json_decode_associative' => true]))]);
 
         return new static($httpClient, $requestFactory, $serializer, $streamFactory);
     }

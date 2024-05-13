@@ -1,22 +1,32 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Qdequippe\Yousign\Api\Endpoint;
 
-class GetUsers extends \Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint implements \Qdequippe\Yousign\Api\Runtime\Client\Endpoint
+use Psr\Http\Message\ResponseInterface;
+use Qdequippe\Yousign\Api\Exception\GetUsersBadRequestException;
+use Qdequippe\Yousign\Api\Exception\GetUsersUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetUsers200Response;
+use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
+use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
+use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class GetUsers extends BaseEndpoint implements Endpoint
 {
-    use \Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
+    use EndpointTrait;
 
     /**
-     * @param array $headerParameters {
+     * @param array $queryParameters {
      *
-     *     @var string $Authorization Authentication credentials for HTTP authentication
-     * }
+     * @var string $after After cursor (pagination)
+     *             }
      */
-    public function __construct(array $headerParameters = [])
+    public function __construct(array $queryParameters = [])
     {
-        $this->headerParameters = $headerParameters;
+        $this->queryParameters = $queryParameters;
     }
 
     public function getMethod(): string
@@ -29,7 +39,7 @@ class GetUsers extends \Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint implem
         return '/users';
     }
 
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         return [[], null];
     }
@@ -39,31 +49,42 @@ class GetUsers extends \Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint implem
         return ['Accept' => ['application/json']];
     }
 
-    protected function getHeadersOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
+    protected function getQueryOptionsResolver(): OptionsResolver
     {
-        $optionsResolver = parent::getHeadersOptionsResolver();
-        $optionsResolver->setDefined(['Authorization']);
-        $optionsResolver->setRequired(['Authorization']);
+        $optionsResolver = parent::getQueryOptionsResolver();
+        $optionsResolver->setDefined(['after']);
+        $optionsResolver->setRequired([]);
         $optionsResolver->setDefaults([]);
-        $optionsResolver->setAllowedTypes('Authorization', ['string']);
+        $optionsResolver->addAllowedTypes('after', ['string']);
 
         return $optionsResolver;
     }
 
     /**
-     * {@inheritdoc}
+     * @return GetUsers200Response|null
      *
-     * @return \Qdequippe\Yousign\Api\Model\UserOutput[]|null
+     * @throws GetUsersBadRequestException
+     * @throws GetUsersUnauthorizedException
      */
-    protected function transformResponseBody(string $body, int $status, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
-        if (200 === $status) {
-            return $serializer->deserialize($body, 'Qdequippe\\Yousign\\Api\\Model\\UserOutput[]', 'json');
+        $status = $response->getStatusCode();
+        $body = (string) $response->getBody();
+        if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            return $serializer->deserialize($body, GetUsers200Response::class, 'json');
         }
+        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetUsersBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetUsersUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+        }
+
+        return null;
     }
 
     public function getAuthenticationScopes(): array
     {
-        return [];
+        return ['bearerAuth'];
     }
 }
