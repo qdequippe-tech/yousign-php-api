@@ -78,7 +78,9 @@ use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdMetada
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdReactivate;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignatures;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSigners;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSign;
 use Qdequippe\Yousign\Api\Endpoint\PostWebhooksSubscriptions;
 use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdMetadata;
 use Qdequippe\Yousign\Api\Endpoint\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId;
@@ -99,6 +101,7 @@ use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdCancelReq
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdReactivateRequest;
 use Qdequippe\Yousign\Api\Model\Signer;
+use Qdequippe\Yousign\Api\Model\SignerSign;
 use Qdequippe\Yousign\Api\Model\UpdateContact;
 use Qdequippe\Yousign\Api\Model\UpdateCustomExperience;
 use Qdequippe\Yousign\Api\Model\UpdateDocument;
@@ -634,6 +637,25 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Send a one-time password (OTP) to a specified Signer. This endpoint is useful for integrating the signing flow into your application and allowing the Signer to sign through the API. Once the OTP is sent, the Signer must provide it back to complete the Signature Request.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -683,6 +705,25 @@ class Client extends Runtime\Client\Client
     public function getSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * Sign a Signature Request on behalf of a given Signer.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdSignersSignerIdSign(string $signatureRequestId, string $signerId, ?SignerSign $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignersSignerIdSign($signatureRequestId, $signerId, $requestBody), $fetch);
     }
 
     /**

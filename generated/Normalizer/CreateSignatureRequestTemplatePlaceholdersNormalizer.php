@@ -4,6 +4,7 @@ namespace Qdequippe\Yousign\Api\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestTemplatePlaceholders;
+use Qdequippe\Yousign\Api\Model\SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput;
 use Qdequippe\Yousign\Api\Model\SignatureRequestPlaceholderSignerSubstituteFromContactIdInput;
 use Qdequippe\Yousign\Api\Model\SignatureRequestPlaceholderSignerSubstituteFromInfoInput;
 use Qdequippe\Yousign\Api\Model\SignatureRequestPlaceholderSignerSubstituteFromUserIdInput;
@@ -65,9 +66,19 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('signers', $data) && null === $data['signers']) {
                 $object->setSigners(null);
             }
-            foreach ($data as $key => $value_2) {
+            if (\array_key_exists('read_only_text_fields', $data) && null !== $data['read_only_text_fields']) {
+                $values_1 = [];
+                foreach ($data['read_only_text_fields'] as $value_2) {
+                    $values_1[] = $this->denormalizer->denormalize($value_2, SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput::class, 'json', $context);
+                }
+                $object->setReadOnlyTextFields($values_1);
+                unset($data['read_only_text_fields']);
+            } elseif (\array_key_exists('read_only_text_fields', $data) && null === $data['read_only_text_fields']) {
+                $object->setReadOnlyTextFields(null);
+            }
+            foreach ($data as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $object[$key] = $value_2;
+                    $object[$key] = $value_3;
                 }
             }
 
@@ -92,9 +103,16 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 }
                 $data['signers'] = $values;
             }
-            foreach ($object as $key => $value_2) {
+            if ($object->isInitialized('readOnlyTextFields') && null !== $object->getReadOnlyTextFields()) {
+                $values_1 = [];
+                foreach ($object->getReadOnlyTextFields() as $value_2) {
+                    $values_1[] = $this->normalizer->normalize($value_2, 'json', $context);
+                }
+                $data['read_only_text_fields'] = $values_1;
+            }
+            foreach ($object as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $data[$key] = $value_2;
+                    $data[$key] = $value_3;
                 }
             }
 
@@ -127,7 +145,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         /**
          * @param mixed|null $format
          */
-        public function denormalize($data, $type, $format = null, array $context = []): mixed
+        public function denormalize($data, $type, $format = null, array $context = [])
         {
             if (isset($data['$ref'])) {
                 return new Reference($data['$ref'], $context['document-origin']);
@@ -157,9 +175,19 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('signers', $data) && null === $data['signers']) {
                 $object->setSigners(null);
             }
-            foreach ($data as $key => $value_2) {
+            if (\array_key_exists('read_only_text_fields', $data) && null !== $data['read_only_text_fields']) {
+                $values_1 = [];
+                foreach ($data['read_only_text_fields'] as $value_2) {
+                    $values_1[] = $this->denormalizer->denormalize($value_2, SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput::class, 'json', $context);
+                }
+                $object->setReadOnlyTextFields($values_1);
+                unset($data['read_only_text_fields']);
+            } elseif (\array_key_exists('read_only_text_fields', $data) && null === $data['read_only_text_fields']) {
+                $object->setReadOnlyTextFields(null);
+            }
+            foreach ($data as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $object[$key] = $value_2;
+                    $object[$key] = $value_3;
                 }
             }
 
@@ -168,8 +196,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         /**
          * @param mixed|null $format
+         *
+         * @return array|string|int|float|bool|\ArrayObject|null
          */
-        public function normalize($object, $format = null, array $context = []): string|int|float|bool|\ArrayObject|array|null
+        public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
             if ($object->isInitialized('signers') && null !== $object->getSigners()) {
@@ -187,9 +217,16 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 }
                 $data['signers'] = $values;
             }
-            foreach ($object as $key => $value_2) {
+            if ($object->isInitialized('readOnlyTextFields') && null !== $object->getReadOnlyTextFields()) {
+                $values_1 = [];
+                foreach ($object->getReadOnlyTextFields() as $value_2) {
+                    $values_1[] = $this->normalizer->normalize($value_2, 'json', $context);
+                }
+                $data['read_only_text_fields'] = $values_1;
+            }
+            foreach ($object as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $data[$key] = $value_2;
+                    $data[$key] = $value_3;
                 }
             }
 

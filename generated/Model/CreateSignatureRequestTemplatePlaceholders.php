@@ -19,6 +19,12 @@ class CreateSignatureRequestTemplatePlaceholders extends \ArrayObject
      * @var list<SignatureRequestPlaceholderSignerSubstituteFromInfoInput>|list<SignatureRequestPlaceholderSignerSubstituteFromUserIdInput>|list<SignatureRequestPlaceholderSignerSubstituteFromContactIdInput>|null
      */
     protected $signers;
+    /**
+     * Substituting data for placeholder read_only_text fields.
+     *
+     * @var list<SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput>|null
+     */
+    protected $readOnlyTextFields;
 
     /**
      * Substituting data for placeholder signers.
@@ -39,6 +45,29 @@ class CreateSignatureRequestTemplatePlaceholders extends \ArrayObject
     {
         $this->initialized['signers'] = true;
         $this->signers = $signers;
+
+        return $this;
+    }
+
+    /**
+     * Substituting data for placeholder read_only_text fields.
+     *
+     * @return list<SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput>|null
+     */
+    public function getReadOnlyTextFields(): ?array
+    {
+        return $this->readOnlyTextFields;
+    }
+
+    /**
+     * Substituting data for placeholder read_only_text fields.
+     *
+     * @param list<SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput>|null $readOnlyTextFields
+     */
+    public function setReadOnlyTextFields(?array $readOnlyTextFields): self
+    {
+        $this->initialized['readOnlyTextFields'] = true;
+        $this->readOnlyTextFields = $readOnlyTextFields;
 
         return $this;
     }

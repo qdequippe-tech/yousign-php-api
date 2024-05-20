@@ -216,7 +216,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         /**
          * @param mixed|null $format
          */
-        public function denormalize($data, $type, $format = null, array $context = []): mixed
+        public function denormalize($data, $type, $format = null, array $context = [])
         {
             if (isset($data['$ref'])) {
                 return new Reference($data['$ref'], $context['document-origin']);
@@ -322,8 +322,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         /**
          * @param mixed|null $format
+         *
+         * @return array|string|int|float|bool|\ArrayObject|null
          */
-        public function normalize($object, $format = null, array $context = []): string|int|float|bool|\ArrayObject|array|null
+        public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
             $data['version'] = $object->getVersion();
