@@ -4,6 +4,7 @@ namespace Qdequippe\Yousign\Api\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
 use Qdequippe\Yousign\Api\Model\SignatureRequest;
+use Qdequippe\Yousign\Api\Model\SignatureRequestDeclineInformation;
 use Qdequippe\Yousign\Api\Model\SignatureRequestEmailNotification;
 use Qdequippe\Yousign\Api\Model\SignatureRequestInListApproversInner;
 use Qdequippe\Yousign\Api\Model\SignatureRequestInListDocumentsInner;
@@ -200,6 +201,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('bulk_send_batch_id', $data) && null === $data['bulk_send_batch_id']) {
                 $object->setBulkSendBatchId(null);
             }
+            if (\array_key_exists('decline_information', $data) && null !== $data['decline_information']) {
+                $object->setDeclineInformation($this->denormalizer->denormalize($data['decline_information'], SignatureRequestDeclineInformation::class, 'json', $context));
+                unset($data['decline_information']);
+            } elseif (\array_key_exists('decline_information', $data) && null === $data['decline_information']) {
+                $object->setDeclineInformation(null);
+            }
             foreach ($data as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_3;
@@ -251,6 +258,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['audit_trail_locale'] = $object->getAuditTrailLocale();
             $data['email_notification'] = $this->normalizer->normalize($object->getEmailNotification(), 'json', $context);
             $data['bulk_send_batch_id'] = $object->getBulkSendBatchId();
+            if ($object->isInitialized('declineInformation') && null !== $object->getDeclineInformation()) {
+                $data['decline_information'] = $this->normalizer->normalize($object->getDeclineInformation(), 'json', $context);
+            }
             foreach ($object as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_3;
@@ -286,7 +296,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         /**
          * @param mixed|null $format
          */
-        public function denormalize($data, $type, $format = null, array $context = []): mixed
+        public function denormalize($data, $type, $format = null, array $context = [])
         {
             if (isset($data['$ref'])) {
                 return new Reference($data['$ref'], $context['document-origin']);
@@ -448,6 +458,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('bulk_send_batch_id', $data) && null === $data['bulk_send_batch_id']) {
                 $object->setBulkSendBatchId(null);
             }
+            if (\array_key_exists('decline_information', $data) && null !== $data['decline_information']) {
+                $object->setDeclineInformation($this->denormalizer->denormalize($data['decline_information'], SignatureRequestDeclineInformation::class, 'json', $context));
+                unset($data['decline_information']);
+            } elseif (\array_key_exists('decline_information', $data) && null === $data['decline_information']) {
+                $object->setDeclineInformation(null);
+            }
             foreach ($data as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_3;
@@ -459,8 +475,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         /**
          * @param mixed|null $format
+         *
+         * @return array|string|int|float|bool|\ArrayObject|null
          */
-        public function normalize($object, $format = null, array $context = []): string|int|float|bool|\ArrayObject|array|null
+        public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
             $data['id'] = $object->getId();
@@ -502,6 +520,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['audit_trail_locale'] = $object->getAuditTrailLocale();
             $data['email_notification'] = $this->normalizer->normalize($object->getEmailNotification(), 'json', $context);
             $data['bulk_send_batch_id'] = $object->getBulkSendBatchId();
+            if ($object->isInitialized('declineInformation') && null !== $object->getDeclineInformation()) {
+                $data['decline_information'] = $this->normalizer->normalize($object->getDeclineInformation(), 'json', $context);
+            }
             foreach ($object as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_3;

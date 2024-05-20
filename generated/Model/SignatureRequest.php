@@ -111,6 +111,10 @@ class SignatureRequest extends \ArrayObject
      * @var string|null
      */
     protected $bulkSendBatchId;
+    /**
+     * @var SignatureRequestDeclineInformation|null
+     */
+    protected $declineInformation;
 
     public function getId(): ?string
     {
@@ -443,6 +447,19 @@ class SignatureRequest extends \ArrayObject
     {
         $this->initialized['bulkSendBatchId'] = true;
         $this->bulkSendBatchId = $bulkSendBatchId;
+
+        return $this;
+    }
+
+    public function getDeclineInformation(): ?SignatureRequestDeclineInformation
+    {
+        return $this->declineInformation;
+    }
+
+    public function setDeclineInformation(?SignatureRequestDeclineInformation $declineInformation): self
+    {
+        $this->initialized['declineInformation'] = true;
+        $this->declineInformation = $declineInformation;
 
         return $this;
     }
