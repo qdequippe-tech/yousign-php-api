@@ -20,6 +20,8 @@ class PostSignatureRequestsSignatureRequestIdApprovers extends BaseEndpoint impl
     use EndpointTrait;
 
     /**
+     * Create a new Approver either from: - scratch - an existing Contact - an existing User - an existing Signer.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId, ?\stdClass $requestBody = null)

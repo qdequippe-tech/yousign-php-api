@@ -21,7 +21,7 @@ class GetConsumptions extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * Get signatures consumption by source.
+     * Get signatures Consumption by source.
      *
      * @param array $queryParameters {
      *

@@ -22,7 +22,7 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDownload extends BaseEndpoi
      * @param string $signatureRequestId Signature Request Id
      * @param array  $queryParameters    {
      *
-     * @var string $version specify documents version to download, "completed" is only available when the signature request status is "done"
+     * @var string $version specify Documents version to download, "completed" is only available when the Signature Request status is "done"
      * @var bool   $archive Force zip archive download
      *             }
      *

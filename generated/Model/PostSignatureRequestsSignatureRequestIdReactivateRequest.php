@@ -14,14 +14,14 @@ class PostSignatureRequestsSignatureRequestIdReactivateRequest extends \ArrayObj
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Due date of the signature request (yyyy-mm-dd). Default to 6 month after the activation.
+     * Due date of the Signature Request (yyyy-mm-dd). Default to 6 month after the activation.
      *
      * @var \DateTime|null
      */
     protected $expirationDate;
 
     /**
-     * Due date of the signature request (yyyy-mm-dd). Default to 6 month after the activation.
+     * Due date of the Signature Request (yyyy-mm-dd). Default to 6 month after the activation.
      */
     public function getExpirationDate(): ?\DateTime
     {
@@ -29,7 +29,7 @@ class PostSignatureRequestsSignatureRequestIdReactivateRequest extends \ArrayObj
     }
 
     /**
-     * Due date of the signature request (yyyy-mm-dd). Default to 6 month after the activation.
+     * Due date of the Signature Request (yyyy-mm-dd). Default to 6 month after the activation.
      */
     public function setExpirationDate(?\DateTime $expirationDate): self
     {

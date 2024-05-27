@@ -20,7 +20,7 @@ class GetConsumptionsExport extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * Get a binary .csv file containing all the consumption data of the underlying signatures.
+     * Get a binary .csv file containing all the Consumption data of the underlying signatures.
      *
      * @param array $queryParameters {
      *
