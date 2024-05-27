@@ -161,7 +161,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Delete or permanent delete a signature request (except in approval and ongoing status).
+     * Delete a Signature Request (except in approval and ongoing status).
      *
      * @param string $signatureRequestId Signature Request Id
      * @param array  $queryParameters    {
@@ -265,6 +265,57 @@ class Client extends Runtime\Client\Client
 
     /**
      * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\SignerAuditTrail|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept             Accept content header application/zip, application/pdf|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdAuditTrailsDownload(string $signatureRequestId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdAuditTrailsDownload($signatureRequestId, $accept), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept             Accept content header application/pdf|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadBadRequestException
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadUnauthorizedException
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadForbiddenException
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadNotFoundException
+     */
+    public function getSignersSignerIdAuditTrailsDownload(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetSignersSignerIdAuditTrailsDownload($signatureRequestId, $signerId, $accept), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
      * @param array  $queryParameters    {
      *
      * @var string $nature Filter by nature
@@ -304,7 +355,7 @@ class Client extends Runtime\Client\Client
      * @param string $signatureRequestId Signature Request Id
      * @param array  $queryParameters    {
      *
-     * @var string $version specify documents version to download, "completed" is only available when the signature request status is "done"
+     * @var string $version specify Documents version to download, "completed" is only available when the Signature Request status is "done"
      * @var bool   $archive Force zip archive download
      *             }
      *
@@ -447,7 +498,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Delete a document's field in a Signature Request (in draft status).
+     * Delete a Document's Field in a Signature Request (in draft status).
      *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
@@ -467,7 +518,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Update a document's field in a Signature Request (in draft status).
+     * Update a Document's Field in a Signature Request (in draft status).
      *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
@@ -500,59 +551,6 @@ class Client extends Runtime\Client\Client
     public function postSignatureRequestsSignatureRequestIdDocumentRequests(string $signatureRequestId, ?CreateSignerDocumentRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdDocumentRequests($signatureRequestId, $requestBody), $fetch);
-    }
-
-    /**
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
-     */
-    public function deleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments($signatureRequestId, $signerId), $fetch);
-    }
-
-    /**
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response|ResponseInterface|null
-     *
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
-     */
-    public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments($signatureRequestId, $signerId), $fetch);
-    }
-
-    /**
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $signerDocumentId   Signer Document Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept             Accept content header application/pdf|application/json
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdBadRequestException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdUnauthorizedException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdForbiddenException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdNotFoundException
-     */
-    public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId(string $signatureRequestId, string $signerId, string $signerDocumentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
-    {
-        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId($signatureRequestId, $signerId, $signerDocumentId, $accept), $fetch);
     }
 
     /**
@@ -673,41 +671,6 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept             Accept content header application/pdf|application/json
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadBadRequestException
-     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadUnauthorizedException
-     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadForbiddenException
-     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadNotFoundException
-     */
-    public function getSignersSignerIdAuditTrailsDownload(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT, array $accept = [])
-    {
-        return $this->executeEndpoint(new GetSignersSignerIdAuditTrailsDownload($signatureRequestId, $signerId, $accept), $fetch);
-    }
-
-    /**
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\SignerAuditTrail|ResponseInterface|null
-     *
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsBadRequestException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsUnauthorizedException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsForbiddenException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsNotFoundException
-     */
-    public function getSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails($signatureRequestId, $signerId), $fetch);
-    }
-
-    /**
      * Sign a Signature Request on behalf of a given Signer.
      *
      * @param string $signatureRequestId Signature Request Id
@@ -727,6 +690,61 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $signerDocumentId   Signer Document Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept             Accept content header application/pdf|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId(string $signatureRequestId, string $signerId, string $signerDocumentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId($signatureRequestId, $signerId, $signerDocumentId, $accept), $fetch);
+    }
+
+    /**
+     * Create a new Approver either from: - scratch - an existing Contact - an existing User - an existing Signer.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -822,22 +840,6 @@ class Client extends Runtime\Client\Client
     public function postSignatureRequestsSignatureRequestIdFollowers(string $signatureRequestId, ?array $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdFollowers($signatureRequestId, $requestBody), $fetch);
-    }
-
-    /**
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept             Accept content header application/zip, application/pdf|application/json
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadBadRequestException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadUnauthorizedException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadNotFoundException
-     */
-    public function getSignatureRequestsSignatureRequestIdAuditTrailsDownload(string $signatureRequestId, string $fetch = self::FETCH_OBJECT, array $accept = [])
-    {
-        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdAuditTrailsDownload($signatureRequestId, $accept), $fetch);
     }
 
     /**
@@ -1309,7 +1311,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Update the information of a given contact.
+     * Update the information of a given Contact.
      *
      * @param string $contactId Contact Id
      * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
@@ -1327,7 +1329,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Get signatures consumption by source.
+     * Get signatures Consumption by source.
      *
      * @param array $queryParameters {
      *
@@ -1351,7 +1353,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Get a binary .csv file containing all the consumption data of the underlying signatures.
+     * Get a binary .csv file containing all the Consumption data of the underlying signatures.
      *
      * @param array $queryParameters {
      *

@@ -103,6 +103,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('delivery_mode', $data) && null === $data['delivery_mode']) {
                 $object->setDeliveryMode(null);
             }
+            if (\array_key_exists('identification_attestation_id', $data) && null !== $data['identification_attestation_id']) {
+                $object->setIdentificationAttestationId($data['identification_attestation_id']);
+                unset($data['identification_attestation_id']);
+            } elseif (\array_key_exists('identification_attestation_id', $data) && null === $data['identification_attestation_id']) {
+                $object->setIdentificationAttestationId(null);
+            }
             foreach ($data as $key_1 => $value_2) {
                 if (preg_match('/.*/', (string) $key_1)) {
                     $object[$key_1] = $value_2;
@@ -142,6 +148,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             if ($object->isInitialized('deliveryMode') && null !== $object->getDeliveryMode()) {
                 $data['delivery_mode'] = $object->getDeliveryMode();
+            }
+            if ($object->isInitialized('identificationAttestationId') && null !== $object->getIdentificationAttestationId()) {
+                $data['identification_attestation_id'] = $object->getIdentificationAttestationId();
             }
             foreach ($object as $key_1 => $value_2) {
                 if (preg_match('/.*/', (string) $key_1)) {
@@ -246,6 +255,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('delivery_mode', $data) && null === $data['delivery_mode']) {
                 $object->setDeliveryMode(null);
             }
+            if (\array_key_exists('identification_attestation_id', $data) && null !== $data['identification_attestation_id']) {
+                $object->setIdentificationAttestationId($data['identification_attestation_id']);
+                unset($data['identification_attestation_id']);
+            } elseif (\array_key_exists('identification_attestation_id', $data) && null === $data['identification_attestation_id']) {
+                $object->setIdentificationAttestationId(null);
+            }
             foreach ($data as $key_1 => $value_2) {
                 if (preg_match('/.*/', (string) $key_1)) {
                     $object[$key_1] = $value_2;
@@ -290,6 +305,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             if ($object->isInitialized('deliveryMode') && null !== $object->getDeliveryMode()) {
                 $data['delivery_mode'] = $object->getDeliveryMode();
+            }
+            if ($object->isInitialized('identificationAttestationId') && null !== $object->getIdentificationAttestationId()) {
+                $data['identification_attestation_id'] = $object->getIdentificationAttestationId();
             }
             foreach ($object as $key_1 => $value_2) {
                 if (preg_match('/.*/', (string) $key_1)) {

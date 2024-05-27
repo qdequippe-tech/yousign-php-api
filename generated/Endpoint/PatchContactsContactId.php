@@ -21,7 +21,7 @@ class PatchContactsContactId extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * Update the information of a given contact.
+     * Update the information of a given Contact.
      *
      * @param string $contactId Contact Id
      */

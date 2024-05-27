@@ -123,6 +123,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('delivery_mode', $data) && null === $data['delivery_mode']) {
                 $object->setDeliveryMode(null);
             }
+            if (\array_key_exists('identification_attestation_id', $data) && null !== $data['identification_attestation_id']) {
+                $object->setIdentificationAttestationId($data['identification_attestation_id']);
+                unset($data['identification_attestation_id']);
+            } elseif (\array_key_exists('identification_attestation_id', $data) && null === $data['identification_attestation_id']) {
+                $object->setIdentificationAttestationId(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -151,6 +157,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['redirect_urls'] = $this->normalizer->normalize($object->getRedirectUrls(), 'json', $context);
             $data['custom_text'] = $this->normalizer->normalize($object->getCustomText(), 'json', $context);
             $data['delivery_mode'] = $object->getDeliveryMode();
+            $data['identification_attestation_id'] = $object->getIdentificationAttestationId();
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;
@@ -274,6 +281,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('delivery_mode', $data) && null === $data['delivery_mode']) {
                 $object->setDeliveryMode(null);
             }
+            if (\array_key_exists('identification_attestation_id', $data) && null !== $data['identification_attestation_id']) {
+                $object->setIdentificationAttestationId($data['identification_attestation_id']);
+                unset($data['identification_attestation_id']);
+            } elseif (\array_key_exists('identification_attestation_id', $data) && null === $data['identification_attestation_id']) {
+                $object->setIdentificationAttestationId(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -307,6 +320,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['redirect_urls'] = $this->normalizer->normalize($object->getRedirectUrls(), 'json', $context);
             $data['custom_text'] = $this->normalizer->normalize($object->getCustomText(), 'json', $context);
             $data['delivery_mode'] = $object->getDeliveryMode();
+            $data['identification_attestation_id'] = $object->getIdentificationAttestationId();
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;

@@ -61,6 +61,10 @@ class Signer extends \ArrayObject
      * @var string|null
      */
     protected $deliveryMode;
+    /**
+     * @var string|null
+     */
+    protected $identificationAttestationId;
 
     public function getId(): ?string
     {
@@ -220,6 +224,19 @@ class Signer extends \ArrayObject
     {
         $this->initialized['deliveryMode'] = true;
         $this->deliveryMode = $deliveryMode;
+
+        return $this;
+    }
+
+    public function getIdentificationAttestationId(): ?string
+    {
+        return $this->identificationAttestationId;
+    }
+
+    public function setIdentificationAttestationId(?string $identificationAttestationId): self
+    {
+        $this->initialized['identificationAttestationId'] = true;
+        $this->identificationAttestationId = $identificationAttestationId;
 
         return $this;
     }
