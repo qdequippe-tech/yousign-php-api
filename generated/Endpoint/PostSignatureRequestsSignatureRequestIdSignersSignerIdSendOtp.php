@@ -19,7 +19,7 @@ class PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp extends Base
     use EndpointTrait;
 
     /**
-     * Send a one-time password (OTP) to a specified Signer. This endpoint is useful for integrating the signing flow into your application and allowing the Signer to sign through the API. Once the OTP is sent, the Signer must provide it back to complete the Signature Request.
+     * Send a One-Time Password (OTP) to a specified Signer. This endpoint is useful for integrating the signing flow into your application and allowing the Signer to sign through the API. Once the OTP is sent, the Signer must provide it back to complete the Signature Request.
      *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
