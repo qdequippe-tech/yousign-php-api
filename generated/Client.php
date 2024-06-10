@@ -1252,6 +1252,7 @@ class Client extends Runtime\Client\Client
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
+     * @var int    $limit The limit of items count to retrieve.
      *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -1381,6 +1382,7 @@ class Client extends Runtime\Client\Client
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
+     * @var int    $limit The limit of items count to retrieve.
      *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -1400,6 +1402,7 @@ class Client extends Runtime\Client\Client
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
+     * @var int    $limit The limit of items count to retrieve.
      *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
