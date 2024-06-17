@@ -56,7 +56,7 @@ class GetSignatureRequestsSignatureRequestIdSigners extends BaseEndpoint impleme
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            return $serializer->deserialize($body, 'Qdequippe\\Yousign\\Api\\Model\\Signer[]', 'json');
+            return $serializer->deserialize($body, 'Qdequippe\Yousign\Api\Model\Signer[]', 'json');
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdSignersUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);

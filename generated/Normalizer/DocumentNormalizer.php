@@ -88,7 +88,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setIsSigned(null);
             }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
-                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['created_at']));
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
             } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
                 $object->setCreatedAt(null);
@@ -136,7 +136,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['sha256'] = $object->getSha256();
             $data['is_protected'] = $object->getIsProtected();
             $data['is_signed'] = $object->getIsSigned();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
             $data['total_pages'] = $object->getTotalPages();
             $data['is_locked'] = $object->getIsLocked();
             $data['initials'] = $this->normalizer->normalize($object->getInitials(), 'json', $context);
@@ -231,7 +231,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setIsSigned(null);
             }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
-                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['created_at']));
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
             } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
                 $object->setCreatedAt(null);
@@ -284,7 +284,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['sha256'] = $object->getSha256();
             $data['is_protected'] = $object->getIsProtected();
             $data['is_signed'] = $object->getIsSigned();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
             $data['total_pages'] = $object->getTotalPages();
             $data['is_locked'] = $object->getIsLocked();
             $data['initials'] = $this->normalizer->normalize($object->getInitials(), 'json', $context);

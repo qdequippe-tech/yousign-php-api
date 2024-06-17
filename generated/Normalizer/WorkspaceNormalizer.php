@@ -58,13 +58,13 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setName(null);
             }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
-                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['created_at']));
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
             } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
                 $object->setCreatedAt(null);
             }
             if (\array_key_exists('updated_at', $data) && null !== $data['updated_at']) {
-                $object->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['updated_at']));
+                $object->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['updated_at']));
                 unset($data['updated_at']);
             } elseif (\array_key_exists('updated_at', $data) && null === $data['updated_at']) {
                 $object->setUpdatedAt(null);
@@ -157,13 +157,13 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setName(null);
             }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
-                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['created_at']));
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
             } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
                 $object->setCreatedAt(null);
             }
             if (\array_key_exists('updated_at', $data) && null !== $data['updated_at']) {
-                $object->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['updated_at']));
+                $object->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['updated_at']));
                 unset($data['updated_at']);
             } elseif (\array_key_exists('updated_at', $data) && null === $data['updated_at']) {
                 $object->setUpdatedAt(null);

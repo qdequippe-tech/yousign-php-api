@@ -99,13 +99,13 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setEnabled(null);
             }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
-                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['created_at']));
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
             } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
                 $object->setCreatedAt(null);
             }
             if (\array_key_exists('updated_at', $data) && null !== $data['updated_at']) {
-                $object->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['updated_at']));
+                $object->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['updated_at']));
                 unset($data['updated_at']);
             } elseif (\array_key_exists('updated_at', $data) && null === $data['updated_at']) {
                 $object->setUpdatedAt(null);
@@ -131,8 +131,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['scopes'] = $object->getScopes();
             $data['auto_retry'] = $object->getAutoRetry();
             $data['enabled'] = $object->getEnabled();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\\TH:i:sP');
-            $data['updated_at'] = $object->getUpdatedAt()->format('Y-m-d\\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
+            $data['updated_at'] = $object->getUpdatedAt()->format('Y-m-d\TH:i:sP');
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
@@ -235,13 +235,13 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setEnabled(null);
             }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
-                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['created_at']));
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
             } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
                 $object->setCreatedAt(null);
             }
             if (\array_key_exists('updated_at', $data) && null !== $data['updated_at']) {
-                $object->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['updated_at']));
+                $object->setUpdatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['updated_at']));
                 unset($data['updated_at']);
             } elseif (\array_key_exists('updated_at', $data) && null === $data['updated_at']) {
                 $object->setUpdatedAt(null);
@@ -272,8 +272,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['scopes'] = $object->getScopes();
             $data['auto_retry'] = $object->getAutoRetry();
             $data['enabled'] = $object->getEnabled();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\\TH:i:sP');
-            $data['updated_at'] = $object->getUpdatedAt()->format('Y-m-d\\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
+            $data['updated_at'] = $object->getUpdatedAt()->format('Y-m-d\TH:i:sP');
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;

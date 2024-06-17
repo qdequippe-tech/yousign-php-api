@@ -57,7 +57,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setIpAddress(null);
             }
             if (\array_key_exists('consent_given_at', $data) && null !== $data['consent_given_at']) {
-                $object->setConsentGivenAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['consent_given_at']));
+                $object->setConsentGivenAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['consent_given_at']));
                 unset($data['consent_given_at']);
             } elseif (\array_key_exists('consent_given_at', $data) && null === $data['consent_given_at']) {
                 $object->setConsentGivenAt(null);
@@ -81,7 +81,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $data['ip_address'] = $object->getIpAddress();
             }
             if ($object->isInitialized('consentGivenAt') && null !== $object->getConsentGivenAt()) {
-                $data['consent_given_at'] = $object->getConsentGivenAt()->format('Y-m-d\\TH:i:sP');
+                $data['consent_given_at'] = $object->getConsentGivenAt()->format('Y-m-d\TH:i:sP');
             }
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
@@ -143,7 +143,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setIpAddress(null);
             }
             if (\array_key_exists('consent_given_at', $data) && null !== $data['consent_given_at']) {
-                $object->setConsentGivenAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['consent_given_at']));
+                $object->setConsentGivenAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['consent_given_at']));
                 unset($data['consent_given_at']);
             } elseif (\array_key_exists('consent_given_at', $data) && null === $data['consent_given_at']) {
                 $object->setConsentGivenAt(null);
@@ -172,7 +172,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $data['ip_address'] = $object->getIpAddress();
             }
             if ($object->isInitialized('consentGivenAt') && null !== $object->getConsentGivenAt()) {
-                $data['consent_given_at'] = $object->getConsentGivenAt()->format('Y-m-d\\TH:i:sP');
+                $data['consent_given_at'] = $object->getConsentGivenAt()->format('Y-m-d\TH:i:sP');
             }
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {

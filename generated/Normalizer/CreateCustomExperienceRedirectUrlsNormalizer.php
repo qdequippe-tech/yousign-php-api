@@ -56,6 +56,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('error', $data) && null === $data['error']) {
                 $object->setError(null);
             }
+            if (\array_key_exists('decline', $data) && null !== $data['decline']) {
+                $object->setDecline($data['decline']);
+                unset($data['decline']);
+            } elseif (\array_key_exists('decline', $data) && null === $data['decline']) {
+                $object->setDecline(null);
+            }
             foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value;
@@ -70,6 +76,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data = [];
             $data['success'] = $object->getSuccess();
             $data['error'] = $object->getError();
+            $data['decline'] = $object->getDecline();
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
@@ -129,6 +136,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('error', $data) && null === $data['error']) {
                 $object->setError(null);
             }
+            if (\array_key_exists('decline', $data) && null !== $data['decline']) {
+                $object->setDecline($data['decline']);
+                unset($data['decline']);
+            } elseif (\array_key_exists('decline', $data) && null === $data['decline']) {
+                $object->setDecline(null);
+            }
             foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value;
@@ -148,6 +161,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data = [];
             $data['success'] = $object->getSuccess();
             $data['error'] = $object->getError();
+            $data['decline'] = $object->getDecline();
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
