@@ -76,7 +76,7 @@ class GetSignatureRequestsSignatureRequestIdDocuments extends BaseEndpoint imple
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            return $serializer->deserialize($body, 'Qdequippe\\Yousign\\Api\\Model\\Document[]', 'json');
+            return $serializer->deserialize($body, 'Qdequippe\Yousign\Api\Model\Document[]', 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);

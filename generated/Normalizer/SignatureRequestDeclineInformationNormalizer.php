@@ -57,7 +57,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setReason(null);
             }
             if (\array_key_exists('declined_at', $data) && null !== $data['declined_at']) {
-                $object->setDeclinedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['declined_at']));
+                $object->setDeclinedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['declined_at']));
                 unset($data['declined_at']);
             } elseif (\array_key_exists('declined_at', $data) && null === $data['declined_at']) {
                 $object->setDeclinedAt(null);
@@ -81,7 +81,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $data['reason'] = $object->getReason();
             }
             if ($object->isInitialized('declinedAt') && null !== $object->getDeclinedAt()) {
-                $data['declined_at'] = $object->getDeclinedAt()->format('Y-m-d\\TH:i:sP');
+                $data['declined_at'] = $object->getDeclinedAt()->format('Y-m-d\TH:i:sP');
             }
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
@@ -143,7 +143,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setReason(null);
             }
             if (\array_key_exists('declined_at', $data) && null !== $data['declined_at']) {
-                $object->setDeclinedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['declined_at']));
+                $object->setDeclinedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['declined_at']));
                 unset($data['declined_at']);
             } elseif (\array_key_exists('declined_at', $data) && null === $data['declined_at']) {
                 $object->setDeclinedAt(null);
@@ -172,7 +172,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $data['reason'] = $object->getReason();
             }
             if ($object->isInitialized('declinedAt') && null !== $object->getDeclinedAt()) {
-                $data['declined_at'] = $object->getDeclinedAt()->format('Y-m-d\\TH:i:sP');
+                $data['declined_at'] = $object->getDeclinedAt()->format('Y-m-d\TH:i:sP');
             }
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {

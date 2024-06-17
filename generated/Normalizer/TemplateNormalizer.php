@@ -69,7 +69,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setStatus(null);
             }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
-                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['created_at']));
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
             } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
                 $object->setCreatedAt(null);
@@ -167,7 +167,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setStatus(null);
             }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
-                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['created_at']));
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
             } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
                 $object->setCreatedAt(null);

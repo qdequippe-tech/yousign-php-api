@@ -74,7 +74,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setDeliveryMode(null);
             }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
-                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['created_at']));
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
             } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
                 $object->setCreatedAt(null);
@@ -104,7 +104,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setEmailCustomNote(null);
             }
             if (\array_key_exists('expiration_date', $data) && null !== $data['expiration_date']) {
-                $object->setExpirationDate(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['expiration_date']));
+                $object->setExpirationDate(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['expiration_date']));
                 unset($data['expiration_date']);
             } elseif (\array_key_exists('expiration_date', $data) && null === $data['expiration_date']) {
                 $object->setExpirationDate(null);
@@ -209,12 +209,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['status'] = $object->getStatus();
             $data['name'] = $object->getName();
             $data['delivery_mode'] = $object->getDeliveryMode();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
             $data['ordered_signers'] = $object->getOrderedSigners();
             $data['reminder_settings'] = $this->normalizer->normalize($object->getReminderSettings(), 'json', $context);
             $data['timezone'] = $object->getTimezone();
             $data['email_custom_note'] = $object->getEmailCustomNote();
-            $data['expiration_date'] = $object->getExpirationDate()->format('Y-m-d\\TH:i:sP');
+            $data['expiration_date'] = $object->getExpirationDate()->format('Y-m-d\TH:i:sP');
             $data['source'] = $object->getSource();
             $values = [];
             foreach ($object->getSigners() as $value) {
@@ -315,7 +315,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setDeliveryMode(null);
             }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
-                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['created_at']));
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
             } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
                 $object->setCreatedAt(null);
@@ -345,7 +345,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setEmailCustomNote(null);
             }
             if (\array_key_exists('expiration_date', $data) && null !== $data['expiration_date']) {
-                $object->setExpirationDate(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['expiration_date']));
+                $object->setExpirationDate(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['expiration_date']));
                 unset($data['expiration_date']);
             } elseif (\array_key_exists('expiration_date', $data) && null === $data['expiration_date']) {
                 $object->setExpirationDate(null);
@@ -455,12 +455,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['status'] = $object->getStatus();
             $data['name'] = $object->getName();
             $data['delivery_mode'] = $object->getDeliveryMode();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
             $data['ordered_signers'] = $object->getOrderedSigners();
             $data['reminder_settings'] = $this->normalizer->normalize($object->getReminderSettings(), 'json', $context);
             $data['timezone'] = $object->getTimezone();
             $data['email_custom_note'] = $object->getEmailCustomNote();
-            $data['expiration_date'] = $object->getExpirationDate()->format('Y-m-d\\TH:i:sP');
+            $data['expiration_date'] = $object->getExpirationDate()->format('Y-m-d\TH:i:sP');
             $data['source'] = $object->getSource();
             $values = [];
             foreach ($object->getSigners() as $value) {

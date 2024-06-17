@@ -21,6 +21,10 @@ class CreateCustomExperienceRedirectUrls extends \ArrayObject
      * @var string|null
      */
     protected $error;
+    /**
+     * @var string|null
+     */
+    protected $decline;
 
     public function getSuccess(): ?string
     {
@@ -44,6 +48,19 @@ class CreateCustomExperienceRedirectUrls extends \ArrayObject
     {
         $this->initialized['error'] = true;
         $this->error = $error;
+
+        return $this;
+    }
+
+    public function getDecline(): ?string
+    {
+        return $this->decline;
+    }
+
+    public function setDecline(?string $decline): self
+    {
+        $this->initialized['decline'] = true;
+        $this->decline = $decline;
 
         return $this;
     }

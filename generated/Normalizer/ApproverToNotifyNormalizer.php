@@ -63,7 +63,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setApprovalLink(null);
             }
             if (\array_key_exists('approval_link_expiration_date', $data) && null !== $data['approval_link_expiration_date']) {
-                $object->setApprovalLinkExpirationDate(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['approval_link_expiration_date']));
+                $object->setApprovalLinkExpirationDate(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['approval_link_expiration_date']));
                 unset($data['approval_link_expiration_date']);
             } elseif (\array_key_exists('approval_link_expiration_date', $data) && null === $data['approval_link_expiration_date']) {
                 $object->setApprovalLinkExpirationDate(null);
@@ -83,7 +83,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['id'] = $object->getId();
             $data['status'] = $object->getStatus();
             $data['approval_link'] = $object->getApprovalLink();
-            $data['approval_link_expiration_date'] = $object->getApprovalLinkExpirationDate()->format('Y-m-d\\TH:i:sP');
+            $data['approval_link_expiration_date'] = $object->getApprovalLinkExpirationDate()->format('Y-m-d\TH:i:sP');
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
@@ -150,7 +150,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setApprovalLink(null);
             }
             if (\array_key_exists('approval_link_expiration_date', $data) && null !== $data['approval_link_expiration_date']) {
-                $object->setApprovalLinkExpirationDate(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['approval_link_expiration_date']));
+                $object->setApprovalLinkExpirationDate(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['approval_link_expiration_date']));
                 unset($data['approval_link_expiration_date']);
             } elseif (\array_key_exists('approval_link_expiration_date', $data) && null === $data['approval_link_expiration_date']) {
                 $object->setApprovalLinkExpirationDate(null);
@@ -175,7 +175,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['id'] = $object->getId();
             $data['status'] = $object->getStatus();
             $data['approval_link'] = $object->getApprovalLink();
-            $data['approval_link_expiration_date'] = $object->getApprovalLinkExpirationDate()->format('Y-m-d\\TH:i:sP');
+            $data['approval_link_expiration_date'] = $object->getApprovalLinkExpirationDate()->format('Y-m-d\TH:i:sP');
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;

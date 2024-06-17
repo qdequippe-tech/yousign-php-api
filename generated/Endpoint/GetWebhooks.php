@@ -50,7 +50,7 @@ class GetWebhooks extends BaseEndpoint implements Endpoint
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            return $serializer->deserialize($body, 'Qdequippe\\Yousign\\Api\\Model\\WebhookSubscription[]', 'json');
+            return $serializer->deserialize($body, 'Qdequippe\Yousign\Api\Model\WebhookSubscription[]', 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetWebhooksBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);

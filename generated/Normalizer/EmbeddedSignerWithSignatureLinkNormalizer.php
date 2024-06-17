@@ -63,7 +63,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setSignatureLink(null);
             }
             if (\array_key_exists('signature_link_expiration_date', $data) && null !== $data['signature_link_expiration_date']) {
-                $object->setSignatureLinkExpirationDate(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['signature_link_expiration_date']));
+                $object->setSignatureLinkExpirationDate(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['signature_link_expiration_date']));
                 unset($data['signature_link_expiration_date']);
             } elseif (\array_key_exists('signature_link_expiration_date', $data) && null === $data['signature_link_expiration_date']) {
                 $object->setSignatureLinkExpirationDate(null);
@@ -83,7 +83,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['id'] = $object->getId();
             $data['status'] = $object->getStatus();
             $data['signature_link'] = $object->getSignatureLink();
-            $data['signature_link_expiration_date'] = $object->getSignatureLinkExpirationDate()->format('Y-m-d\\TH:i:sP');
+            $data['signature_link_expiration_date'] = $object->getSignatureLinkExpirationDate()->format('Y-m-d\TH:i:sP');
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
@@ -150,7 +150,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setSignatureLink(null);
             }
             if (\array_key_exists('signature_link_expiration_date', $data) && null !== $data['signature_link_expiration_date']) {
-                $object->setSignatureLinkExpirationDate(\DateTime::createFromFormat('Y-m-d\\TH:i:sP', $data['signature_link_expiration_date']));
+                $object->setSignatureLinkExpirationDate(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['signature_link_expiration_date']));
                 unset($data['signature_link_expiration_date']);
             } elseif (\array_key_exists('signature_link_expiration_date', $data) && null === $data['signature_link_expiration_date']) {
                 $object->setSignatureLinkExpirationDate(null);
@@ -175,7 +175,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['id'] = $object->getId();
             $data['status'] = $object->getStatus();
             $data['signature_link'] = $object->getSignatureLink();
-            $data['signature_link_expiration_date'] = $object->getSignatureLinkExpirationDate()->format('Y-m-d\\TH:i:sP');
+            $data['signature_link_expiration_date'] = $object->getSignatureLinkExpirationDate()->format('Y-m-d\TH:i:sP');
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
