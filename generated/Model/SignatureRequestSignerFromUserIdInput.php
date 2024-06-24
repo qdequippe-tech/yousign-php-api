@@ -32,7 +32,7 @@ class SignatureRequestSignerFromUserIdInput extends \ArrayObject
      */
     protected $signatureAuthenticationMode;
     /**
-     * @var FromScratch1RedirectUrls|null
+     * @var SignatureRequestSignerFromInfoInputRedirectUrls|null
      */
     protected $redirectUrls;
     /**
@@ -104,12 +104,12 @@ class SignatureRequestSignerFromUserIdInput extends \ArrayObject
         return $this;
     }
 
-    public function getRedirectUrls(): ?FromScratch1RedirectUrls
+    public function getRedirectUrls(): ?SignatureRequestSignerFromInfoInputRedirectUrls
     {
         return $this->redirectUrls;
     }
 
-    public function setRedirectUrls(?FromScratch1RedirectUrls $redirectUrls): self
+    public function setRedirectUrls(?SignatureRequestSignerFromInfoInputRedirectUrls $redirectUrls): self
     {
         $this->initialized['redirectUrls'] = true;
         $this->redirectUrls = $redirectUrls;

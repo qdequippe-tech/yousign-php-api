@@ -4,7 +4,7 @@ namespace Qdequippe\Yousign\Api\Exception;
 
 use Psr\Http\Message\ResponseInterface;
 
-class PostSignatureRequestsSignatureRequestIdSignaturesForbiddenException extends ForbiddenException
+class PostSignatureRequestsSignatureRequestIdActivateForbiddenException extends ForbiddenException
 {
     public function __construct(/**
      * @var ResponseInterface

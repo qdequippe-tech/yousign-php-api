@@ -67,6 +67,7 @@ use Qdequippe\Yousign\Api\Endpoint\PostCustomExperience;
 use Qdequippe\Yousign\Api\Endpoint\PostDocuments;
 use Qdequippe\Yousign\Api\Endpoint\PostElectronicSeals;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequests;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdActivate;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdApprovers;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdCancel;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdDocumentRequests;
@@ -76,7 +77,6 @@ use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdDocume
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdFollowers;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdMetadata;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdReactivate;
-use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignatures;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSigners;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder;
@@ -221,14 +221,14 @@ class Client extends Runtime\Client\Client
      *
      * @return Model\SignatureRequestActivated|ResponseInterface|null
      *
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignaturesBadRequestException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignaturesUnauthorizedException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignaturesForbiddenException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignaturesNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdActivateBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdActivateUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdActivateForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdActivateNotFoundException
      */
-    public function postSignatureRequestsSignatureRequestIdSignatures(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequestsSignatureRequestIdActivate(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignatures($signatureRequestId), $fetch);
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdActivate($signatureRequestId), $fetch);
     }
 
     /**
@@ -908,6 +908,7 @@ class Client extends Runtime\Client\Client
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
+     * @var int    $limit The limit of items count to retrieve.
      *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)

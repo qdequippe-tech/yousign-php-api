@@ -3,10 +3,10 @@
 namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
-use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignaturesBadRequestException;
-use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignaturesForbiddenException;
-use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignaturesNotFoundException;
-use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignaturesUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdActivateBadRequestException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdActivateForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdActivateNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdActivateUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
 use Qdequippe\Yousign\Api\Model\SignatureRequestActivated;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
@@ -15,7 +15,7 @@ use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class PostSignatureRequestsSignatureRequestIdSignatures extends BaseEndpoint implements Endpoint
+class PostSignatureRequestsSignatureRequestIdActivate extends BaseEndpoint implements Endpoint
 {
     use EndpointTrait;
 
@@ -49,10 +49,10 @@ class PostSignatureRequestsSignatureRequestIdSignatures extends BaseEndpoint imp
     /**
      * @return SignatureRequestActivated|null
      *
-     * @throws PostSignatureRequestsSignatureRequestIdSignaturesBadRequestException
-     * @throws PostSignatureRequestsSignatureRequestIdSignaturesUnauthorizedException
-     * @throws PostSignatureRequestsSignatureRequestIdSignaturesForbiddenException
-     * @throws PostSignatureRequestsSignatureRequestIdSignaturesNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdActivateBadRequestException
+     * @throws PostSignatureRequestsSignatureRequestIdActivateUnauthorizedException
+     * @throws PostSignatureRequestsSignatureRequestIdActivateForbiddenException
+     * @throws PostSignatureRequestsSignatureRequestIdActivateNotFoundException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -62,16 +62,16 @@ class PostSignatureRequestsSignatureRequestIdSignatures extends BaseEndpoint imp
             return $serializer->deserialize($body, SignatureRequestActivated::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdSignaturesBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostSignatureRequestsSignatureRequestIdActivateBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdSignaturesUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new PostSignatureRequestsSignatureRequestIdActivateUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdSignaturesForbiddenException($response);
+            throw new PostSignatureRequestsSignatureRequestIdActivateForbiddenException($response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdSignaturesNotFoundException($response);
+            throw new PostSignatureRequestsSignatureRequestIdActivateNotFoundException($response);
         }
 
         return null;
