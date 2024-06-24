@@ -4,7 +4,7 @@ namespace Qdequippe\Yousign\Api\Exception;
 
 use Psr\Http\Message\ResponseInterface;
 
-class PostSignatureRequestsSignatureRequestIdSignaturesNotFoundException extends NotFoundException
+class PostSignatureRequestsSignatureRequestIdActivateNotFoundException extends NotFoundException
 {
     public function __construct(/**
      * @var ResponseInterface

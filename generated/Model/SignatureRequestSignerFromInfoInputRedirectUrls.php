@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class FromScratch1RedirectUrls extends \ArrayObject
+class SignatureRequestSignerFromInfoInputRedirectUrls extends \ArrayObject
 {
     /**
      * @var array
@@ -21,10 +21,6 @@ class FromScratch1RedirectUrls extends \ArrayObject
      * @var string|null
      */
     protected $error;
-    /**
-     * @var string|null
-     */
-    protected $decline;
 
     public function getSuccess(): ?string
     {
@@ -48,19 +44,6 @@ class FromScratch1RedirectUrls extends \ArrayObject
     {
         $this->initialized['error'] = true;
         $this->error = $error;
-
-        return $this;
-    }
-
-    public function getDecline(): ?string
-    {
-        return $this->decline;
-    }
-
-    public function setDecline(?string $decline): self
-    {
-        $this->initialized['decline'] = true;
-        $this->decline = $decline;
 
         return $this;
     }

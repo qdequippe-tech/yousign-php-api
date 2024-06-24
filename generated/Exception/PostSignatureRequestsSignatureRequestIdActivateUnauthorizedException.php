@@ -5,7 +5,7 @@ namespace Qdequippe\Yousign\Api\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
 
-class PostSignatureRequestsSignatureRequestIdSignaturesUnauthorizedException extends UnauthorizedException
+class PostSignatureRequestsSignatureRequestIdActivateUnauthorizedException extends UnauthorizedException
 {
     public function __construct(private readonly GetSignatureRequests401Response $getSignatureRequests401Response, private readonly ResponseInterface $response)
     {

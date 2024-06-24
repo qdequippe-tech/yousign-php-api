@@ -4,7 +4,7 @@ namespace Qdequippe\Yousign\Api\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
 use Qdequippe\Yousign\Api\Model\FromScratch1CustomText;
-use Qdequippe\Yousign\Api\Model\FromScratch1RedirectUrls;
+use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromInfoInputRedirectUrls;
 use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromUserIdInput;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
@@ -79,7 +79,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setSignatureAuthenticationMode(null);
             }
             if (\array_key_exists('redirect_urls', $data) && null !== $data['redirect_urls']) {
-                $object->setRedirectUrls($this->denormalizer->denormalize($data['redirect_urls'], FromScratch1RedirectUrls::class, 'json', $context));
+                $object->setRedirectUrls($this->denormalizer->denormalize($data['redirect_urls'], SignatureRequestSignerFromInfoInputRedirectUrls::class, 'json', $context));
                 unset($data['redirect_urls']);
             } elseif (\array_key_exists('redirect_urls', $data) && null === $data['redirect_urls']) {
                 $object->setRedirectUrls(null);
@@ -204,7 +204,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setSignatureAuthenticationMode(null);
             }
             if (\array_key_exists('redirect_urls', $data) && null !== $data['redirect_urls']) {
-                $object->setRedirectUrls($this->denormalizer->denormalize($data['redirect_urls'], FromScratch1RedirectUrls::class, 'json', $context));
+                $object->setRedirectUrls($this->denormalizer->denormalize($data['redirect_urls'], SignatureRequestSignerFromInfoInputRedirectUrls::class, 'json', $context));
                 unset($data['redirect_urls']);
             } elseif (\array_key_exists('redirect_urls', $data) && null === $data['redirect_urls']) {
                 $object->setRedirectUrls(null);

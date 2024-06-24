@@ -5,7 +5,7 @@ namespace Qdequippe\Yousign\Api\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 
-class PostSignatureRequestsSignatureRequestIdSignaturesBadRequestException extends BadRequestException
+class PostSignatureRequestsSignatureRequestIdActivateBadRequestException extends BadRequestException
 {
     public function __construct(private readonly ViolationResponse $violationResponse, private readonly ResponseInterface $response)
     {
