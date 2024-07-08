@@ -11,6 +11,7 @@ use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class GetSignatureRequestsSignatureRequestIdAuditTrailsDownload extends BaseEndpoint implements Endpoint
@@ -19,10 +20,16 @@ class GetSignatureRequestsSignatureRequestIdAuditTrailsDownload extends BaseEndp
 
     /**
      * @param string $signatureRequestId Signature Request Id
-     * @param array  $accept             Accept content header application/zip, application/pdf|application/json
+     * @param array  $queryParameters    {
+     *
+     * @var bool $merge Download all Audit Trails merged as a single PDF file
+     *           }
+     *
+     * @param array $accept Accept content header application/zip, application/pdf|application/json
      */
-    public function __construct(protected string $signatureRequestId, protected array $accept = [])
+    public function __construct(protected string $signatureRequestId, array $queryParameters = [], protected array $accept = [])
     {
+        $this->queryParameters = $queryParameters;
     }
 
     public function getMethod(): string
@@ -47,6 +54,17 @@ class GetSignatureRequestsSignatureRequestIdAuditTrailsDownload extends BaseEndp
         }
 
         return $this->accept;
+    }
+
+    protected function getQueryOptionsResolver(): OptionsResolver
+    {
+        $optionsResolver = parent::getQueryOptionsResolver();
+        $optionsResolver->setDefined(['merge']);
+        $optionsResolver->setRequired([]);
+        $optionsResolver->setDefaults(['merge' => false]);
+        $optionsResolver->addAllowedTypes('merge', ['bool']);
+
+        return $optionsResolver;
     }
 
     /**

@@ -53,6 +53,8 @@ use Qdequippe\Yousign\Api\Endpoint\GetUsers;
 use Qdequippe\Yousign\Api\Endpoint\GetWebhooks;
 use Qdequippe\Yousign\Api\Endpoint\GetWebhooksWebhookId;
 use Qdequippe\Yousign\Api\Endpoint\GetWorkspaces;
+use Qdequippe\Yousign\Api\Endpoint\GetWorkspacesDefault;
+use Qdequippe\Yousign\Api\Endpoint\GetWorkspacesWorkspaceId;
 use Qdequippe\Yousign\Api\Endpoint\ListElectronicSealImages;
 use Qdequippe\Yousign\Api\Endpoint\PatchContactsContactId;
 use Qdequippe\Yousign\Api\Endpoint\PatchCustomExperienceLogo;
@@ -62,6 +64,7 @@ use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdAppro
 use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentId;
 use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdSignersSignerId;
 use Qdequippe\Yousign\Api\Endpoint\PatchWebhooksWebhookId;
+use Qdequippe\Yousign\Api\Endpoint\PatchWorkspacesWorkspaceId;
 use Qdequippe\Yousign\Api\Endpoint\PostContact;
 use Qdequippe\Yousign\Api\Endpoint\PostCustomExperience;
 use Qdequippe\Yousign\Api\Endpoint\PostDocuments;
@@ -82,6 +85,7 @@ use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSigner
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSign;
 use Qdequippe\Yousign\Api\Endpoint\PostWebhooksSubscriptions;
+use Qdequippe\Yousign\Api\Endpoint\PostWorkspace;
 use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdMetadata;
 use Qdequippe\Yousign\Api\Endpoint\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId;
 use Qdequippe\Yousign\Api\Model\CreateContact;
@@ -93,8 +97,11 @@ use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
 use Qdequippe\Yousign\Api\Model\CreateWebhookSubscription;
+use Qdequippe\Yousign\Api\Model\CreateWorkspace;
+use Qdequippe\Yousign\Api\Model\DeleteWorkspace;
 use Qdequippe\Yousign\Api\Model\Document;
 use Qdequippe\Yousign\Api\Model\Follower;
+use Qdequippe\Yousign\Api\Model\MarkWorkspaceAsDefault;
 use Qdequippe\Yousign\Api\Model\PatchCustomExperienceLogoRequest;
 use Qdequippe\Yousign\Api\Model\PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdCancelRequest;
@@ -109,6 +116,7 @@ use Qdequippe\Yousign\Api\Model\UpdateSignatureRequest;
 use Qdequippe\Yousign\Api\Model\UpdateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\UpdateSigner;
 use Qdequippe\Yousign\Api\Model\UpdateWebhookSubscription;
+use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealImage;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
@@ -282,8 +290,13 @@ class Client extends Runtime\Client\Client
 
     /**
      * @param string $signatureRequestId Signature Request Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept             Accept content header application/zip, application/pdf|application/json
+     * @param array  $queryParameters    {
+     *
+     * @var bool $merge Download all Audit Trails merged as a single PDF file
+     *           }
+     *
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept Accept content header application/zip, application/pdf|application/json
      *
      * @return ResponseInterface|null
      *
@@ -291,9 +304,9 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadNotFoundException
      */
-    public function getSignatureRequestsSignatureRequestIdAuditTrailsDownload(string $signatureRequestId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    public function getSignatureRequestsSignatureRequestIdAuditTrailsDownload(string $signatureRequestId, array $queryParameters = [], string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
-        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdAuditTrailsDownload($signatureRequestId, $accept), $fetch);
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdAuditTrailsDownload($signatureRequestId, $queryParameters, $accept), $fetch);
     }
 
     /**
@@ -1397,6 +1410,114 @@ class Client extends Runtime\Client\Client
     public function getWorkspaces(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new GetWorkspaces($queryParameters), $fetch);
+    }
+
+    /**
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Workspace|ResponseInterface|null
+     *
+     * @throws Exception\PostWorkspaceBadRequestException
+     * @throws Exception\PostWorkspaceUnauthorizedException
+     * @throws Exception\PostWorkspaceForbiddenException
+     * @throws Exception\PostWorkspaceNotFoundException
+     */
+    public function postWorkspace(?CreateWorkspace $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostWorkspace($requestBody), $fetch);
+    }
+
+    /**
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Workspace|ResponseInterface|null
+     *
+     * @throws Exception\GetWorkspacesDefaultBadRequestException
+     * @throws Exception\GetWorkspacesDefaultUnauthorizedException
+     * @throws Exception\GetWorkspacesDefaultForbiddenException
+     * @throws Exception\GetWorkspacesDefaultNotFoundException
+     */
+    public function getWorkspacesDefault(string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetWorkspacesDefault(), $fetch);
+    }
+
+    /**
+     * Mark the given Workspace as default. The workspace should not already be the default one and should not have been deleted.
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\MarkWorkspaceAsDefaultBadRequestException
+     * @throws Exception\MarkWorkspaceAsDefaultUnauthorizedException
+     * @throws Exception\MarkWorkspaceAsDefaultForbiddenException
+     */
+    public function markWorkspaceAsDefault(?MarkWorkspaceAsDefault $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new Endpoint\MarkWorkspaceAsDefault($requestBody), $fetch);
+    }
+
+    /**
+     * Delete a Workspace and migrate resources to a specified workspace. The deleted workspace should not have been migrated and should not be the default one.
+     * Migrated resources are:
+     * - BulkSendBatches
+     * - Contacts
+     * - SignatureRequests
+     * - Templates
+     * - Users (not already present in target workspace)
+     * - WorkflowExecutions
+     * - WorkflowFormQuestion
+     * - WorkflowsWorkspace
+     * - WorkspaceInvitations.
+     *
+     * @param string $workspaceId Workspace Id
+     * @param string $fetch       Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteWorkspaceBadRequestException
+     * @throws Exception\DeleteWorkspaceUnauthorizedException
+     * @throws Exception\DeleteWorkspaceForbiddenException
+     * @throws Exception\DeleteWorkspaceNotFoundException
+     */
+    public function deleteWorkspace(string $workspaceId, ?DeleteWorkspace $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new Endpoint\DeleteWorkspace($workspaceId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $workspaceId Workspace Id
+     * @param string $fetch       Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Workspace|ResponseInterface|null
+     *
+     * @throws Exception\GetWorkspacesWorkspaceIdBadRequestException
+     * @throws Exception\GetWorkspacesWorkspaceIdUnauthorizedException
+     * @throws Exception\GetWorkspacesWorkspaceIdForbiddenException
+     * @throws Exception\GetWorkspacesWorkspaceIdNotFoundException
+     */
+    public function getWorkspacesWorkspaceId(string $workspaceId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetWorkspacesWorkspaceId($workspaceId), $fetch);
+    }
+
+    /**
+     * Update the information of a given Workspace.
+     *
+     * @param string $workspaceId Workspace Id
+     * @param string $fetch       Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Workspace|ResponseInterface|null
+     *
+     * @throws Exception\PatchWorkspacesWorkspaceIdBadRequestException
+     * @throws Exception\PatchWorkspacesWorkspaceIdUnauthorizedException
+     * @throws Exception\PatchWorkspacesWorkspaceIdForbiddenException
+     * @throws Exception\PatchWorkspacesWorkspaceIdNotFoundException
+     */
+    public function patchWorkspacesWorkspaceId(string $workspaceId, ?UpdateWorkspace $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchWorkspacesWorkspaceId($workspaceId, $requestBody), $fetch);
     }
 
     /**

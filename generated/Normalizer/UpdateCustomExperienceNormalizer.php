@@ -3,8 +3,8 @@
 namespace Qdequippe\Yousign\Api\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Qdequippe\Yousign\Api\Model\CreateCustomExperienceRedirectUrls;
 use Qdequippe\Yousign\Api\Model\UpdateCustomExperience;
+use Qdequippe\Yousign\Api\Model\UpdateCustomExperienceRedirectUrls;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\HttpKernel\Kernel;
@@ -30,7 +30,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && UpdateCustomExperience::class === $data::class;
+            return \is_object($data) && Qdequippe\Yousign\Api\Model\UpdateCustomExperience::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -122,7 +122,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setEmailExpirationTextDisabled(null);
             }
             if (\array_key_exists('redirect_urls', $data) && null !== $data['redirect_urls']) {
-                $object->setRedirectUrls($this->denormalizer->denormalize($data['redirect_urls'], CreateCustomExperienceRedirectUrls::class, 'json', $context));
+                $object->setRedirectUrls($this->denormalizer->denormalize($data['redirect_urls'], UpdateCustomExperienceRedirectUrls::class, 'json', $context));
                 unset($data['redirect_urls']);
             } elseif (\array_key_exists('redirect_urls', $data) && null === $data['redirect_urls']) {
                 $object->setRedirectUrls(null);
@@ -211,7 +211,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && UpdateCustomExperience::class === $data::class;
+            return \is_object($data) && Qdequippe\Yousign\Api\Model\UpdateCustomExperience::class === $data::class;
         }
 
         /**
@@ -306,7 +306,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setEmailExpirationTextDisabled(null);
             }
             if (\array_key_exists('redirect_urls', $data) && null !== $data['redirect_urls']) {
-                $object->setRedirectUrls($this->denormalizer->denormalize($data['redirect_urls'], CreateCustomExperienceRedirectUrls::class, 'json', $context));
+                $object->setRedirectUrls($this->denormalizer->denormalize($data['redirect_urls'], UpdateCustomExperienceRedirectUrls::class, 'json', $context));
                 unset($data['redirect_urls']);
             } elseif (\array_key_exists('redirect_urls', $data) && null === $data['redirect_urls']) {
                 $object->setRedirectUrls(null);

@@ -22,6 +22,14 @@ class Workspace extends \ArrayObject
      */
     protected $name;
     /**
+     * @var string|null
+     */
+    protected $externalName;
+    /**
+     * @var bool|null
+     */
+    protected $default;
+    /**
      * @var \DateTime|null
      */
     protected $createdAt;
@@ -29,6 +37,10 @@ class Workspace extends \ArrayObject
      * @var \DateTime|null
      */
     protected $updatedAt;
+    /**
+     * @var \DateTime|null
+     */
+    protected $deletedAt;
     /**
      * @var list<WorkspaceUsersInner>|null
      */
@@ -60,6 +72,32 @@ class Workspace extends \ArrayObject
         return $this;
     }
 
+    public function getExternalName(): ?string
+    {
+        return $this->externalName;
+    }
+
+    public function setExternalName(?string $externalName): self
+    {
+        $this->initialized['externalName'] = true;
+        $this->externalName = $externalName;
+
+        return $this;
+    }
+
+    public function getDefault(): ?bool
+    {
+        return $this->default;
+    }
+
+    public function setDefault(?bool $default): self
+    {
+        $this->initialized['default'] = true;
+        $this->default = $default;
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
@@ -82,6 +120,19 @@ class Workspace extends \ArrayObject
     {
         $this->initialized['updatedAt'] = true;
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTime $deletedAt): self
+    {
+        $this->initialized['deletedAt'] = true;
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }

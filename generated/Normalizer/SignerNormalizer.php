@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Model\Signer;
 use Qdequippe\Yousign\Api\Model\SignerCustomText;
 use Qdequippe\Yousign\Api\Model\SignerInfo;
 use Qdequippe\Yousign\Api\Model\SignerRedirectUrls;
+use Qdequippe\Yousign\Api\Model\SmsNotification;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\HttpKernel\Kernel;
@@ -32,7 +33,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Signer::class === $data::class;
+            return \is_object($data) && Qdequippe\Yousign\Api\Model\Signer::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -129,6 +130,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('identification_attestation_id', $data) && null === $data['identification_attestation_id']) {
                 $object->setIdentificationAttestationId(null);
             }
+            if (\array_key_exists('sms_notification', $data) && null !== $data['sms_notification']) {
+                $object->setSmsNotification($this->denormalizer->denormalize($data['sms_notification'], SmsNotification::class, 'json', $context));
+                unset($data['sms_notification']);
+            } elseif (\array_key_exists('sms_notification', $data) && null === $data['sms_notification']) {
+                $object->setSmsNotification(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -158,6 +165,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['custom_text'] = $this->normalizer->normalize($object->getCustomText(), 'json', $context);
             $data['delivery_mode'] = $object->getDeliveryMode();
             $data['identification_attestation_id'] = $object->getIdentificationAttestationId();
+            $data['sms_notification'] = $this->normalizer->normalize($object->getSmsNotification(), 'json', $context);
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;
@@ -187,7 +195,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Signer::class === $data::class;
+            return \is_object($data) && Qdequippe\Yousign\Api\Model\Signer::class === $data::class;
         }
 
         /**
@@ -287,6 +295,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('identification_attestation_id', $data) && null === $data['identification_attestation_id']) {
                 $object->setIdentificationAttestationId(null);
             }
+            if (\array_key_exists('sms_notification', $data) && null !== $data['sms_notification']) {
+                $object->setSmsNotification($this->denormalizer->denormalize($data['sms_notification'], SmsNotification::class, 'json', $context));
+                unset($data['sms_notification']);
+            } elseif (\array_key_exists('sms_notification', $data) && null === $data['sms_notification']) {
+                $object->setSmsNotification(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -321,6 +335,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['custom_text'] = $this->normalizer->normalize($object->getCustomText(), 'json', $context);
             $data['delivery_mode'] = $object->getDeliveryMode();
             $data['identification_attestation_id'] = $object->getIdentificationAttestationId();
+            $data['sms_notification'] = $this->normalizer->normalize($object->getSmsNotification(), 'json', $context);
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;

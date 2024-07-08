@@ -70,7 +70,7 @@ class UpdateCustomExperience extends \ArrayObject
      */
     protected $emailExpirationTextDisabled;
     /**
-     * @var CreateCustomExperienceRedirectUrls|null
+     * @var UpdateCustomExperienceRedirectUrls|null
      */
     protected $redirectUrls;
 
@@ -260,12 +260,12 @@ class UpdateCustomExperience extends \ArrayObject
         return $this;
     }
 
-    public function getRedirectUrls(): ?CreateCustomExperienceRedirectUrls
+    public function getRedirectUrls(): ?UpdateCustomExperienceRedirectUrls
     {
         return $this->redirectUrls;
     }
 
-    public function setRedirectUrls(?CreateCustomExperienceRedirectUrls $redirectUrls): self
+    public function setRedirectUrls(?UpdateCustomExperienceRedirectUrls $redirectUrls): self
     {
         $this->initialized['redirectUrls'] = true;
         $this->redirectUrls = $redirectUrls;
