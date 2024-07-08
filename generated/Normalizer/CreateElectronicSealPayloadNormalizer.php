@@ -29,7 +29,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && CreateElectronicSealPayload::class === $data::class;
+            return \is_object($data) && Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -61,12 +61,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 unset($data['external_id']);
             } elseif (\array_key_exists('external_id', $data) && null === $data['external_id']) {
                 $object->setExternalId(null);
-            }
-            if (\array_key_exists('timestamp', $data) && null !== $data['timestamp']) {
-                $object->setTimestamp($data['timestamp']);
-                unset($data['timestamp']);
-            } elseif (\array_key_exists('timestamp', $data) && null === $data['timestamp']) {
-                $object->setTimestamp(null);
             }
             if (\array_key_exists('fields', $data) && null !== $data['fields']) {
                 $values = [];
@@ -113,9 +107,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if ($object->isInitialized('externalId') && null !== $object->getExternalId()) {
                 $data['external_id'] = $object->getExternalId();
             }
-            if ($object->isInitialized('timestamp') && null !== $object->getTimestamp()) {
-                $data['timestamp'] = $object->getTimestamp();
-            }
             $values = [];
             foreach ($object->getFields() as $value) {
                 $values_1 = [];
@@ -160,7 +151,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && CreateElectronicSealPayload::class === $data::class;
+            return \is_object($data) && Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload::class === $data::class;
         }
 
         /**
@@ -195,12 +186,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 unset($data['external_id']);
             } elseif (\array_key_exists('external_id', $data) && null === $data['external_id']) {
                 $object->setExternalId(null);
-            }
-            if (\array_key_exists('timestamp', $data) && null !== $data['timestamp']) {
-                $object->setTimestamp($data['timestamp']);
-                unset($data['timestamp']);
-            } elseif (\array_key_exists('timestamp', $data) && null === $data['timestamp']) {
-                $object->setTimestamp(null);
             }
             if (\array_key_exists('fields', $data) && null !== $data['fields']) {
                 $values = [];
@@ -251,9 +236,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             if ($object->isInitialized('externalId') && null !== $object->getExternalId()) {
                 $data['external_id'] = $object->getExternalId();
-            }
-            if ($object->isInitialized('timestamp') && null !== $object->getTimestamp()) {
-                $data['timestamp'] = $object->getTimestamp();
             }
             $values = [];
             foreach ($object->getFields() as $value) {

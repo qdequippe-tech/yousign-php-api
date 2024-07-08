@@ -30,7 +30,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Workspace::class === $data::class;
+            return \is_object($data) && Qdequippe\Yousign\Api\Model\Workspace::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -57,6 +57,18 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('name', $data) && null === $data['name']) {
                 $object->setName(null);
             }
+            if (\array_key_exists('external_name', $data) && null !== $data['external_name']) {
+                $object->setExternalName($data['external_name']);
+                unset($data['external_name']);
+            } elseif (\array_key_exists('external_name', $data) && null === $data['external_name']) {
+                $object->setExternalName(null);
+            }
+            if (\array_key_exists('default', $data) && null !== $data['default']) {
+                $object->setDefault($data['default']);
+                unset($data['default']);
+            } elseif (\array_key_exists('default', $data) && null === $data['default']) {
+                $object->setDefault(null);
+            }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
                 $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
@@ -68,6 +80,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 unset($data['updated_at']);
             } elseif (\array_key_exists('updated_at', $data) && null === $data['updated_at']) {
                 $object->setUpdatedAt(null);
+            }
+            if (\array_key_exists('deleted_at', $data) && null !== $data['deleted_at']) {
+                $object->setDeletedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['deleted_at']));
+                unset($data['deleted_at']);
+            } elseif (\array_key_exists('deleted_at', $data) && null === $data['deleted_at']) {
+                $object->setDeletedAt(null);
             }
             if (\array_key_exists('users', $data) && null !== $data['users']) {
                 $values = [];
@@ -92,6 +110,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         {
             $data = [];
             $data['name'] = $object->getName();
+            $data['external_name'] = $object->getExternalName();
+            $data['default'] = $object->getDefault();
             $values = [];
             foreach ($object->getUsers() as $value) {
                 $values[] = $this->normalizer->normalize($value, 'json', $context);
@@ -126,7 +146,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Workspace::class === $data::class;
+            return \is_object($data) && Qdequippe\Yousign\Api\Model\Workspace::class === $data::class;
         }
 
         /**
@@ -156,6 +176,18 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('name', $data) && null === $data['name']) {
                 $object->setName(null);
             }
+            if (\array_key_exists('external_name', $data) && null !== $data['external_name']) {
+                $object->setExternalName($data['external_name']);
+                unset($data['external_name']);
+            } elseif (\array_key_exists('external_name', $data) && null === $data['external_name']) {
+                $object->setExternalName(null);
+            }
+            if (\array_key_exists('default', $data) && null !== $data['default']) {
+                $object->setDefault($data['default']);
+                unset($data['default']);
+            } elseif (\array_key_exists('default', $data) && null === $data['default']) {
+                $object->setDefault(null);
+            }
             if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
                 $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
                 unset($data['created_at']);
@@ -167,6 +199,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 unset($data['updated_at']);
             } elseif (\array_key_exists('updated_at', $data) && null === $data['updated_at']) {
                 $object->setUpdatedAt(null);
+            }
+            if (\array_key_exists('deleted_at', $data) && null !== $data['deleted_at']) {
+                $object->setDeletedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['deleted_at']));
+                unset($data['deleted_at']);
+            } elseif (\array_key_exists('deleted_at', $data) && null === $data['deleted_at']) {
+                $object->setDeletedAt(null);
             }
             if (\array_key_exists('users', $data) && null !== $data['users']) {
                 $values = [];
@@ -196,6 +234,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         {
             $data = [];
             $data['name'] = $object->getName();
+            $data['external_name'] = $object->getExternalName();
+            $data['default'] = $object->getDefault();
             $values = [];
             foreach ($object->getUsers() as $value) {
                 $values[] = $this->normalizer->normalize($value, 'json', $context);

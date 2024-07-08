@@ -32,10 +32,6 @@ class CreateElectronicSealPayload extends \ArrayObject
      */
     protected $externalId;
     /**
-     * @var bool|null
-     */
-    protected $timestamp = false;
-    /**
      * @var list<array<string, mixed>>|null
      */
     protected $fields;
@@ -103,19 +99,6 @@ class CreateElectronicSealPayload extends \ArrayObject
     {
         $this->initialized['externalId'] = true;
         $this->externalId = $externalId;
-
-        return $this;
-    }
-
-    public function getTimestamp(): ?bool
-    {
-        return $this->timestamp;
-    }
-
-    public function setTimestamp(?bool $timestamp): self
-    {
-        $this->initialized['timestamp'] = true;
-        $this->timestamp = $timestamp;
 
         return $this;
     }
