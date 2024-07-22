@@ -20,6 +20,9 @@ class PostContact extends BaseEndpoint implements Endpoint
 {
     use EndpointTrait;
 
+    /**
+     * Creates a new Contact.
+     */
     public function __construct(?CreateContact $requestBody = null)
     {
         $this->body = $requestBody;

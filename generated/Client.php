@@ -14,6 +14,7 @@ use Qdequippe\Yousign\Api\Endpoint\DeleteCustomExperienceLogo;
 use Qdequippe\Yousign\Api\Endpoint\DeleteElectronicSealImage;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdApproversApproverId;
+use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdMetadata;
@@ -130,6 +131,8 @@ use Symfony\Component\Serializer\Serializer;
 class Client extends Runtime\Client\Client
 {
     /**
+     * Returns the list of all Signatures Requests in your organization. You can limit the number of items returned by using filters and pagination.
+     *
      * @param array $queryParameters {
      *
      * @var string $status Filter by status
@@ -154,6 +157,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Creates a new Signature Request resource.
+     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return Model\SignatureRequest|ResponseInterface|null
@@ -169,7 +174,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Delete a Signature Request (except in approval and ongoing status).
+     * Deletes a given Signature Request, not possible if the Signature Request is in `approval` and `ongoing` status.
      *
      * @param string $signatureRequestId Signature Request Id
      * @param array  $queryParameters    {
@@ -192,6 +197,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Retrieves a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -208,6 +215,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Updates a given Signature Request. Any parameters not provided are left unchanged.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -224,6 +233,9 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Activates a Signature request, so it is not in `draft` status anymore.
+     * If the `delivery_mode` is not `null`, activating the Signature Request will trigger the notifications to Approvers/Followers/Signers.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -240,6 +252,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Cancels a Signature Request when it is in `approval` or `ongoing` status. A canceled Signature Request cannot be reactivated.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -256,6 +270,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Reactivates a Signature Request when it is in `expired` status.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -272,6 +288,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Retrieves the JSON version of the Audit Trail attached to a given Signer. Only possible when Signer status is `signed`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -289,6 +307,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Download the PDF version of all the Audit Trails attached to a given Signature Request. Each Audit Trail is bound to a different Signer. Only possible when the Signature Request status is `done`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param array  $queryParameters    {
      *
@@ -310,6 +330,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Download the PDF version of the Audit Trail attached to a given Signer. Only possible when Signer status is `signed`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -328,6 +350,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Returns a list of Documents for a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param array  $queryParameters    {
      *
@@ -349,6 +373,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Adds a Document to a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -365,10 +391,12 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Downloads the PDF version of all Documents attached to a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param array  $queryParameters    {
      *
-     * @var string $version specify Documents version to download, "completed" is only available when the Signature Request status is "done"
+     * @var string $version specify Documents version to download, `completed` is only available when the Signature Request status is `done`
      * @var bool   $archive Force zip archive download
      *             }
      *
@@ -387,6 +415,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Deletes a given Document from a Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -404,6 +434,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Retrieves a given Document.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -420,6 +452,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Updates a given Document. Any parameters not provided are left unchanged.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -437,6 +471,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Downloads the PDF version of a given Document.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -455,6 +491,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Replace the file of a given Document.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -472,6 +510,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Returns a list of Fields for a given Document. You can limit the number of items returned by using filters.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document ID
      * @param array  $queryParameters    {
@@ -494,6 +534,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Adds a Field to a given Document.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document ID
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -511,7 +553,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Delete a Document's Field in a Signature Request (in draft status).
+     * Deletes a given Field from a Document.
      *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
@@ -531,7 +573,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Update a Document's Field in a Signature Request (in draft status).
+     * Updates a given Field. Any parameters not provided are left unchanged.
      *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
@@ -551,6 +593,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Adds a Signer Document Request to a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -567,6 +611,27 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Delete a Signer Document Request from signature request. This action is only permitted when the signature request is a draft.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentRequestId  Signer Document Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestId(string $signatureRequestId, string $documentRequestId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestId($signatureRequestId, $documentRequestId), $fetch);
+    }
+
+    /**
+     * Returns a list of Signers for a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -582,6 +647,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Adds a Signer to a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -598,6 +665,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Deletes a given Signer from a Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -615,6 +684,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Retrieves a given Signer.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -631,6 +702,9 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Updates a given Signer.
+     * Any parameters not provided are left unchanged.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -648,7 +722,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Send a One-Time Password (OTP) to a specified Signer. This endpoint is useful for integrating the signing flow into your application and allowing the Signer to sign through the API. Once the OTP is sent, the Signer must provide it back to complete the Signature Request.
+     * Send a One-Time Password (OTP) to a given Signer. Use this endpoint only if you use your own signing flow.
      *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
@@ -667,6 +741,9 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Sends a reminder to a given signer to complete their Signature Request.
+     * Only possible when the Signature Request status is `ongoing` and the Signer status is `notified`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -703,6 +780,9 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Deletes all documents uploaded by a given Signer for a specific Signature Request.
+     * Deletion is only possible when Signer status is `signed`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -720,6 +800,9 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Returns a list of Documents uploaded by a given Signer.
+     * Only possible when Signer status is `signed`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -737,6 +820,9 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Downloads a Document uploaded by a given Signer.
+     * Only possible when Signer status is `signed`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param string $signerDocumentId   Signer Document Id
@@ -756,7 +842,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Create a new Approver either from: - scratch - an existing Contact - an existing User - an existing Signer.
+     * Adds an Approver to a given Signature Request.
      *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -774,6 +860,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Deletes a given Approver from a Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $approverId         Approver Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -791,6 +879,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Retrieves a given Approver.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $approverId         Approver Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -807,6 +897,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Updates a given Approver. Any parameters not provided are left unchanged.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $approverId         Approver Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -824,6 +916,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Returns a list of Followers for a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -839,6 +933,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Adds a Follower to a given Signature Request.
+     *
      * @param string                      $signatureRequestId Signature Request Id
      * @param CreateFollowersInner[]|null $requestBody
      * @param string                      $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
@@ -856,6 +952,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Deletes the Metadata of a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -871,6 +969,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Retrieves the Metadata of a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -886,6 +986,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Add Metadata to a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -902,6 +1004,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Updates the Metadata of a given Signature Request. Any parameters not provided are left unchanged.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -918,6 +1022,9 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Returns the list of all Custom Experiences in your Organization.
+     * You can limit the number of items returned by using pagination.
+     *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
@@ -938,6 +1045,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Creates a new Custom Experience.
+     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return Model\CustomExperience|ResponseInterface|null
@@ -952,6 +1061,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Deletes a given Custom Experience.
+     *
      * @param string $customExperienceId Custom Experience Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -968,6 +1079,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Retrieves a given Custom Experience.
+     *
      * @param string $customExperienceId Custom Experience Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -984,6 +1097,9 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Updates a given Custom Experience.
+     * Any parameters not provided are left unchanged.
+     *
      * @param string $customExperienceId Custom Experience Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -1000,6 +1116,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Deletes the logo of a Custom Experience.
+     *
      * @param string $customExperienceId Custom Experience Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -1016,6 +1134,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Updates the logo of a given Custom Experience by uploading the image of your choice.
+     *
      * @param string $customExperienceId Custom Experience Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -1200,6 +1320,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Creates a new Webhook subscription in your organization.
+     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return WebhookSubscription|ResponseInterface|null
@@ -1215,6 +1337,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Deletes a given Webhook subscription.
+     *
      * @param string $webhookId Webhook Id
      * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -1231,6 +1355,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Retrieves a given Webhook subscription.
+     *
      * @param string $webhookId Webhook Id
      * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -1247,6 +1373,9 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Updates a given Webhook subscription.
+     * Any parameters not provided are left unchanged.
+     *
      * @param string $webhookId Webhook Id
      * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -1263,6 +1392,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Returns the list of all the Contacts within your organization.
+     *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
@@ -1283,6 +1414,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Creates a new Contact.
+     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return Model\Contact|ResponseInterface|null
@@ -1298,6 +1431,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Deletes a given Contact.
+     *
      * @param string $contactId Contact Id
      * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -1313,6 +1448,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Retrieves a given Contact.
+     *
      * @param string $contactId Contact Id
      * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -1326,7 +1463,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Update the information of a given Contact.
+     * Updates a given Contact.
+     * Any parameters not provided are left unchanged.
      *
      * @param string $contactId Contact Id
      * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
@@ -1393,6 +1531,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Returns the list of all Workspaces within your Organization.
+     *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
@@ -1413,6 +1553,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Creates a new Workspace in the organization.
+     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return Model\Workspace|ResponseInterface|null
@@ -1443,7 +1585,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Mark the given Workspace as default. The workspace should not already be the default one and should not have been deleted.
+     * Marks the given Workspace as default.
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -1459,17 +1601,7 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Delete a Workspace and migrate resources to a specified workspace. The deleted workspace should not have been migrated and should not be the default one.
-     * Migrated resources are:
-     * - BulkSendBatches
-     * - Contacts
-     * - SignatureRequests
-     * - Templates
-     * - Users (not already present in target workspace)
-     * - WorkflowExecutions
-     * - WorkflowFormQuestion
-     * - WorkflowsWorkspace
-     * - WorkspaceInvitations.
+     * Deletes a given Workspace and transfers everything that is attached to this Workspace to a another specified Workspace.
      *
      * @param string $workspaceId Workspace Id
      * @param string $fetch       Fetch mode to use (can be OBJECT or RESPONSE)
@@ -1487,6 +1619,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Retrieves a given Workspace.
+     *
      * @param string $workspaceId Workspace Id
      * @param string $fetch       Fetch mode to use (can be OBJECT or RESPONSE)
      *
@@ -1503,7 +1637,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Update the information of a given Workspace.
+     * Updates a given Workspace.
+     * Any parameters not provided are left unchanged.
      *
      * @param string $workspaceId Workspace Id
      * @param string $fetch       Fetch mode to use (can be OBJECT or RESPONSE)
@@ -1521,6 +1656,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Returns the list of all the Users within your organization.
+     *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
@@ -1540,6 +1677,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Deprecated endpoint, do not use.
+     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return Document|ResponseInterface|null
@@ -1554,6 +1693,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Returns the list of all Templates within your Organization.
+     *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)

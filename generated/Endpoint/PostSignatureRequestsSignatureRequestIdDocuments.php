@@ -22,6 +22,8 @@ class PostSignatureRequestsSignatureRequestIdDocuments extends BaseEndpoint impl
     use EndpointTrait;
 
     /**
+     * Adds a Document to a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId, ?CreateDocument $requestBody = null)

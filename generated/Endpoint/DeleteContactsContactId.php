@@ -17,6 +17,8 @@ class DeleteContactsContactId extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Deletes a given Contact.
+     *
      * @param string $contactId Contact Id
      */
     public function __construct(protected string $contactId)

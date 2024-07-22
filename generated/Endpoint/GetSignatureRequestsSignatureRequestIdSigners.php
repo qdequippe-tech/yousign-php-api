@@ -18,6 +18,8 @@ class GetSignatureRequestsSignatureRequestIdSigners extends BaseEndpoint impleme
     use EndpointTrait;
 
     /**
+     * Returns a list of Signers for a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId)

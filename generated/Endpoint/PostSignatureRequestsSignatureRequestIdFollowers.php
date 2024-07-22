@@ -21,6 +21,8 @@ class PostSignatureRequestsSignatureRequestIdFollowers extends BaseEndpoint impl
     use EndpointTrait;
 
     /**
+     * Adds a Follower to a given Signature Request.
+     *
      * @param string                      $signatureRequestId Signature Request Id
      * @param CreateFollowersInner[]|null $requestBody
      */

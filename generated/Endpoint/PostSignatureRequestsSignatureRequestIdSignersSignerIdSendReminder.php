@@ -19,6 +19,9 @@ class PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder extends
     use EndpointTrait;
 
     /**
+     * Sends a reminder to a given signer to complete their Signature Request.
+     * Only possible when the Signature Request status is `ongoing` and the Signer status is `notified`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      */

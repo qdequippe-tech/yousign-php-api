@@ -19,6 +19,8 @@ class PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields extends B
     use EndpointTrait;
 
     /**
+     * Adds a Field to a given Document.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document ID
      */

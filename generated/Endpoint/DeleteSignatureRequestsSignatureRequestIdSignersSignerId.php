@@ -19,6 +19,8 @@ class DeleteSignatureRequestsSignatureRequestIdSignersSignerId extends BaseEndpo
     use EndpointTrait;
 
     /**
+     * Deletes a given Signer from a Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      */

@@ -19,17 +19,7 @@ class DeleteWorkspace extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * Delete a Workspace and migrate resources to a specified workspace. The deleted workspace should not have been migrated and should not be the default one.
-     * Migrated resources are:
-     * - BulkSendBatches
-     * - Contacts
-     * - SignatureRequests
-     * - Templates
-     * - Users (not already present in target workspace)
-     * - WorkflowExecutions
-     * - WorkflowFormQuestion
-     * - WorkflowsWorkspace
-     * - WorkspaceInvitations.
+     * Deletes a given Workspace and transfers everything that is attached to this Workspace to a another specified Workspace.
      *
      * @param string $workspaceId Workspace Id
      */

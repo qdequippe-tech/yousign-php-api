@@ -15,6 +15,8 @@ class GetContactsContactId extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Retrieves a given Contact.
+     *
      * @param string $contactId Contact Id
      */
     public function __construct(protected string $contactId)

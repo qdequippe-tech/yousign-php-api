@@ -19,7 +19,7 @@ class UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId 
     use EndpointTrait;
 
     /**
-     * Update a Document's Field in a Signature Request (in draft status).
+     * Updates a given Field. Any parameters not provided are left unchanged.
      *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id

@@ -19,7 +19,7 @@ class DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId 
     use EndpointTrait;
 
     /**
-     * Delete a Document's Field in a Signature Request (in draft status).
+     * Deletes a given Field from a Document.
      *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id

@@ -21,6 +21,8 @@ class PostSignatureRequestsSignatureRequestIdReactivate extends BaseEndpoint imp
     use EndpointTrait;
 
     /**
+     * Reactivates a Signature Request when it is in `expired` status.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdReactivateRequest $requestBody = null)

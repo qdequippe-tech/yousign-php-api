@@ -20,6 +20,9 @@ class PostSignatureRequestsSignatureRequestIdActivate extends BaseEndpoint imple
     use EndpointTrait;
 
     /**
+     * Activates a Signature request, so it is not in `draft` status anymore.
+     * If the `delivery_mode` is not `null`, activating the Signature Request will trigger the notifications to Approvers/Followers/Signers.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId)

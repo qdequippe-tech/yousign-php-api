@@ -20,6 +20,8 @@ class GetSignatureRequests extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Returns the list of all Signatures Requests in your organization. You can limit the number of items returned by using filters and pagination.
+     *
      * @param array $queryParameters {
      *
      * @var string $status Filter by status

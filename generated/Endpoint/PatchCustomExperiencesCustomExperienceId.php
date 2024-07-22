@@ -21,6 +21,9 @@ class PatchCustomExperiencesCustomExperienceId extends BaseEndpoint implements E
     use EndpointTrait;
 
     /**
+     * Updates a given Custom Experience.
+     * Any parameters not provided are left unchanged.
+     *
      * @param string $customExperienceId Custom Experience Id
      */
     public function __construct(protected string $customExperienceId, ?UpdateCustomExperience $requestBody = null)

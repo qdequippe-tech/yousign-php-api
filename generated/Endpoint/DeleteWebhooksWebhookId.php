@@ -19,6 +19,8 @@ class DeleteWebhooksWebhookId extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Deletes a given Webhook subscription.
+     *
      * @param string $webhookId Webhook Id
      */
     public function __construct(protected string $webhookId)

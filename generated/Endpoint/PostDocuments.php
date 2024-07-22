@@ -20,6 +20,9 @@ class PostDocuments extends BaseEndpoint implements Endpoint
 {
     use EndpointTrait;
 
+    /**
+     * Deprecated endpoint, do not use.
+     */
     public function __construct(?CreateDocument $requestBody = null)
     {
         $this->body = $requestBody;

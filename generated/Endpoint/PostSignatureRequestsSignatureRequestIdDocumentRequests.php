@@ -21,6 +21,8 @@ class PostSignatureRequestsSignatureRequestIdDocumentRequests extends BaseEndpoi
     use EndpointTrait;
 
     /**
+     * Adds a Signer Document Request to a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId, ?CreateSignerDocumentRequest $requestBody = null)

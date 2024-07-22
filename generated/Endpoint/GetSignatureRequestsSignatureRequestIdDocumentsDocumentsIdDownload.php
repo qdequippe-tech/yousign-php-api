@@ -19,6 +19,8 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownload extends
     use EndpointTrait;
 
     /**
+     * Downloads the PDF version of a given Document.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
      * @param array  $accept             Accept content header application/pdf|application/json

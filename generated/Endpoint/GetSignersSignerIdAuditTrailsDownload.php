@@ -19,6 +19,8 @@ class GetSignersSignerIdAuditTrailsDownload extends BaseEndpoint implements Endp
     use EndpointTrait;
 
     /**
+     * Download the PDF version of the Audit Trail attached to a given Signer. Only possible when Signer status is `signed`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param array  $accept             Accept content header application/pdf|application/json

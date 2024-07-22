@@ -20,7 +20,7 @@ class PostSignatureRequestsSignatureRequestIdApprovers extends BaseEndpoint impl
     use EndpointTrait;
 
     /**
-     * Create a new Approver either from: - scratch - an existing Contact - an existing User - an existing Signer.
+     * Adds an Approver to a given Signature Request.
      *
      * @param string $signatureRequestId Signature Request Id
      */

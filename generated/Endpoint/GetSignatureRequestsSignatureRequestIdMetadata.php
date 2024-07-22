@@ -18,6 +18,8 @@ class GetSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint implem
     use EndpointTrait;
 
     /**
+     * Retrieves the Metadata of a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId)

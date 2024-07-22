@@ -19,6 +19,9 @@ class GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocume
     use EndpointTrait;
 
     /**
+     * Downloads a Document uploaded by a given Signer.
+     * Only possible when Signer status is `signed`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      * @param string $signerDocumentId   Signer Document Id

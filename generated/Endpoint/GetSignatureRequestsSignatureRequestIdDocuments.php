@@ -21,6 +21,8 @@ class GetSignatureRequestsSignatureRequestIdDocuments extends BaseEndpoint imple
     use EndpointTrait;
 
     /**
+     * Returns a list of Documents for a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param array  $queryParameters    {
      *

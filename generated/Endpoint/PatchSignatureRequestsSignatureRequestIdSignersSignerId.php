@@ -21,6 +21,9 @@ class PatchSignatureRequestsSignatureRequestIdSignersSignerId extends BaseEndpoi
     use EndpointTrait;
 
     /**
+     * Updates a given Signer.
+     * Any parameters not provided are left unchanged.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      */

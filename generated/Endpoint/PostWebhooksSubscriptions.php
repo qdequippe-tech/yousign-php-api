@@ -20,6 +20,9 @@ class PostWebhooksSubscriptions extends BaseEndpoint implements Endpoint
 {
     use EndpointTrait;
 
+    /**
+     * Creates a new Webhook subscription in your organization.
+     */
     public function __construct(?CreateWebhookSubscription $requestBody = null)
     {
         $this->body = $requestBody;

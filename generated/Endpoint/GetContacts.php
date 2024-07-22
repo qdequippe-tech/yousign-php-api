@@ -20,6 +20,8 @@ class GetContacts extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Returns the list of all the Contacts within your organization.
+     *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)

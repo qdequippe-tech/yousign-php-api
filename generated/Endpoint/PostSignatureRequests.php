@@ -20,6 +20,9 @@ class PostSignatureRequests extends BaseEndpoint implements Endpoint
 {
     use EndpointTrait;
 
+    /**
+     * Creates a new Signature Request resource.
+     */
     public function __construct(?CreateSignatureRequest $requestBody = null)
     {
         $this->body = $requestBody;

@@ -19,6 +19,8 @@ class GetSignatureRequestsSignatureRequestIdAuditTrailsDownload extends BaseEndp
     use EndpointTrait;
 
     /**
+     * Download the PDF version of all the Audit Trails attached to a given Signature Request. Each Audit Trail is bound to a different Signer. Only possible when the Signature Request status is `done`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param array  $queryParameters    {
      *

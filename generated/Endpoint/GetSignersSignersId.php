@@ -18,6 +18,8 @@ class GetSignersSignersId extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Retrieves a given Signer.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      */

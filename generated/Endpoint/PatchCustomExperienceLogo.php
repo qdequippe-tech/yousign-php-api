@@ -21,6 +21,8 @@ class PatchCustomExperienceLogo extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Updates the logo of a given Custom Experience by uploading the image of your choice.
+     *
      * @param string $customExperienceId Custom Experience Id
      */
     public function __construct(protected string $customExperienceId, ?PatchCustomExperienceLogoRequest $requestBody = null)
