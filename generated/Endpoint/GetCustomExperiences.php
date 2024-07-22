@@ -20,6 +20,9 @@ class GetCustomExperiences extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Returns the list of all Custom Experiences in your Organization.
+     * You can limit the number of items returned by using pagination.
+     *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)

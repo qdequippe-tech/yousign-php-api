@@ -20,6 +20,8 @@ class PostSignatureRequestsSignatureRequestIdSigners extends BaseEndpoint implem
     use EndpointTrait;
 
     /**
+     * Adds a Signer to a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId, ?\stdClass $requestBody = null)

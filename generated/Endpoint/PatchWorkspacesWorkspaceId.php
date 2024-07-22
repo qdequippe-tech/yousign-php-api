@@ -21,7 +21,8 @@ class PatchWorkspacesWorkspaceId extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * Update the information of a given Workspace.
+     * Updates a given Workspace.
+     * Any parameters not provided are left unchanged.
      *
      * @param string $workspaceId Workspace Id
      */

@@ -19,6 +19,8 @@ class DeleteSignatureRequestsSignatureRequestIdApproversApproverId extends BaseE
     use EndpointTrait;
 
     /**
+     * Deletes a given Approver from a Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $approverId         Approver Id
      */

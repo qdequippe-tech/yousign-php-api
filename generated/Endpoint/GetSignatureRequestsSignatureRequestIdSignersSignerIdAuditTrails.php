@@ -20,6 +20,8 @@ class GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails extends B
     use EndpointTrait;
 
     /**
+     * Retrieves the JSON version of the Audit Trail attached to a given Signer. Only possible when Signer status is `signed`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      */

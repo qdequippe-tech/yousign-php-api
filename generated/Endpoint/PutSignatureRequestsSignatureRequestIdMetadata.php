@@ -21,6 +21,8 @@ class PutSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint implem
     use EndpointTrait;
 
     /**
+     * Updates the Metadata of a given Signature Request. Any parameters not provided are left unchanged.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId, ?UpdateSignatureRequestMetadata $requestBody = null)

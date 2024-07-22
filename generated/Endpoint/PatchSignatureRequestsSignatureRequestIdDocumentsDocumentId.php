@@ -21,6 +21,8 @@ class PatchSignatureRequestsSignatureRequestIdDocumentsDocumentId extends BaseEn
     use EndpointTrait;
 
     /**
+     * Updates a given Document. Any parameters not provided are left unchanged.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
      */

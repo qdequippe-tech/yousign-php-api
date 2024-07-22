@@ -20,6 +20,8 @@ class GetTemplates extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Returns the list of all Templates within your Organization.
+     *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)

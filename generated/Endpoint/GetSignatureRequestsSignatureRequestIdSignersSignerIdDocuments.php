@@ -20,6 +20,9 @@ class GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments extends Bas
     use EndpointTrait;
 
     /**
+     * Returns a list of Documents uploaded by a given Signer.
+     * Only possible when Signer status is `signed`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      */

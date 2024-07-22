@@ -22,6 +22,8 @@ class PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace extends 
     use EndpointTrait;
 
     /**
+     * Replace the file of a given Document.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
      */

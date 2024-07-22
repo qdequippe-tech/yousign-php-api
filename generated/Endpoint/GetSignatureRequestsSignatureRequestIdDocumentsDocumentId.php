@@ -18,6 +18,8 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentId extends BaseEndp
     use EndpointTrait;
 
     /**
+     * Retrieves a given Document.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
      */

@@ -19,6 +19,8 @@ class DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentId extends BaseE
     use EndpointTrait;
 
     /**
+     * Deletes a given Document from a Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document Id
      */

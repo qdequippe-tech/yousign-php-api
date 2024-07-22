@@ -20,6 +20,8 @@ class GetWorkspacesWorkspaceId extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Retrieves a given Workspace.
+     *
      * @param string $workspaceId Workspace Id
      */
     public function __construct(protected string $workspaceId)

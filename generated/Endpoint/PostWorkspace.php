@@ -20,6 +20,9 @@ class PostWorkspace extends BaseEndpoint implements Endpoint
 {
     use EndpointTrait;
 
+    /**
+     * Creates a new Workspace in the organization.
+     */
     public function __construct(?CreateWorkspace $requestBody = null)
     {
         $this->body = $requestBody;

@@ -17,6 +17,8 @@ class DeleteSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint imp
     use EndpointTrait;
 
     /**
+     * Deletes the Metadata of a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId)

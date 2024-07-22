@@ -21,6 +21,8 @@ class PatchSignatureRequestsSignatureRequestId extends BaseEndpoint implements E
     use EndpointTrait;
 
     /**
+     * Updates a given Signature Request. Any parameters not provided are left unchanged.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId, ?UpdateSignatureRequest $requestBody = null)

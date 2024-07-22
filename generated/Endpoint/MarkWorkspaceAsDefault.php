@@ -18,7 +18,7 @@ class MarkWorkspaceAsDefault extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * Mark the given Workspace as default. The workspace should not already be the default one and should not have been deleted.
+     * Marks the given Workspace as default.
      */
     public function __construct(?\Qdequippe\Yousign\Api\Model\MarkWorkspaceAsDefault $requestBody = null)
     {

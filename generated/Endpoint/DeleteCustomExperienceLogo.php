@@ -19,6 +19,8 @@ class DeleteCustomExperienceLogo extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Deletes the logo of a Custom Experience.
+     *
      * @param string $customExperienceId Custom Experience Id
      */
     public function __construct(protected string $customExperienceId)

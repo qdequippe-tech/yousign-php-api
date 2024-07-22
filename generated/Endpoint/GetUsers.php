@@ -19,6 +19,8 @@ class GetUsers extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Returns the list of all the Users within your organization.
+     *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)

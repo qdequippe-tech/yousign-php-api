@@ -20,6 +20,8 @@ class GetCustomExperiencesCustomExperienceId extends BaseEndpoint implements End
     use EndpointTrait;
 
     /**
+     * Retrieves a given Custom Experience.
+     *
      * @param string $customExperienceId Custom Experience Id
      */
     public function __construct(protected string $customExperienceId)

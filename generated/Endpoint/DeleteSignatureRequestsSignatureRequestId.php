@@ -20,7 +20,7 @@ class DeleteSignatureRequestsSignatureRequestId extends BaseEndpoint implements 
     use EndpointTrait;
 
     /**
-     * Delete a Signature Request (except in approval and ongoing status).
+     * Deletes a given Signature Request, not possible if the Signature Request is in `approval` and `ongoing` status.
      *
      * @param string $signatureRequestId Signature Request Id
      * @param array  $queryParameters    {

@@ -19,6 +19,9 @@ class DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments extends 
     use EndpointTrait;
 
     /**
+     * Deletes all documents uploaded by a given Signer for a specific Signature Request.
+     * Deletion is only possible when Signer status is `signed`.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $signerId           Signer Id
      */

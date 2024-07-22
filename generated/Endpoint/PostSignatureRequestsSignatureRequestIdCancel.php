@@ -21,6 +21,8 @@ class PostSignatureRequestsSignatureRequestIdCancel extends BaseEndpoint impleme
     use EndpointTrait;
 
     /**
+     * Cancels a Signature Request when it is in `approval` or `ongoing` status. A canceled Signature Request cannot be reactivated.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdCancelRequest $requestBody = null)

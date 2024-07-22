@@ -21,6 +21,9 @@ class PatchWebhooksWebhookId extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Updates a given Webhook subscription.
+     * Any parameters not provided are left unchanged.
+     *
      * @param string $webhookId Webhook Id
      */
     public function __construct(protected string $webhookId, ?UpdateWebhookSubscription $requestBody = null)

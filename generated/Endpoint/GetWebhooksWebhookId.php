@@ -20,6 +20,8 @@ class GetWebhooksWebhookId extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Retrieves a given Webhook subscription.
+     *
      * @param string $webhookId Webhook Id
      */
     public function __construct(protected string $webhookId)

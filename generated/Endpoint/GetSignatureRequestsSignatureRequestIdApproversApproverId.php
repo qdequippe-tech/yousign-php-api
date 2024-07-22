@@ -18,6 +18,8 @@ class GetSignatureRequestsSignatureRequestIdApproversApproverId extends BaseEndp
     use EndpointTrait;
 
     /**
+     * Retrieves a given Approver.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $approverId         Approver Id
      */

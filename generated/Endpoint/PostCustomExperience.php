@@ -19,6 +19,9 @@ class PostCustomExperience extends BaseEndpoint implements Endpoint
 {
     use EndpointTrait;
 
+    /**
+     * Creates a new Custom Experience.
+     */
     public function __construct(?CreateCustomExperience $requestBody = null)
     {
         $this->body = $requestBody;

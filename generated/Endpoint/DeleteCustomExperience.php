@@ -19,6 +19,8 @@ class DeleteCustomExperience extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Deletes a given Custom Experience.
+     *
      * @param string $customExperienceId Custom Experience Id
      */
     public function __construct(protected string $customExperienceId)

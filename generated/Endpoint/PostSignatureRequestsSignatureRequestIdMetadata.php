@@ -21,6 +21,8 @@ class PostSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint imple
     use EndpointTrait;
 
     /**
+     * Add Metadata to a given Signature Request.
+     *
      * @param string $signatureRequestId Signature Request Id
      */
     public function __construct(protected string $signatureRequestId, ?CreateSignatureRequestMetadata $requestBody = null)

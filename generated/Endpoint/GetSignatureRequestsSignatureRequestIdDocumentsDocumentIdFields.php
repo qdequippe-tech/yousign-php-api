@@ -19,6 +19,8 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields extends Ba
     use EndpointTrait;
 
     /**
+     * Returns a list of Fields for a given Document. You can limit the number of items returned by using filters.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentId         Document ID
      * @param array  $queryParameters    {

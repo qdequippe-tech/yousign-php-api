@@ -21,6 +21,8 @@ class PatchSignatureRequestsSignatureRequestIdApproversApproverId extends BaseEn
     use EndpointTrait;
 
     /**
+     * Updates a given Approver. Any parameters not provided are left unchanged.
+     *
      * @param string $signatureRequestId Signature Request Id
      * @param string $approverId         Approver Id
      */
