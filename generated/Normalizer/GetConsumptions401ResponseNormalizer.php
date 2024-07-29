@@ -3,7 +3,7 @@
 namespace Qdequippe\Yousign\Api\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\HttpKernel\Kernel;
@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR_VERSION === 6 && Kernel::MINOR_VERSION === 4)) {
-    class GetSignatureRequests401ResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+    class GetConsumptions401ResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
         use CheckArray;
         use DenormalizerAwareTrait;
@@ -24,12 +24,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
         {
-            return GetSignatureRequests401Response::class === $type;
+            return GetConsumptions401Response::class === $type;
         }
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response::class === $data::class;
+            return \is_object($data) && Qdequippe\Yousign\Api\Model\GetConsumptions401Response::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -40,7 +40,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if (isset($data['$recursiveRef'])) {
                 return new Reference($data['$recursiveRef'], $context['document-origin']);
             }
-            $object = new GetSignatureRequests401Response();
+            $object = new GetConsumptions401Response();
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
@@ -74,11 +74,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function getSupportedTypes(?string $format = null): array
         {
-            return [GetSignatureRequests401Response::class => false];
+            return [GetConsumptions401Response::class => false];
         }
     }
 } else {
-    class GetSignatureRequests401ResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+    class GetConsumptions401ResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
         use CheckArray;
         use DenormalizerAwareTrait;
@@ -87,12 +87,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsDenormalization($data, $type, ?string $format = null, array $context = []): bool
         {
-            return GetSignatureRequests401Response::class === $type;
+            return GetConsumptions401Response::class === $type;
         }
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response::class === $data::class;
+            return \is_object($data) && Qdequippe\Yousign\Api\Model\GetConsumptions401Response::class === $data::class;
         }
 
         /**
@@ -106,7 +106,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if (isset($data['$recursiveRef'])) {
                 return new Reference($data['$recursiveRef'], $context['document-origin']);
             }
-            $object = new GetSignatureRequests401Response();
+            $object = new GetConsumptions401Response();
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
@@ -145,7 +145,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function getSupportedTypes(?string $format = null): array
         {
-            return [GetSignatureRequests401Response::class => false];
+            return [GetConsumptions401Response::class => false];
         }
     }
 }

@@ -6,8 +6,8 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequests200Response;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -91,7 +91,7 @@ class GetSignatureRequests extends BaseEndpoint implements Endpoint
             throw new GetSignatureRequestsBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignatureRequestsUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new GetSignatureRequestsUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignatureRequestsForbiddenException($response);

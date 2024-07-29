@@ -7,7 +7,7 @@ use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdSigner
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -69,7 +69,7 @@ class GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments extends Bas
             throw new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException($response);

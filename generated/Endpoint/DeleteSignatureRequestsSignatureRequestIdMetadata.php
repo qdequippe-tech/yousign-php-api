@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdMetadataForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdMetadataNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdMetadataUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -58,7 +58,7 @@ class DeleteSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint imp
             return null;
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteSignatureRequestsSignatureRequestIdMetadataUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new DeleteSignatureRequestsSignatureRequestIdMetadataUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DeleteSignatureRequestsSignatureRequestIdMetadataForbiddenException($response);

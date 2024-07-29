@@ -7,7 +7,7 @@ use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -64,7 +64,7 @@ class DeleteCustomExperience extends BaseEndpoint implements Endpoint
             throw new DeleteCustomExperienceBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteCustomExperienceUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new DeleteCustomExperienceUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DeleteCustomExperienceForbiddenException($response);

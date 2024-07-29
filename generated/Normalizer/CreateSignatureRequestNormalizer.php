@@ -174,6 +174,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('template_placeholders', $data) && null === $data['template_placeholders']) {
                 $object->setTemplatePlaceholders(null);
             }
+            if (\array_key_exists('archiving', $data) && null !== $data['archiving']) {
+                $object->setArchiving($data['archiving']);
+                unset($data['archiving']);
+            } elseif (\array_key_exists('archiving', $data) && null === $data['archiving']) {
+                $object->setArchiving(null);
+            }
             foreach ($data as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_3;
@@ -251,6 +257,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             if ($object->isInitialized('templatePlaceholders') && null !== $object->getTemplatePlaceholders()) {
                 $data['template_placeholders'] = $this->normalizer->normalize($object->getTemplatePlaceholders(), 'json', $context);
+            }
+            if ($object->isInitialized('archiving') && null !== $object->getArchiving()) {
+                $data['archiving'] = $object->getArchiving();
             }
             foreach ($object as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {
@@ -423,6 +432,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('template_placeholders', $data) && null === $data['template_placeholders']) {
                 $object->setTemplatePlaceholders(null);
             }
+            if (\array_key_exists('archiving', $data) && null !== $data['archiving']) {
+                $object->setArchiving($data['archiving']);
+                unset($data['archiving']);
+            } elseif (\array_key_exists('archiving', $data) && null === $data['archiving']) {
+                $object->setArchiving(null);
+            }
             foreach ($data as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_3;
@@ -505,6 +520,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             if ($object->isInitialized('templatePlaceholders') && null !== $object->getTemplatePlaceholders()) {
                 $data['template_placeholders'] = $this->normalizer->normalize($object->getTemplatePlaceholders(), 'json', $context);
+            }
+            if ($object->isInitialized('archiving') && null !== $object->getArchiving()) {
+                $data['archiving'] = $object->getArchiving();
             }
             foreach ($object as $key => $value_3) {
                 if (preg_match('/.*/', (string) $key)) {

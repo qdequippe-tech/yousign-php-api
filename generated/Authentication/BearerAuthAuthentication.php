@@ -16,7 +16,7 @@ class BearerAuthAuthentication implements AuthenticationPlugin
 
     public function authentication(RequestInterface $request): RequestInterface
     {
-        $header = sprintf('Bearer %s', $this->{'token'});
+        $header = \sprintf('Bearer %s', $this->{'token'});
 
         return $request->withHeader('Authorization', $header);
     }

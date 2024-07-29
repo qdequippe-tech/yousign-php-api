@@ -7,7 +7,7 @@ use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdBadReq
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\SignatureRequest;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -67,7 +67,7 @@ class GetSignatureRequestsSignatureRequestId extends BaseEndpoint implements End
             throw new GetSignatureRequestsSignatureRequestIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignatureRequestsSignatureRequestIdUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new GetSignatureRequestsSignatureRequestIdUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdForbiddenException($response);

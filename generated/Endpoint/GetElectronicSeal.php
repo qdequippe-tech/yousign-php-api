@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\ElectronicSeal;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -54,7 +54,7 @@ class GetElectronicSeal extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, ElectronicSeal::class, 'json');
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetElectronicSealUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new GetElectronicSealUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetElectronicSealNotFoundException($response);

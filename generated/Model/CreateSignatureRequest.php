@@ -127,6 +127,14 @@ class CreateSignatureRequest extends \ArrayObject
      * @var CreateSignatureRequestTemplatePlaceholders|null
      */
     protected $templatePlaceholders;
+    /**
+     * Once the signature request completed, archive its documents in a secure digital safe.
+     *
+     * @deprecated
+     *
+     * @var string|null
+     */
+    protected $archiving;
 
     /**
      * Name of the signature request.
@@ -484,6 +492,29 @@ class CreateSignatureRequest extends \ArrayObject
     {
         $this->initialized['templatePlaceholders'] = true;
         $this->templatePlaceholders = $templatePlaceholders;
+
+        return $this;
+    }
+
+    /**
+     * Once the signature request completed, archive its documents in a secure digital safe.
+     *
+     * @deprecated
+     */
+    public function getArchiving(): ?string
+    {
+        return $this->archiving;
+    }
+
+    /**
+     * Once the signature request completed, archive its documents in a secure digital safe.
+     *
+     * @deprecated
+     */
+    public function setArchiving(?string $archiving): self
+    {
+        $this->initialized['archiving'] = true;
+        $this->archiving = $archiving;
 
         return $this;
     }
