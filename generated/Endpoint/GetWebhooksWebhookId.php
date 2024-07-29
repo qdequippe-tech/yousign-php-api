@@ -7,7 +7,7 @@ use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -67,7 +67,7 @@ class GetWebhooksWebhookId extends BaseEndpoint implements Endpoint
             throw new GetWebhooksWebhookIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWebhooksWebhookIdUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new GetWebhooksWebhookIdUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetWebhooksWebhookIdForbiddenException($response);

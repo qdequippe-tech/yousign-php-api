@@ -8,7 +8,7 @@ use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageBadRequestException
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageForbiddenException;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\ElectronicSealImage;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -76,7 +76,7 @@ class UploadElectronicSealImage extends BaseEndpoint implements Endpoint
             throw new UploadElectronicSealImageBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new UploadElectronicSealImageUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new UploadElectronicSealImageUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new UploadElectronicSealImageForbiddenException($response);

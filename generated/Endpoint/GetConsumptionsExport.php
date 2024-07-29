@@ -7,7 +7,7 @@ use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -87,7 +87,7 @@ class GetConsumptionsExport extends BaseEndpoint implements Endpoint
             throw new GetConsumptionsExportBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetConsumptionsExportUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new GetConsumptionsExportUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetConsumptionsExportForbiddenException($response);

@@ -87,6 +87,7 @@ use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSigner
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSign;
 use Qdequippe\Yousign\Api\Endpoint\PostWebhooksSubscriptions;
 use Qdequippe\Yousign\Api\Endpoint\PostWorkspace;
+use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerId;
 use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdMetadata;
 use Qdequippe\Yousign\Api\Endpoint\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId;
 use Qdequippe\Yousign\Api\Model\CreateContact;
@@ -130,6 +131,445 @@ use Symfony\Component\Serializer\Serializer;
 
 class Client extends Runtime\Client\Client
 {
+    /**
+     * Get signatures Consumption by source.
+     *
+     * @param array $queryParameters {
+     *
+     * @var string $from The "from" date must not be more than 1 year in the past
+     * @var string $to The "to" date must be more recent than the "from" date
+     * @var string $authentication_key
+     *             }
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Consumption|ResponseInterface|null
+     *
+     * @throws Exception\GetConsumptionsBadRequestException
+     * @throws Exception\GetConsumptionsUnauthorizedException
+     * @throws Exception\GetConsumptionsForbiddenException
+     * @throws Exception\GetConsumptionsNotFoundException
+     */
+    public function getConsumptions(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetConsumptions($queryParameters), $fetch);
+    }
+
+    /**
+     * Get a binary .csv file containing all the Consumption data of the underlying signatures.
+     *
+     * @param array $queryParameters {
+     *
+     * @var string $from The "from" date must not be more than 1 year in the past
+     * @var string $to The "to" date must be more recent than the "from" date
+     * @var string $authentication_key
+     *             }
+     *
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept Accept content header text/csv|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetConsumptionsExportBadRequestException
+     * @throws Exception\GetConsumptionsExportUnauthorizedException
+     * @throws Exception\GetConsumptionsExportForbiddenException
+     * @throws Exception\GetConsumptionsExportNotFoundException
+     */
+    public function getConsumptionsExport(array $queryParameters = [], string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetConsumptionsExport($queryParameters, $accept), $fetch);
+    }
+
+    /**
+     * Returns the list of all the Contacts within your organization.
+     *
+     * @param array $queryParameters {
+     *
+     * @var string $after After cursor (pagination)
+     * @var int    $limit The limit of items count to retrieve.
+     *             }
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetContacts200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetContactsBadRequestException
+     * @throws Exception\GetContactsUnauthorizedException
+     * @throws Exception\GetContactsForbiddenException
+     */
+    public function getContacts(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetContacts($queryParameters), $fetch);
+    }
+
+    /**
+     * Creates a new Contact.
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Contact|ResponseInterface|null
+     *
+     * @throws Exception\PostContactBadRequestException
+     * @throws Exception\PostContactUnauthorizedException
+     * @throws Exception\PostContactForbiddenException
+     * @throws Exception\PostContactNotFoundException
+     */
+    public function postContact(?CreateContact $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostContact($requestBody), $fetch);
+    }
+
+    /**
+     * Deletes a given Contact.
+     *
+     * @param string $contactId Contact Id
+     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteContactsContactIdUnauthorizedException
+     * @throws Exception\DeleteContactsContactIdForbiddenException
+     * @throws Exception\DeleteContactsContactIdNotFoundException
+     */
+    public function deleteContactsContactId(string $contactId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteContactsContactId($contactId), $fetch);
+    }
+
+    /**
+     * Retrieves a given Contact.
+     *
+     * @param string $contactId Contact Id
+     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Contact|ResponseInterface|null
+     *
+     * @throws Exception\GetContactsContactIdNotFoundException
+     */
+    public function getContactsContactId(string $contactId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetContactsContactId($contactId), $fetch);
+    }
+
+    /**
+     * Updates a given Contact.
+     * Any parameters not provided are left unchanged.
+     *
+     * @param string $contactId Contact Id
+     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Contact|ResponseInterface|null
+     *
+     * @throws Exception\PatchContactsContactIdBadRequestException
+     * @throws Exception\PatchContactsContactIdUnauthorizedException
+     * @throws Exception\PatchContactsContactIdForbiddenException
+     * @throws Exception\PatchContactsContactIdNotFoundException
+     */
+    public function patchContactsContactId(string $contactId, ?UpdateContact $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchContactsContactId($contactId, $requestBody), $fetch);
+    }
+
+    /**
+     * Returns the list of all Custom Experiences in your Organization.
+     * You can limit the number of items returned by using pagination.
+     *
+     * @param array $queryParameters {
+     *
+     * @var string $after After cursor (pagination)
+     * @var int    $limit The limit of items count to retrieve.
+     *             }
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetCustomExperiences200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetCustomExperiencesBadRequestException
+     * @throws Exception\GetCustomExperiencesUnauthorizedException
+     * @throws Exception\GetCustomExperiencesForbiddenException
+     */
+    public function getCustomExperiences(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetCustomExperiences($queryParameters), $fetch);
+    }
+
+    /**
+     * Creates a new Custom Experience.
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\CustomExperience|ResponseInterface|null
+     *
+     * @throws Exception\PostCustomExperienceBadRequestException
+     * @throws Exception\PostCustomExperienceUnauthorizedException
+     * @throws Exception\PostCustomExperienceForbiddenException
+     */
+    public function postCustomExperience(?CreateCustomExperience $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostCustomExperience($requestBody), $fetch);
+    }
+
+    /**
+     * Deletes a given Custom Experience.
+     *
+     * @param string $customExperienceId Custom Experience Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteCustomExperienceBadRequestException
+     * @throws Exception\DeleteCustomExperienceUnauthorizedException
+     * @throws Exception\DeleteCustomExperienceForbiddenException
+     * @throws Exception\DeleteCustomExperienceNotFoundException
+     */
+    public function deleteCustomExperience(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteCustomExperience($customExperienceId), $fetch);
+    }
+
+    /**
+     * Retrieves a given Custom Experience.
+     *
+     * @param string $customExperienceId Custom Experience Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\CustomExperience|ResponseInterface|null
+     *
+     * @throws Exception\GetCustomExperiencesCustomExperienceIdBadRequestException
+     * @throws Exception\GetCustomExperiencesCustomExperienceIdUnauthorizedException
+     * @throws Exception\GetCustomExperiencesCustomExperienceIdForbiddenException
+     * @throws Exception\GetCustomExperiencesCustomExperienceIdNotFoundException
+     */
+    public function getCustomExperiencesCustomExperienceId(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetCustomExperiencesCustomExperienceId($customExperienceId), $fetch);
+    }
+
+    /**
+     * Updates a given Custom Experience.
+     * Any parameters not provided are left unchanged.
+     *
+     * @param string $customExperienceId Custom Experience Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\CustomExperience|ResponseInterface|null
+     *
+     * @throws Exception\PatchCustomExperiencesCustomExperienceIdBadRequestException
+     * @throws Exception\PatchCustomExperiencesCustomExperienceIdUnauthorizedException
+     * @throws Exception\PatchCustomExperiencesCustomExperienceIdForbiddenException
+     * @throws Exception\PatchCustomExperiencesCustomExperienceIdNotFoundException
+     */
+    public function patchCustomExperiencesCustomExperienceId(string $customExperienceId, ?UpdateCustomExperience $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchCustomExperiencesCustomExperienceId($customExperienceId, $requestBody), $fetch);
+    }
+
+    /**
+     * Deletes the logo of a Custom Experience.
+     *
+     * @param string $customExperienceId Custom Experience Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteCustomExperienceLogoBadRequestException
+     * @throws Exception\DeleteCustomExperienceLogoUnauthorizedException
+     * @throws Exception\DeleteCustomExperienceLogoForbiddenException
+     * @throws Exception\DeleteCustomExperienceLogoNotFoundException
+     */
+    public function deleteCustomExperienceLogo(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteCustomExperienceLogo($customExperienceId), $fetch);
+    }
+
+    /**
+     * Updates the logo of a given Custom Experience by uploading the image of your choice.
+     *
+     * @param string $customExperienceId Custom Experience Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\CustomExperience|ResponseInterface|null
+     *
+     * @throws Exception\PatchCustomExperienceLogoBadRequestException
+     * @throws Exception\PatchCustomExperienceLogoUnauthorizedException
+     * @throws Exception\PatchCustomExperienceLogoForbiddenException
+     */
+    public function patchCustomExperienceLogo(string $customExperienceId, ?PatchCustomExperienceLogoRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchCustomExperienceLogo($customExperienceId, $requestBody), $fetch);
+    }
+
+    /**
+     * Deprecated endpoint, do not use.
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Document|ResponseInterface|null
+     *
+     * @throws Exception\PostDocumentsBadRequestException
+     * @throws Exception\PostDocumentsUnauthorizedException
+     * @throws Exception\PostDocumentsForbiddenException
+     */
+    public function postDocuments(?CreateDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostDocuments($requestBody), $fetch);
+    }
+
+    /**
+     * Upload an Electronic Seal Document to use for creating an Electronic Seal (can be used for only one Electronic Seal).
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\ElectronicSealDocument|ResponseInterface|null
+     *
+     * @throws Exception\UploadElectronicSealDocumentBadRequestException
+     * @throws Exception\UploadElectronicSealDocumentUnauthorizedException
+     * @throws Exception\UploadElectronicSealDocumentForbiddenException
+     */
+    public function uploadElectronicSealDocument(?UploadElectronicSealDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new Endpoint\UploadElectronicSealDocument($requestBody), $fetch);
+    }
+
+    /**
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept Accept content header application/pdf|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DownloadElectronicSealDocumentUnauthorizedException
+     * @throws Exception\DownloadElectronicSealDocumentNotFoundException
+     */
+    public function downloadElectronicSealDocument(string $electronicSealDocumentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new DownloadElectronicSealDocument($electronicSealDocumentId, $accept), $fetch);
+    }
+
+    /**
+     * @param array $queryParameters {
+     *
+     * @var string $after After cursor (pagination)
+     *             }
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\ListElectronicSealImages200Response|ResponseInterface|null
+     *
+     * @throws Exception\ListElectronicSealImagesBadRequestException
+     * @throws Exception\ListElectronicSealImagesUnauthorizedException
+     * @throws Exception\ListElectronicSealImagesForbiddenException
+     */
+    public function listElectronicSealImages(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new ListElectronicSealImages($queryParameters), $fetch);
+    }
+
+    /**
+     * Upload an Electronic Seal Image to use for creating an Electronic Seal (can be used for several Electronic Seals).
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\ElectronicSealImage|ResponseInterface|null
+     *
+     * @throws Exception\UploadElectronicSealImageBadRequestException
+     * @throws Exception\UploadElectronicSealImageUnauthorizedException
+     * @throws Exception\UploadElectronicSealImageForbiddenException
+     */
+    public function uploadElectronicSealImage(?UploadElectronicSealImage $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new Endpoint\UploadElectronicSealImage($requestBody), $fetch);
+    }
+
+    /**
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteElectronicSealImageUnauthorizedException
+     * @throws Exception\DeleteElectronicSealImageForbiddenException
+     * @throws Exception\DeleteElectronicSealImageNotFoundException
+     */
+    public function deleteElectronicSealImage(string $electronicSealImageId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteElectronicSealImage($electronicSealImageId), $fetch);
+    }
+
+    /**
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept Accept content header image/png|image/jpg|image/gif|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DownloadElectronicSealImageUnauthorizedException
+     * @throws Exception\DownloadElectronicSealImageNotFoundException
+     */
+    public function downloadElectronicSealImage(string $electronicSealImageId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new DownloadElectronicSealImage($electronicSealImageId, $accept), $fetch);
+    }
+
+    /**
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\ElectronicSeal|ResponseInterface|null
+     *
+     * @throws Exception\PostElectronicSealsBadRequestException
+     * @throws Exception\PostElectronicSealsUnauthorizedException
+     * @throws Exception\PostElectronicSealsForbiddenException
+     */
+    public function postElectronicSeals(?CreateElectronicSealPayload $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostElectronicSeals($requestBody), $fetch);
+    }
+
+    /**
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\ElectronicSeal|ResponseInterface|null
+     *
+     * @throws Exception\GetElectronicSealUnauthorizedException
+     * @throws Exception\GetElectronicSealNotFoundException
+     */
+    public function getElectronicSeal(string $electronicSealId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetElectronicSeal($electronicSealId), $fetch);
+    }
+
+    /**
+     * Electronic Seal Audit Trail is only available when the Electronic Seal is "done".
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\ElectronicSealAuditTrail|ResponseInterface|null
+     *
+     * @throws Exception\GetElectronicSealAuditTrailBadRequestException
+     * @throws Exception\GetElectronicSealAuditTrailUnauthorizedException
+     * @throws Exception\GetElectronicSealAuditTrailForbiddenException
+     * @throws Exception\GetElectronicSealAuditTrailNotFoundException
+     */
+    public function getElectronicSealAuditTrail(string $electronicSealId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetElectronicSealAuditTrail($electronicSealId), $fetch);
+    }
+
+    /**
+     * Electronic Seal Audit Trail is only available when the Electronic Seal is "done".
+     *
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept Accept content header application/pdf|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DownloadElectronicSealAuditTrailBadRequestException
+     * @throws Exception\DownloadElectronicSealAuditTrailUnauthorizedException
+     * @throws Exception\DownloadElectronicSealAuditTrailForbiddenException
+     * @throws Exception\DownloadElectronicSealAuditTrailNotFoundException
+     */
+    public function downloadElectronicSealAuditTrail(string $electronicSealId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new DownloadElectronicSealAuditTrail($electronicSealId, $accept), $fetch);
+    }
+
     /**
      * Returns the list of all Signatures Requests in your organization. You can limit the number of items returned by using filters and pagination.
      *
@@ -252,58 +692,77 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Cancels a Signature Request when it is in `approval` or `ongoing` status. A canceled Signature Request cannot be reactivated.
+     * Adds an Approver to a given Signature Request.
      *
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Model\SignatureRequest|ResponseInterface|null
+     * @return Model\Approver|ResponseInterface|null
      *
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelBadRequestException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelUnauthorizedException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelForbiddenException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversNotFoundException
      */
-    public function postSignatureRequestsSignatureRequestIdCancel(string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdCancelRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequestsSignatureRequestIdApprovers(string $signatureRequestId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdCancel($signatureRequestId, $requestBody), $fetch);
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdApprovers($signatureRequestId, $requestBody), $fetch);
     }
 
     /**
-     * Reactivates a Signature Request when it is in `expired` status.
+     * Deletes a given Approver from a Signature Request.
      *
      * @param string $signatureRequestId Signature Request Id
+     * @param string $approverId         Approver Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Model\SignatureRequest|ResponseInterface|null
+     * @return ResponseInterface|null
      *
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateBadRequestException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateUnauthorizedException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateForbiddenException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
      */
-    public function postSignatureRequestsSignatureRequestIdReactivate(string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdReactivateRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    public function deleteSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdReactivate($signatureRequestId, $requestBody), $fetch);
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdApproversApproverId($signatureRequestId, $approverId), $fetch);
     }
 
     /**
-     * Retrieves the JSON version of the Audit Trail attached to a given Signer. Only possible when Signer status is `signed`.
+     * Retrieves a given Approver.
      *
      * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
+     * @param string $approverId         Approver Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Model\SignerAuditTrail|ResponseInterface|null
+     * @return Model\Approver|ResponseInterface|null
      *
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsBadRequestException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsUnauthorizedException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsForbiddenException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
      */
-    public function getSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    public function getSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails($signatureRequestId, $signerId), $fetch);
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdApproversApproverId($signatureRequestId, $approverId), $fetch);
+    }
+
+    /**
+     * Updates a given Approver. Any parameters not provided are left unchanged.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $approverId         Approver Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\Approver|ResponseInterface|null
+     *
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdBadRequestException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
+     */
+    public function patchSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, ?PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchSignatureRequestsSignatureRequestIdApproversApproverId($signatureRequestId, $approverId, $requestBody), $fetch);
     }
 
     /**
@@ -330,23 +789,78 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Download the PDF version of the Audit Trail attached to a given Signer. Only possible when Signer status is `signed`.
+     * Cancels a Signature Request when it is in `approval` or `ongoing` status. A canceled Signature Request cannot be reactivated.
      *
      * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept             Accept content header application/pdf|application/json
+     *
+     * @return Model\SignatureRequest|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdCancel(string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdCancelRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdCancel($signatureRequestId, $requestBody), $fetch);
+    }
+
+    /**
+     * Adds a Signer Document Request to a given Signature Request.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\SignerDocumentRequest|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdDocumentRequests(string $signatureRequestId, ?CreateSignerDocumentRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdDocumentRequests($signatureRequestId, $requestBody), $fetch);
+    }
+
+    /**
+     * Delete a Signer Document Request from signature request. This action is only permitted when the Signature Request is a draft.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentRequestId  Signer Document Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return ResponseInterface|null
      *
-     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadBadRequestException
-     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadUnauthorizedException
-     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadForbiddenException
-     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdNotFoundException
      */
-    public function getSignersSignerIdAuditTrailsDownload(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    public function deleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestId(string $signatureRequestId, string $documentRequestId, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new GetSignersSignerIdAuditTrailsDownload($signatureRequestId, $signerId, $accept), $fetch);
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestId($signatureRequestId, $documentRequestId), $fetch);
+    }
+
+    /**
+     * Adds a Signer to a given Signer Document Request. This action is only permitted when the Signature Request is a draft.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentRequestId  Signer Document Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\SignerDocumentRequest|ResponseInterface|null
+     *
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdBadRequestException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdUnauthorizedException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdForbiddenException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdNotFoundException
+     */
+    public function putSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerId(string $signatureRequestId, string $documentRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerId($signatureRequestId, $documentRequestId, $signerId), $fetch);
     }
 
     /**
@@ -491,25 +1005,6 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Replace the file of a given Document.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $documentId         Document Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Document|ResponseInterface|null
-     *
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceBadRequestException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnauthorizedException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceForbiddenException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceNotFoundException
-     */
-    public function postSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace(string $signatureRequestId, string $documentId, ?PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace($signatureRequestId, $documentId, $requestBody), $fetch);
-    }
-
-    /**
      * Returns a list of Fields for a given Document. You can limit the number of items returned by using filters.
      *
      * @param string $signatureRequestId Signature Request Id
@@ -593,326 +1088,22 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Adds a Signer Document Request to a given Signature Request.
+     * Replace the file of a given Document.
      *
      * @param string $signatureRequestId Signature Request Id
+     * @param string $documentId         Document Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Model\SignerDocumentRequest|ResponseInterface|null
+     * @return Document|ResponseInterface|null
      *
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsBadRequestException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsUnauthorizedException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsForbiddenException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceNotFoundException
      */
-    public function postSignatureRequestsSignatureRequestIdDocumentRequests(string $signatureRequestId, ?CreateSignerDocumentRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace(string $signatureRequestId, string $documentId, ?PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdDocumentRequests($signatureRequestId, $requestBody), $fetch);
-    }
-
-    /**
-     * Delete a Signer Document Request from signature request. This action is only permitted when the signature request is a draft.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $documentRequestId  Signer Document Request Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdBadRequestException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdUnauthorizedException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdForbiddenException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdNotFoundException
-     */
-    public function deleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestId(string $signatureRequestId, string $documentRequestId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestId($signatureRequestId, $documentRequestId), $fetch);
-    }
-
-    /**
-     * Returns a list of Signers for a given Signature Request.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Signer[]|ResponseInterface|null
-     *
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersUnauthorizedException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersForbiddenException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersNotFoundException
-     */
-    public function getSignatureRequestsSignatureRequestIdSigners(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSigners($signatureRequestId), $fetch);
-    }
-
-    /**
-     * Adds a Signer to a given Signature Request.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Signer|ResponseInterface|null
-     *
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersBadRequestException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersUnauthorizedException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersForbiddenException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersNotFoundException
-     */
-    public function postSignatureRequestsSignatureRequestIdSigners(string $signatureRequestId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSigners($signatureRequestId, $requestBody), $fetch);
-    }
-
-    /**
-     * Deletes a given Signer from a Signature Request.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdBadRequestException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdUnauthorizedException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdForbiddenException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdNotFoundException
-     */
-    public function deleteSignatureRequestsSignatureRequestIdSignersSignerId(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdSignersSignerId($signatureRequestId, $signerId), $fetch);
-    }
-
-    /**
-     * Retrieves a given Signer.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Signer|ResponseInterface|null
-     *
-     * @throws Exception\GetSignersSignersIdUnauthorizedException
-     * @throws Exception\GetSignersSignersIdForbiddenException
-     * @throws Exception\GetSignersSignersIdNotFoundException
-     */
-    public function getSignersSignersId(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetSignersSignersId($signatureRequestId, $signerId), $fetch);
-    }
-
-    /**
-     * Updates a given Signer.
-     * Any parameters not provided are left unchanged.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Signer|ResponseInterface|null
-     *
-     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdBadRequestException
-     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdUnauthorizedException
-     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdForbiddenException
-     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdNotFoundException
-     */
-    public function patchSignatureRequestsSignatureRequestIdSignersSignerId(string $signatureRequestId, string $signerId, ?UpdateSigner $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PatchSignatureRequestsSignatureRequestIdSignersSignerId($signatureRequestId, $signerId, $requestBody), $fetch);
-    }
-
-    /**
-     * Send a One-Time Password (OTP) to a given Signer. Use this endpoint only if you use your own signing flow.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpBadRequestException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException
-     */
-    public function postSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp($signatureRequestId, $signerId), $fetch);
-    }
-
-    /**
-     * Sends a reminder to a given signer to complete their Signature Request.
-     * Only possible when the Signature Request status is `ongoing` and the Signer status is `notified`.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderBadRequestException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderUnauthorizedException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderForbiddenException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderNotFoundException
-     */
-    public function postSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder($signatureRequestId, $signerId), $fetch);
-    }
-
-    /**
-     * Sign a Signature Request on behalf of a given Signer.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignBadRequestException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignUnauthorizedException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignForbiddenException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignNotFoundException
-     */
-    public function postSignatureRequestsSignatureRequestIdSignersSignerIdSign(string $signatureRequestId, string $signerId, ?SignerSign $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignersSignerIdSign($signatureRequestId, $signerId, $requestBody), $fetch);
-    }
-
-    /**
-     * Deletes all documents uploaded by a given Signer for a specific Signature Request.
-     * Deletion is only possible when Signer status is `signed`.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
-     */
-    public function deleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments($signatureRequestId, $signerId), $fetch);
-    }
-
-    /**
-     * Returns a list of Documents uploaded by a given Signer.
-     * Only possible when Signer status is `signed`.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response|ResponseInterface|null
-     *
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
-     */
-    public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments($signatureRequestId, $signerId), $fetch);
-    }
-
-    /**
-     * Downloads a Document uploaded by a given Signer.
-     * Only possible when Signer status is `signed`.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $signerDocumentId   Signer Document Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept             Accept content header application/pdf|application/json
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdBadRequestException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdUnauthorizedException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdForbiddenException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdNotFoundException
-     */
-    public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId(string $signatureRequestId, string $signerId, string $signerDocumentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
-    {
-        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId($signatureRequestId, $signerId, $signerDocumentId, $accept), $fetch);
-    }
-
-    /**
-     * Adds an Approver to a given Signature Request.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\Approver|ResponseInterface|null
-     *
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversBadRequestException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversUnauthorizedException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversForbiddenException
-     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversNotFoundException
-     */
-    public function postSignatureRequestsSignatureRequestIdApprovers(string $signatureRequestId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdApprovers($signatureRequestId, $requestBody), $fetch);
-    }
-
-    /**
-     * Deletes a given Approver from a Signature Request.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $approverId         Approver Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdBadRequestException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
-     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
-     */
-    public function deleteSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdApproversApproverId($signatureRequestId, $approverId), $fetch);
-    }
-
-    /**
-     * Retrieves a given Approver.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $approverId         Approver Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\Approver|ResponseInterface|null
-     *
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
-     * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
-     */
-    public function getSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdApproversApproverId($signatureRequestId, $approverId), $fetch);
-    }
-
-    /**
-     * Updates a given Approver. Any parameters not provided are left unchanged.
-     *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $approverId         Approver Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\Approver|ResponseInterface|null
-     *
-     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdBadRequestException
-     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
-     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
-     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
-     */
-    public function patchSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, ?PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PatchSignatureRequestsSignatureRequestIdApproversApproverId($signatureRequestId, $approverId, $requestBody), $fetch);
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace($signatureRequestId, $documentId, $requestBody), $fetch);
     }
 
     /**
@@ -1022,8 +1213,297 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Returns the list of all Custom Experiences in your Organization.
-     * You can limit the number of items returned by using pagination.
+     * Reactivates a Signature Request when it is in `expired` status.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\SignatureRequest|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdReactivate(string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdReactivateRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdReactivate($signatureRequestId, $requestBody), $fetch);
+    }
+
+    /**
+     * Returns a list of Signers for a given Signature Request.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Signer[]|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSigners(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSigners($signatureRequestId), $fetch);
+    }
+
+    /**
+     * Adds a Signer to a given Signature Request.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Signer|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdSigners(string $signatureRequestId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSigners($signatureRequestId, $requestBody), $fetch);
+    }
+
+    /**
+     * Deletes a given Signer from a Signature Request.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdSignersSignerId(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdSignersSignerId($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * Retrieves a given Signer.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Signer|ResponseInterface|null
+     *
+     * @throws Exception\GetSignersSignersIdUnauthorizedException
+     * @throws Exception\GetSignersSignersIdForbiddenException
+     * @throws Exception\GetSignersSignersIdNotFoundException
+     */
+    public function getSignersSignersId(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignersSignersId($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * Updates a given Signer.
+     * Any parameters not provided are left unchanged.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Signer|ResponseInterface|null
+     *
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdBadRequestException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdUnauthorizedException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdForbiddenException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdNotFoundException
+     */
+    public function patchSignatureRequestsSignatureRequestIdSignersSignerId(string $signatureRequestId, string $signerId, ?UpdateSigner $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchSignatureRequestsSignatureRequestIdSignersSignerId($signatureRequestId, $signerId, $requestBody), $fetch);
+    }
+
+    /**
+     * Retrieves the JSON version of the Audit Trail attached to a given Signer. Only possible when Signer status is `signed`.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\SignerAuditTrail|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * Download the PDF version of the Audit Trail attached to a given Signer. Only possible when Signer status is `signed`.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept             Accept content header application/pdf|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadBadRequestException
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadUnauthorizedException
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadForbiddenException
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadNotFoundException
+     */
+    public function getSignersSignerIdAuditTrailsDownload(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetSignersSignerIdAuditTrailsDownload($signatureRequestId, $signerId, $accept), $fetch);
+    }
+
+    /**
+     * Deletes all documents uploaded by a given Signer for a specific Signature Request.
+     * Deletion is only possible when Signer status is `signed`.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * Returns a list of Documents uploaded by a given Signer.
+     * Only possible when Signer status is `signed`.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * Downloads a Document uploaded by a given Signer.
+     * Only possible when Signer status is `signed`.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $signerDocumentId   Signer Document Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept             Accept content header application/pdf|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdBadRequestException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId(string $signatureRequestId, string $signerId, string $signerDocumentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId($signatureRequestId, $signerId, $signerDocumentId, $accept), $fetch);
+    }
+
+    /**
+     * Send a One-Time Password (OTP) to a given Signer. Use this endpoint only if you use your own signing flow.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * Sends a reminder to a given signer to complete their Signature Request.
+     * Only possible when the Signature Request status is `ongoing` and the Signer status is `notified`.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder($signatureRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * Sign a Signature Request on behalf of a given Signer.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdSignersSignerIdSign(string $signatureRequestId, string $signerId, ?SignerSign $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignersSignerIdSign($signatureRequestId, $signerId, $requestBody), $fetch);
+    }
+
+    /**
+     * Returns the list of all Templates within your Organization.
+     *
+     * @param array $queryParameters {
+     *
+     * @var string $after After cursor (pagination)
+     *             }
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetTemplates200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetTemplatesBadRequestException
+     * @throws Exception\GetTemplatesUnauthorizedException
+     * @throws Exception\GetTemplatesForbiddenException
+     */
+    public function getTemplates(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetTemplates($queryParameters), $fetch);
+    }
+
+    /**
+     * Returns the list of all the Users within your organization.
      *
      * @param array $queryParameters {
      *
@@ -1033,276 +1513,14 @@ class Client extends Runtime\Client\Client
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Model\GetCustomExperiences200Response|ResponseInterface|null
+     * @return Model\GetUsers200Response|ResponseInterface|null
      *
-     * @throws Exception\GetCustomExperiencesBadRequestException
-     * @throws Exception\GetCustomExperiencesUnauthorizedException
-     * @throws Exception\GetCustomExperiencesForbiddenException
+     * @throws Exception\GetUsersBadRequestException
+     * @throws Exception\GetUsersUnauthorizedException
      */
-    public function getCustomExperiences(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    public function getUsers(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new GetCustomExperiences($queryParameters), $fetch);
-    }
-
-    /**
-     * Creates a new Custom Experience.
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\CustomExperience|ResponseInterface|null
-     *
-     * @throws Exception\PostCustomExperienceBadRequestException
-     * @throws Exception\PostCustomExperienceUnauthorizedException
-     * @throws Exception\PostCustomExperienceForbiddenException
-     */
-    public function postCustomExperience(?CreateCustomExperience $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PostCustomExperience($requestBody), $fetch);
-    }
-
-    /**
-     * Deletes a given Custom Experience.
-     *
-     * @param string $customExperienceId Custom Experience Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DeleteCustomExperienceBadRequestException
-     * @throws Exception\DeleteCustomExperienceUnauthorizedException
-     * @throws Exception\DeleteCustomExperienceForbiddenException
-     * @throws Exception\DeleteCustomExperienceNotFoundException
-     */
-    public function deleteCustomExperience(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new DeleteCustomExperience($customExperienceId), $fetch);
-    }
-
-    /**
-     * Retrieves a given Custom Experience.
-     *
-     * @param string $customExperienceId Custom Experience Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\CustomExperience|ResponseInterface|null
-     *
-     * @throws Exception\GetCustomExperiencesCustomExperienceIdBadRequestException
-     * @throws Exception\GetCustomExperiencesCustomExperienceIdUnauthorizedException
-     * @throws Exception\GetCustomExperiencesCustomExperienceIdForbiddenException
-     * @throws Exception\GetCustomExperiencesCustomExperienceIdNotFoundException
-     */
-    public function getCustomExperiencesCustomExperienceId(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetCustomExperiencesCustomExperienceId($customExperienceId), $fetch);
-    }
-
-    /**
-     * Updates a given Custom Experience.
-     * Any parameters not provided are left unchanged.
-     *
-     * @param string $customExperienceId Custom Experience Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\CustomExperience|ResponseInterface|null
-     *
-     * @throws Exception\PatchCustomExperiencesCustomExperienceIdBadRequestException
-     * @throws Exception\PatchCustomExperiencesCustomExperienceIdUnauthorizedException
-     * @throws Exception\PatchCustomExperiencesCustomExperienceIdForbiddenException
-     * @throws Exception\PatchCustomExperiencesCustomExperienceIdNotFoundException
-     */
-    public function patchCustomExperiencesCustomExperienceId(string $customExperienceId, ?UpdateCustomExperience $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PatchCustomExperiencesCustomExperienceId($customExperienceId, $requestBody), $fetch);
-    }
-
-    /**
-     * Deletes the logo of a Custom Experience.
-     *
-     * @param string $customExperienceId Custom Experience Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DeleteCustomExperienceLogoBadRequestException
-     * @throws Exception\DeleteCustomExperienceLogoUnauthorizedException
-     * @throws Exception\DeleteCustomExperienceLogoForbiddenException
-     * @throws Exception\DeleteCustomExperienceLogoNotFoundException
-     */
-    public function deleteCustomExperienceLogo(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new DeleteCustomExperienceLogo($customExperienceId), $fetch);
-    }
-
-    /**
-     * Updates the logo of a given Custom Experience by uploading the image of your choice.
-     *
-     * @param string $customExperienceId Custom Experience Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\CustomExperience|ResponseInterface|null
-     *
-     * @throws Exception\PatchCustomExperienceLogoBadRequestException
-     * @throws Exception\PatchCustomExperienceLogoUnauthorizedException
-     * @throws Exception\PatchCustomExperienceLogoForbiddenException
-     */
-    public function patchCustomExperienceLogo(string $customExperienceId, ?PatchCustomExperienceLogoRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PatchCustomExperienceLogo($customExperienceId, $requestBody), $fetch);
-    }
-
-    /**
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\ElectronicSeal|ResponseInterface|null
-     *
-     * @throws Exception\PostElectronicSealsBadRequestException
-     * @throws Exception\PostElectronicSealsUnauthorizedException
-     * @throws Exception\PostElectronicSealsForbiddenException
-     */
-    public function postElectronicSeals(?CreateElectronicSealPayload $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PostElectronicSeals($requestBody), $fetch);
-    }
-
-    /**
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\ElectronicSeal|ResponseInterface|null
-     *
-     * @throws Exception\GetElectronicSealUnauthorizedException
-     * @throws Exception\GetElectronicSealNotFoundException
-     */
-    public function getElectronicSeal(string $electronicSealId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetElectronicSeal($electronicSealId), $fetch);
-    }
-
-    /**
-     * Electronic Seal Audit Trail is only available when the Electronic Seal is "done".
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\ElectronicSealAuditTrail|ResponseInterface|null
-     *
-     * @throws Exception\GetElectronicSealAuditTrailBadRequestException
-     * @throws Exception\GetElectronicSealAuditTrailUnauthorizedException
-     * @throws Exception\GetElectronicSealAuditTrailForbiddenException
-     * @throws Exception\GetElectronicSealAuditTrailNotFoundException
-     */
-    public function getElectronicSealAuditTrail(string $electronicSealId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetElectronicSealAuditTrail($electronicSealId), $fetch);
-    }
-
-    /**
-     * Electronic Seal Audit Trail is only available when the Electronic Seal is "done".
-     *
-     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept Accept content header application/pdf|application/json
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DownloadElectronicSealAuditTrailBadRequestException
-     * @throws Exception\DownloadElectronicSealAuditTrailUnauthorizedException
-     * @throws Exception\DownloadElectronicSealAuditTrailForbiddenException
-     * @throws Exception\DownloadElectronicSealAuditTrailNotFoundException
-     */
-    public function downloadElectronicSealAuditTrail(string $electronicSealId, string $fetch = self::FETCH_OBJECT, array $accept = [])
-    {
-        return $this->executeEndpoint(new DownloadElectronicSealAuditTrail($electronicSealId, $accept), $fetch);
-    }
-
-    /**
-     * Upload an Electronic Seal Document to use for creating an Electronic Seal (can be used for only one Electronic Seal).
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\ElectronicSealDocument|ResponseInterface|null
-     *
-     * @throws Exception\UploadElectronicSealDocumentBadRequestException
-     * @throws Exception\UploadElectronicSealDocumentUnauthorizedException
-     * @throws Exception\UploadElectronicSealDocumentForbiddenException
-     */
-    public function uploadElectronicSealDocument(?UploadElectronicSealDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new Endpoint\UploadElectronicSealDocument($requestBody), $fetch);
-    }
-
-    /**
-     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept Accept content header application/pdf|application/json
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DownloadElectronicSealDocumentUnauthorizedException
-     * @throws Exception\DownloadElectronicSealDocumentNotFoundException
-     */
-    public function downloadElectronicSealDocument(string $electronicSealDocumentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
-    {
-        return $this->executeEndpoint(new DownloadElectronicSealDocument($electronicSealDocumentId, $accept), $fetch);
-    }
-
-    /**
-     * @param array $queryParameters {
-     *
-     * @var string $after After cursor (pagination)
-     *             }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\ListElectronicSealImages200Response|ResponseInterface|null
-     *
-     * @throws Exception\ListElectronicSealImagesBadRequestException
-     * @throws Exception\ListElectronicSealImagesUnauthorizedException
-     * @throws Exception\ListElectronicSealImagesForbiddenException
-     */
-    public function listElectronicSealImages(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new ListElectronicSealImages($queryParameters), $fetch);
-    }
-
-    /**
-     * Upload an Electronic Seal Image to use for creating an Electronic Seal (can be used for several Electronic Seals).
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\ElectronicSealImage|ResponseInterface|null
-     *
-     * @throws Exception\UploadElectronicSealImageBadRequestException
-     * @throws Exception\UploadElectronicSealImageUnauthorizedException
-     * @throws Exception\UploadElectronicSealImageForbiddenException
-     */
-    public function uploadElectronicSealImage(?UploadElectronicSealImage $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new Endpoint\UploadElectronicSealImage($requestBody), $fetch);
-    }
-
-    /**
-     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept Accept content header image/png|image/jpg|image/gif|application/json
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DownloadElectronicSealImageUnauthorizedException
-     * @throws Exception\DownloadElectronicSealImageNotFoundException
-     */
-    public function downloadElectronicSealImage(string $electronicSealImageId, string $fetch = self::FETCH_OBJECT, array $accept = [])
-    {
-        return $this->executeEndpoint(new DownloadElectronicSealImage($electronicSealImageId, $accept), $fetch);
-    }
-
-    /**
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DeleteElectronicSealImageUnauthorizedException
-     * @throws Exception\DeleteElectronicSealImageForbiddenException
-     * @throws Exception\DeleteElectronicSealImageNotFoundException
-     */
-    public function deleteElectronicSealImage(string $electronicSealImageId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new DeleteElectronicSealImage($electronicSealImageId), $fetch);
+        return $this->executeEndpoint(new GetUsers($queryParameters), $fetch);
     }
 
     /**
@@ -1389,145 +1607,6 @@ class Client extends Runtime\Client\Client
     public function patchWebhooksWebhookId(string $webhookId, ?UpdateWebhookSubscription $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PatchWebhooksWebhookId($webhookId, $requestBody), $fetch);
-    }
-
-    /**
-     * Returns the list of all the Contacts within your organization.
-     *
-     * @param array $queryParameters {
-     *
-     * @var string $after After cursor (pagination)
-     * @var int    $limit The limit of items count to retrieve.
-     *             }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\GetContacts200Response|ResponseInterface|null
-     *
-     * @throws Exception\GetContactsBadRequestException
-     * @throws Exception\GetContactsUnauthorizedException
-     * @throws Exception\GetContactsForbiddenException
-     */
-    public function getContacts(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetContacts($queryParameters), $fetch);
-    }
-
-    /**
-     * Creates a new Contact.
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\Contact|ResponseInterface|null
-     *
-     * @throws Exception\PostContactBadRequestException
-     * @throws Exception\PostContactUnauthorizedException
-     * @throws Exception\PostContactForbiddenException
-     * @throws Exception\PostContactNotFoundException
-     */
-    public function postContact(?CreateContact $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PostContact($requestBody), $fetch);
-    }
-
-    /**
-     * Deletes a given Contact.
-     *
-     * @param string $contactId Contact Id
-     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\DeleteContactsContactIdUnauthorizedException
-     * @throws Exception\DeleteContactsContactIdForbiddenException
-     * @throws Exception\DeleteContactsContactIdNotFoundException
-     */
-    public function deleteContactsContactId(string $contactId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new DeleteContactsContactId($contactId), $fetch);
-    }
-
-    /**
-     * Retrieves a given Contact.
-     *
-     * @param string $contactId Contact Id
-     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\Contact|ResponseInterface|null
-     *
-     * @throws Exception\GetContactsContactIdNotFoundException
-     */
-    public function getContactsContactId(string $contactId, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetContactsContactId($contactId), $fetch);
-    }
-
-    /**
-     * Updates a given Contact.
-     * Any parameters not provided are left unchanged.
-     *
-     * @param string $contactId Contact Id
-     * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\Contact|ResponseInterface|null
-     *
-     * @throws Exception\PatchContactsContactIdBadRequestException
-     * @throws Exception\PatchContactsContactIdUnauthorizedException
-     * @throws Exception\PatchContactsContactIdForbiddenException
-     * @throws Exception\PatchContactsContactIdNotFoundException
-     */
-    public function patchContactsContactId(string $contactId, ?UpdateContact $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PatchContactsContactId($contactId, $requestBody), $fetch);
-    }
-
-    /**
-     * Get signatures Consumption by source.
-     *
-     * @param array $queryParameters {
-     *
-     * @var string $from The "from" date must not be more than 1 year in the past
-     * @var string $to The "to" date must be more recent than the "from" date
-     * @var string $authentication_key
-     *             }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\Consumption|ResponseInterface|null
-     *
-     * @throws Exception\GetConsumptionsBadRequestException
-     * @throws Exception\GetConsumptionsUnauthorizedException
-     * @throws Exception\GetConsumptionsForbiddenException
-     * @throws Exception\GetConsumptionsNotFoundException
-     */
-    public function getConsumptions(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetConsumptions($queryParameters), $fetch);
-    }
-
-    /**
-     * Get a binary .csv file containing all the Consumption data of the underlying signatures.
-     *
-     * @param array $queryParameters {
-     *
-     * @var string $from The "from" date must not be more than 1 year in the past
-     * @var string $to The "to" date must be more recent than the "from" date
-     * @var string $authentication_key
-     *             }
-     *
-     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept Accept content header text/csv|application/json
-     *
-     * @return ResponseInterface|null
-     *
-     * @throws Exception\GetConsumptionsExportBadRequestException
-     * @throws Exception\GetConsumptionsExportUnauthorizedException
-     * @throws Exception\GetConsumptionsExportForbiddenException
-     * @throws Exception\GetConsumptionsExportNotFoundException
-     */
-    public function getConsumptionsExport(array $queryParameters = [], string $fetch = self::FETCH_OBJECT, array $accept = [])
-    {
-        return $this->executeEndpoint(new GetConsumptionsExport($queryParameters, $accept), $fetch);
     }
 
     /**
@@ -1653,64 +1732,6 @@ class Client extends Runtime\Client\Client
     public function patchWorkspacesWorkspaceId(string $workspaceId, ?UpdateWorkspace $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PatchWorkspacesWorkspaceId($workspaceId, $requestBody), $fetch);
-    }
-
-    /**
-     * Returns the list of all the Users within your organization.
-     *
-     * @param array $queryParameters {
-     *
-     * @var string $after After cursor (pagination)
-     * @var int    $limit The limit of items count to retrieve.
-     *             }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\GetUsers200Response|ResponseInterface|null
-     *
-     * @throws Exception\GetUsersBadRequestException
-     * @throws Exception\GetUsersUnauthorizedException
-     */
-    public function getUsers(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetUsers($queryParameters), $fetch);
-    }
-
-    /**
-     * Deprecated endpoint, do not use.
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Document|ResponseInterface|null
-     *
-     * @throws Exception\PostDocumentsBadRequestException
-     * @throws Exception\PostDocumentsUnauthorizedException
-     * @throws Exception\PostDocumentsForbiddenException
-     */
-    public function postDocuments(?CreateDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new PostDocuments($requestBody), $fetch);
-    }
-
-    /**
-     * Returns the list of all Templates within your Organization.
-     *
-     * @param array $queryParameters {
-     *
-     * @var string $after After cursor (pagination)
-     *             }
-     *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
-     *
-     * @return Model\GetTemplates200Response|ResponseInterface|null
-     *
-     * @throws Exception\GetTemplatesBadRequestException
-     * @throws Exception\GetTemplatesUnauthorizedException
-     * @throws Exception\GetTemplatesForbiddenException
-     */
-    public function getTemplates(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
-    {
-        return $this->executeEndpoint(new GetTemplates($queryParameters), $fetch);
     }
 
     public static function create($httpClient = null, array $additionalPlugins = [], array $additionalNormalizers = []): static

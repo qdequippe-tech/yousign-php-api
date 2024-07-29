@@ -62,10 +62,10 @@ use Qdequippe\Yousign\Api\Model\FromScratch1CustomText;
 use Qdequippe\Yousign\Api\Model\FromScratch1Info;
 use Qdequippe\Yousign\Api\Model\FromScratch1RedirectUrls;
 use Qdequippe\Yousign\Api\Model\FromScratchInfo;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\GetContacts200Response;
 use Qdequippe\Yousign\Api\Model\GetCustomExperiences200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequests200Response;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdFollowers200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response;
@@ -172,11 +172,43 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         use NormalizerAwareTrait;
         use ValidatorTrait;
         protected $normalizers = [
-            Pagination::class => PaginationNormalizer::class,
-
-            SignatureRequestInList::class => SignatureRequestInListNormalizer::class,
+            Consumption::class => ConsumptionNormalizer::class,
 
             ViolationResponse::class => ViolationResponseNormalizer::class,
+
+            Pagination::class => PaginationNormalizer::class,
+
+            Contact::class => ContactNormalizer::class,
+
+            CreateContact::class => CreateContactNormalizer::class,
+
+            UpdateContact::class => UpdateContactNormalizer::class,
+
+            CustomExperience::class => CustomExperienceNormalizer::class,
+
+            CreateCustomExperience::class => CreateCustomExperienceNormalizer::class,
+
+            UpdateCustomExperience::class => UpdateCustomExperienceNormalizer::class,
+
+            CreateDocument::class => CreateDocumentNormalizer::class,
+
+            Document::class => DocumentNormalizer::class,
+
+            UploadElectronicSealDocument::class => UploadElectronicSealDocumentNormalizer::class,
+
+            ElectronicSealDocument::class => ElectronicSealDocumentNormalizer::class,
+
+            ElectronicSealImage::class => ElectronicSealImageNormalizer::class,
+
+            UploadElectronicSealImage::class => UploadElectronicSealImageNormalizer::class,
+
+            CreateElectronicSealPayload::class => CreateElectronicSealPayloadNormalizer::class,
+
+            ElectronicSeal::class => ElectronicSealNormalizer::class,
+
+            ElectronicSealAuditTrail::class => ElectronicSealAuditTrailNormalizer::class,
+
+            SignatureRequestInList::class => SignatureRequestInListNormalizer::class,
 
             CreateSignatureRequest::class => CreateSignatureRequestNormalizer::class,
 
@@ -186,11 +218,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             SignatureRequestActivated::class => SignatureRequestActivatedNormalizer::class,
 
-            SignerAuditTrail::class => SignerAuditTrailNormalizer::class,
+            Approver::class => ApproverNormalizer::class,
 
-            Document::class => DocumentNormalizer::class,
+            CreateSignerDocumentRequest::class => CreateSignerDocumentRequestNormalizer::class,
 
-            CreateDocument::class => CreateDocumentNormalizer::class,
+            SignerDocumentRequest::class => SignerDocumentRequestNormalizer::class,
 
             UpdateDocument::class => UpdateDocumentNormalizer::class,
 
@@ -206,20 +238,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             FieldReadOnlyText::class => FieldReadOnlyTextNormalizer::class,
 
-            CreateSignerDocumentRequest::class => CreateSignerDocumentRequestNormalizer::class,
-
-            SignerDocumentRequest::class => SignerDocumentRequestNormalizer::class,
-
-            Signer::class => SignerNormalizer::class,
-
-            UpdateSigner::class => UpdateSignerNormalizer::class,
-
-            SignerSign::class => SignerSignNormalizer::class,
-
-            SignerDocument::class => SignerDocumentNormalizer::class,
-
-            Approver::class => ApproverNormalizer::class,
-
             Follower::class => FollowerNormalizer::class,
 
             Metadata::class => MetadataNormalizer::class,
@@ -228,39 +246,25 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             CreateSignatureRequestMetadata::class => CreateSignatureRequestMetadataNormalizer::class,
 
-            CustomExperience::class => CustomExperienceNormalizer::class,
+            Signer::class => SignerNormalizer::class,
 
-            CreateCustomExperience::class => CreateCustomExperienceNormalizer::class,
+            UpdateSigner::class => UpdateSignerNormalizer::class,
 
-            UpdateCustomExperience::class => UpdateCustomExperienceNormalizer::class,
+            SignerAuditTrail::class => SignerAuditTrailNormalizer::class,
 
-            CreateElectronicSealPayload::class => CreateElectronicSealPayloadNormalizer::class,
+            SignerDocument::class => SignerDocumentNormalizer::class,
 
-            ElectronicSeal::class => ElectronicSealNormalizer::class,
+            SignerSign::class => SignerSignNormalizer::class,
 
-            ElectronicSealAuditTrail::class => ElectronicSealAuditTrailNormalizer::class,
+            Template::class => TemplateNormalizer::class,
 
-            UploadElectronicSealDocument::class => UploadElectronicSealDocumentNormalizer::class,
-
-            ElectronicSealDocument::class => ElectronicSealDocumentNormalizer::class,
-
-            ElectronicSealImage::class => ElectronicSealImageNormalizer::class,
-
-            UploadElectronicSealImage::class => UploadElectronicSealImageNormalizer::class,
+            User::class => UserNormalizer::class,
 
             WebhookSubscription::class => WebhookSubscriptionNormalizer::class,
 
             CreateWebhookSubscription::class => CreateWebhookSubscriptionNormalizer::class,
 
             UpdateWebhookSubscription::class => UpdateWebhookSubscriptionNormalizer::class,
-
-            Contact::class => ContactNormalizer::class,
-
-            CreateContact::class => CreateContactNormalizer::class,
-
-            UpdateContact::class => UpdateContactNormalizer::class,
-
-            Consumption::class => ConsumptionNormalizer::class,
 
             Workspace::class => WorkspaceNormalizer::class,
 
@@ -272,9 +276,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             UpdateWorkspace::class => UpdateWorkspaceNormalizer::class,
 
-            User::class => UserNormalizer::class,
+            InitialsArea::class => InitialsAreaNormalizer::class,
 
-            Template::class => TemplateNormalizer::class,
+            CreateElectronicSealFieldSealPayload::class => CreateElectronicSealFieldSealPayloadNormalizer::class,
+
+            CreateElectronicSealFieldReadOnlyTextPayload::class => CreateElectronicSealFieldReadOnlyTextPayloadNormalizer::class,
 
             SignatureRequestSignerFromInfoInput::class => SignatureRequestSignerFromInfoInputNormalizer::class,
 
@@ -296,8 +302,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             ApproverToNotify::class => ApproverToNotifyNormalizer::class,
 
-            InitialsArea::class => InitialsAreaNormalizer::class,
-
             Font::class => FontNormalizer::class,
 
             CreateFieldFont::class => CreateFieldFontNormalizer::class,
@@ -306,29 +310,23 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             SmsNotification::class => SmsNotificationNormalizer::class,
 
-            CreateElectronicSealFieldSealPayload::class => CreateElectronicSealFieldSealPayloadNormalizer::class,
-
-            CreateElectronicSealFieldReadOnlyTextPayload::class => CreateElectronicSealFieldReadOnlyTextPayloadNormalizer::class,
-
             SignatureRequestEmailNotificationSender::class => SignatureRequestEmailNotificationSenderNormalizer::class,
 
             FontVariants::class => FontVariantsNormalizer::class,
 
             OtpMessage::class => OtpMessageNormalizer::class,
 
+            GetConsumptions401Response::class => GetConsumptions401ResponseNormalizer::class,
+
+            GetContacts200Response::class => GetContacts200ResponseNormalizer::class,
+
+            GetCustomExperiences200Response::class => GetCustomExperiences200ResponseNormalizer::class,
+
+            PatchCustomExperienceLogoRequest::class => PatchCustomExperienceLogoRequestNormalizer::class,
+
+            ListElectronicSealImages200Response::class => ListElectronicSealImages200ResponseNormalizer::class,
+
             GetSignatureRequests200Response::class => GetSignatureRequests200ResponseNormalizer::class,
-
-            GetSignatureRequests401Response::class => GetSignatureRequests401ResponseNormalizer::class,
-
-            PostSignatureRequestsSignatureRequestIdCancelRequest::class => PostSignatureRequestsSignatureRequestIdCancelRequestNormalizer::class,
-
-            PostSignatureRequestsSignatureRequestIdReactivateRequest::class => PostSignatureRequestsSignatureRequestIdReactivateRequestNormalizer::class,
-
-            PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequestNormalizer::class,
-
-            GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200ResponseNormalizer::class,
-
-            GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response::class => GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200ResponseNormalizer::class,
 
             FromScratchInfo::class => FromScratchInfoNormalizer::class,
 
@@ -344,21 +342,39 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestNormalizer::class,
 
+            PostSignatureRequestsSignatureRequestIdCancelRequest::class => PostSignatureRequestsSignatureRequestIdCancelRequestNormalizer::class,
+
+            GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200ResponseNormalizer::class,
+
+            PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequestNormalizer::class,
+
             GetSignatureRequestsSignatureRequestIdFollowers200Response::class => GetSignatureRequestsSignatureRequestIdFollowers200ResponseNormalizer::class,
 
-            GetCustomExperiences200Response::class => GetCustomExperiences200ResponseNormalizer::class,
+            PostSignatureRequestsSignatureRequestIdReactivateRequest::class => PostSignatureRequestsSignatureRequestIdReactivateRequestNormalizer::class,
 
-            PatchCustomExperienceLogoRequest::class => PatchCustomExperienceLogoRequestNormalizer::class,
+            GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response::class => GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200ResponseNormalizer::class,
 
-            ListElectronicSealImages200Response::class => ListElectronicSealImages200ResponseNormalizer::class,
-
-            GetContacts200Response::class => GetContacts200ResponseNormalizer::class,
-
-            GetWorkspaces200Response::class => GetWorkspaces200ResponseNormalizer::class,
+            GetTemplates200Response::class => GetTemplates200ResponseNormalizer::class,
 
             GetUsers200Response::class => GetUsers200ResponseNormalizer::class,
 
-            GetTemplates200Response::class => GetTemplates200ResponseNormalizer::class,
+            GetWorkspaces200Response::class => GetWorkspaces200ResponseNormalizer::class,
+
+            ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerificationNormalizer::class,
+
+            ConsumptionAppQualifiedElectronicSignatureIdentificationMode::class => ConsumptionAppQualifiedElectronicSignatureIdentificationModeNormalizer::class,
+
+            ConsumptionApp::class => ConsumptionAppNormalizer::class,
+
+            ConsumptionApi::class => ConsumptionApiNormalizer::class,
+
+            CustomExperienceRedirectUrls::class => CustomExperienceRedirectUrlsNormalizer::class,
+
+            CreateCustomExperienceRedirectUrls::class => CreateCustomExperienceRedirectUrlsNormalizer::class,
+
+            UpdateCustomExperienceRedirectUrls::class => UpdateCustomExperienceRedirectUrlsNormalizer::class,
+
+            DocumentInitials::class => DocumentInitialsNormalizer::class,
 
             SignatureRequestInListReminderSettings::class => SignatureRequestInListReminderSettingsNormalizer::class,
 
@@ -380,7 +396,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             SignatureRequestActivatedDocumentsInner::class => SignatureRequestActivatedDocumentsInnerNormalizer::class,
 
-            DocumentInitials::class => DocumentInitialsNormalizer::class,
+            ApproverInfo::class => ApproverInfoNormalizer::class,
 
             FieldRadioButtonGroupRadiosInner::class => FieldRadioButtonGroupRadiosInnerNormalizer::class,
 
@@ -412,6 +428,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             ReadOnlyText1::class => ReadOnlyText1Normalizer::class,
 
+            CreateFollowersInner::class => CreateFollowersInnerNormalizer::class,
+
             SignerInfo::class => SignerInfoNormalizer::class,
 
             SignerRedirectUrls::class => SignerRedirectUrlsNormalizer::class,
@@ -432,27 +450,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             UpdateSignerInfo::class => UpdateSignerInfoNormalizer::class,
 
-            ApproverInfo::class => ApproverInfoNormalizer::class,
-
-            CreateFollowersInner::class => CreateFollowersInnerNormalizer::class,
-
-            CustomExperienceRedirectUrls::class => CustomExperienceRedirectUrlsNormalizer::class,
-
-            CreateCustomExperienceRedirectUrls::class => CreateCustomExperienceRedirectUrlsNormalizer::class,
-
-            UpdateCustomExperienceRedirectUrls::class => UpdateCustomExperienceRedirectUrlsNormalizer::class,
-
-            ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerificationNormalizer::class,
-
-            ConsumptionAppQualifiedElectronicSignatureIdentificationMode::class => ConsumptionAppQualifiedElectronicSignatureIdentificationModeNormalizer::class,
-
-            ConsumptionApp::class => ConsumptionAppNormalizer::class,
-
-            ConsumptionApi::class => ConsumptionApiNormalizer::class,
+            UserWorkspacesInner::class => UserWorkspacesInnerNormalizer::class,
 
             WorkspaceUsersInner::class => WorkspaceUsersInnerNormalizer::class,
-
-            UserWorkspacesInner::class => UserWorkspacesInnerNormalizer::class,
 
             SignatureRequestSignerFromInfoInputInfo::class => SignatureRequestSignerFromInfoInputInfoNormalizer::class,
 
@@ -519,7 +519,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function getSupportedTypes(?string $format = null): array
         {
-            return [Pagination::class => false, SignatureRequestInList::class => false, ViolationResponse::class => false, CreateSignatureRequest::class => false, SignatureRequest::class => false, UpdateSignatureRequest::class => false, SignatureRequestActivated::class => false, SignerAuditTrail::class => false, Document::class => false, CreateDocument::class => false, UpdateDocument::class => false, FieldSignature::class => false, FieldText::class => false, FieldMention::class => false, FieldCheckbox::class => false, FieldRadioButtonGroup::class => false, FieldReadOnlyText::class => false, CreateSignerDocumentRequest::class => false, SignerDocumentRequest::class => false, Signer::class => false, UpdateSigner::class => false, SignerSign::class => false, SignerDocument::class => false, Approver::class => false, Follower::class => false, Metadata::class => false, UpdateSignatureRequestMetadata::class => false, CreateSignatureRequestMetadata::class => false, CustomExperience::class => false, CreateCustomExperience::class => false, UpdateCustomExperience::class => false, CreateElectronicSealPayload::class => false, ElectronicSeal::class => false, ElectronicSealAuditTrail::class => false, UploadElectronicSealDocument::class => false, ElectronicSealDocument::class => false, ElectronicSealImage::class => false, UploadElectronicSealImage::class => false, WebhookSubscription::class => false, CreateWebhookSubscription::class => false, UpdateWebhookSubscription::class => false, Contact::class => false, CreateContact::class => false, UpdateContact::class => false, Consumption::class => false, Workspace::class => false, CreateWorkspace::class => false, MarkWorkspaceAsDefault::class => false, DeleteWorkspace::class => false, UpdateWorkspace::class => false, User::class => false, Template::class => false, SignatureRequestSignerFromInfoInput::class => false, SignatureRequestSignerFromUserIdInput::class => false, SignatureRequestSignerFromContactIdInput::class => false, SignatureRequestEmailNotification::class => false, SignatureRequestPlaceholderSignerSubstituteFromInfoInput::class => false, SignatureRequestPlaceholderSignerSubstituteFromUserIdInput::class => false, SignatureRequestPlaceholderSignerSubstituteFromContactIdInput::class => false, SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput::class => false, EmbeddedSignerWithSignatureLink::class => false, ApproverToNotify::class => false, InitialsArea::class => false, Font::class => false, CreateFieldFont::class => false, UpdateFieldFont::class => false, SmsNotification::class => false, CreateElectronicSealFieldSealPayload::class => false, CreateElectronicSealFieldReadOnlyTextPayload::class => false, SignatureRequestEmailNotificationSender::class => false, FontVariants::class => false, OtpMessage::class => false, GetSignatureRequests200Response::class => false, GetSignatureRequests401Response::class => false, PostSignatureRequestsSignatureRequestIdCancelRequest::class => false, PostSignatureRequestsSignatureRequestIdReactivateRequest::class => false, PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => false, GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => false, GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response::class => false, FromScratchInfo::class => false, FromScratch::class => false, FromExistingUser::class => false, FromExistingContact::class => false, FromExistingSigner::class => false, PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => false, PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => false, GetSignatureRequestsSignatureRequestIdFollowers200Response::class => false, GetCustomExperiences200Response::class => false, PatchCustomExperienceLogoRequest::class => false, ListElectronicSealImages200Response::class => false, GetContacts200Response::class => false, GetWorkspaces200Response::class => false, GetUsers200Response::class => false, GetTemplates200Response::class => false, SignatureRequestInListReminderSettings::class => false, SignatureRequestInListSignersInner::class => false, SignatureRequestInListApproversInner::class => false, SignatureRequestInListDocumentsInner::class => false, SignatureRequestInListSender::class => false, CreateSignatureRequestReminderSettings::class => false, CreateSignatureRequestTemplatePlaceholders::class => false, SignatureRequestDeclineInformation::class => false, UpdateSignatureRequestReminderSettings::class => false, SignatureRequestActivatedDocumentsInner::class => false, DocumentInitials::class => false, FieldRadioButtonGroupRadiosInner::class => false, Signature::class => false, Mention::class => false, Text::class => false, Checkbox::class => false, RadioGroupRadiosInner::class => false, RadioGroup::class => false, ReadOnlyText::class => false, Signature1::class => false, Mention1::class => false, Text1::class => false, Checkbox1::class => false, RadioGroup1RadiosInner::class => false, RadioGroup1::class => false, ReadOnlyText1::class => false, SignerInfo::class => false, SignerRedirectUrls::class => false, SignerCustomText::class => false, FromScratch1Info::class => false, FromScratch1RedirectUrls::class => false, FromScratch1CustomText::class => false, FromScratch1::class => false, FromExistingUser1::class => false, FromExistingContact1::class => false, UpdateSignerInfo::class => false, ApproverInfo::class => false, CreateFollowersInner::class => false, CustomExperienceRedirectUrls::class => false, CreateCustomExperienceRedirectUrls::class => false, UpdateCustomExperienceRedirectUrls::class => false, ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => false, ConsumptionAppQualifiedElectronicSignatureIdentificationMode::class => false, ConsumptionApp::class => false, ConsumptionApi::class => false, WorkspaceUsersInner::class => false, UserWorkspacesInner::class => false, SignatureRequestSignerFromInfoInputInfo::class => false, SignatureRequestSignerFromInfoInputRedirectUrls::class => false, SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo::class => false, Signature2::class => false, Mention2::class => false, Text2::class => false, Checkbox2::class => false, RadioGroup2RadiosInner::class => false, RadioGroup2::class => false, Reference::class => false];
+            return [Consumption::class => false, ViolationResponse::class => false, Pagination::class => false, Contact::class => false, CreateContact::class => false, UpdateContact::class => false, CustomExperience::class => false, CreateCustomExperience::class => false, UpdateCustomExperience::class => false, CreateDocument::class => false, Document::class => false, UploadElectronicSealDocument::class => false, ElectronicSealDocument::class => false, ElectronicSealImage::class => false, UploadElectronicSealImage::class => false, CreateElectronicSealPayload::class => false, ElectronicSeal::class => false, ElectronicSealAuditTrail::class => false, SignatureRequestInList::class => false, CreateSignatureRequest::class => false, SignatureRequest::class => false, UpdateSignatureRequest::class => false, SignatureRequestActivated::class => false, Approver::class => false, CreateSignerDocumentRequest::class => false, SignerDocumentRequest::class => false, UpdateDocument::class => false, FieldSignature::class => false, FieldText::class => false, FieldMention::class => false, FieldCheckbox::class => false, FieldRadioButtonGroup::class => false, FieldReadOnlyText::class => false, Follower::class => false, Metadata::class => false, UpdateSignatureRequestMetadata::class => false, CreateSignatureRequestMetadata::class => false, Signer::class => false, UpdateSigner::class => false, SignerAuditTrail::class => false, SignerDocument::class => false, SignerSign::class => false, Template::class => false, User::class => false, WebhookSubscription::class => false, CreateWebhookSubscription::class => false, UpdateWebhookSubscription::class => false, Workspace::class => false, CreateWorkspace::class => false, MarkWorkspaceAsDefault::class => false, DeleteWorkspace::class => false, UpdateWorkspace::class => false, InitialsArea::class => false, CreateElectronicSealFieldSealPayload::class => false, CreateElectronicSealFieldReadOnlyTextPayload::class => false, SignatureRequestSignerFromInfoInput::class => false, SignatureRequestSignerFromUserIdInput::class => false, SignatureRequestSignerFromContactIdInput::class => false, SignatureRequestEmailNotification::class => false, SignatureRequestPlaceholderSignerSubstituteFromInfoInput::class => false, SignatureRequestPlaceholderSignerSubstituteFromUserIdInput::class => false, SignatureRequestPlaceholderSignerSubstituteFromContactIdInput::class => false, SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput::class => false, EmbeddedSignerWithSignatureLink::class => false, ApproverToNotify::class => false, Font::class => false, CreateFieldFont::class => false, UpdateFieldFont::class => false, SmsNotification::class => false, SignatureRequestEmailNotificationSender::class => false, FontVariants::class => false, OtpMessage::class => false, GetConsumptions401Response::class => false, GetContacts200Response::class => false, GetCustomExperiences200Response::class => false, PatchCustomExperienceLogoRequest::class => false, ListElectronicSealImages200Response::class => false, GetSignatureRequests200Response::class => false, FromScratchInfo::class => false, FromScratch::class => false, FromExistingUser::class => false, FromExistingContact::class => false, FromExistingSigner::class => false, PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => false, PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => false, PostSignatureRequestsSignatureRequestIdCancelRequest::class => false, GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => false, PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => false, GetSignatureRequestsSignatureRequestIdFollowers200Response::class => false, PostSignatureRequestsSignatureRequestIdReactivateRequest::class => false, GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response::class => false, GetTemplates200Response::class => false, GetUsers200Response::class => false, GetWorkspaces200Response::class => false, ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => false, ConsumptionAppQualifiedElectronicSignatureIdentificationMode::class => false, ConsumptionApp::class => false, ConsumptionApi::class => false, CustomExperienceRedirectUrls::class => false, CreateCustomExperienceRedirectUrls::class => false, UpdateCustomExperienceRedirectUrls::class => false, DocumentInitials::class => false, SignatureRequestInListReminderSettings::class => false, SignatureRequestInListSignersInner::class => false, SignatureRequestInListApproversInner::class => false, SignatureRequestInListDocumentsInner::class => false, SignatureRequestInListSender::class => false, CreateSignatureRequestReminderSettings::class => false, CreateSignatureRequestTemplatePlaceholders::class => false, SignatureRequestDeclineInformation::class => false, UpdateSignatureRequestReminderSettings::class => false, SignatureRequestActivatedDocumentsInner::class => false, ApproverInfo::class => false, FieldRadioButtonGroupRadiosInner::class => false, Signature::class => false, Mention::class => false, Text::class => false, Checkbox::class => false, RadioGroupRadiosInner::class => false, RadioGroup::class => false, ReadOnlyText::class => false, Signature1::class => false, Mention1::class => false, Text1::class => false, Checkbox1::class => false, RadioGroup1RadiosInner::class => false, RadioGroup1::class => false, ReadOnlyText1::class => false, CreateFollowersInner::class => false, SignerInfo::class => false, SignerRedirectUrls::class => false, SignerCustomText::class => false, FromScratch1Info::class => false, FromScratch1RedirectUrls::class => false, FromScratch1CustomText::class => false, FromScratch1::class => false, FromExistingUser1::class => false, FromExistingContact1::class => false, UpdateSignerInfo::class => false, UserWorkspacesInner::class => false, WorkspaceUsersInner::class => false, SignatureRequestSignerFromInfoInputInfo::class => false, SignatureRequestSignerFromInfoInputRedirectUrls::class => false, SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo::class => false, Signature2::class => false, Mention2::class => false, Text2::class => false, Checkbox2::class => false, RadioGroup2RadiosInner::class => false, RadioGroup2::class => false, Reference::class => false];
         }
     }
 } else {
@@ -530,11 +530,43 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         use NormalizerAwareTrait;
         use ValidatorTrait;
         protected $normalizers = [
-            Pagination::class => PaginationNormalizer::class,
-
-            SignatureRequestInList::class => SignatureRequestInListNormalizer::class,
+            Consumption::class => ConsumptionNormalizer::class,
 
             ViolationResponse::class => ViolationResponseNormalizer::class,
+
+            Pagination::class => PaginationNormalizer::class,
+
+            Contact::class => ContactNormalizer::class,
+
+            CreateContact::class => CreateContactNormalizer::class,
+
+            UpdateContact::class => UpdateContactNormalizer::class,
+
+            CustomExperience::class => CustomExperienceNormalizer::class,
+
+            CreateCustomExperience::class => CreateCustomExperienceNormalizer::class,
+
+            UpdateCustomExperience::class => UpdateCustomExperienceNormalizer::class,
+
+            CreateDocument::class => CreateDocumentNormalizer::class,
+
+            Document::class => DocumentNormalizer::class,
+
+            UploadElectronicSealDocument::class => UploadElectronicSealDocumentNormalizer::class,
+
+            ElectronicSealDocument::class => ElectronicSealDocumentNormalizer::class,
+
+            ElectronicSealImage::class => ElectronicSealImageNormalizer::class,
+
+            UploadElectronicSealImage::class => UploadElectronicSealImageNormalizer::class,
+
+            CreateElectronicSealPayload::class => CreateElectronicSealPayloadNormalizer::class,
+
+            ElectronicSeal::class => ElectronicSealNormalizer::class,
+
+            ElectronicSealAuditTrail::class => ElectronicSealAuditTrailNormalizer::class,
+
+            SignatureRequestInList::class => SignatureRequestInListNormalizer::class,
 
             CreateSignatureRequest::class => CreateSignatureRequestNormalizer::class,
 
@@ -544,11 +576,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             SignatureRequestActivated::class => SignatureRequestActivatedNormalizer::class,
 
-            SignerAuditTrail::class => SignerAuditTrailNormalizer::class,
+            Approver::class => ApproverNormalizer::class,
 
-            Document::class => DocumentNormalizer::class,
+            CreateSignerDocumentRequest::class => CreateSignerDocumentRequestNormalizer::class,
 
-            CreateDocument::class => CreateDocumentNormalizer::class,
+            SignerDocumentRequest::class => SignerDocumentRequestNormalizer::class,
 
             UpdateDocument::class => UpdateDocumentNormalizer::class,
 
@@ -564,20 +596,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             FieldReadOnlyText::class => FieldReadOnlyTextNormalizer::class,
 
-            CreateSignerDocumentRequest::class => CreateSignerDocumentRequestNormalizer::class,
-
-            SignerDocumentRequest::class => SignerDocumentRequestNormalizer::class,
-
-            Signer::class => SignerNormalizer::class,
-
-            UpdateSigner::class => UpdateSignerNormalizer::class,
-
-            SignerSign::class => SignerSignNormalizer::class,
-
-            SignerDocument::class => SignerDocumentNormalizer::class,
-
-            Approver::class => ApproverNormalizer::class,
-
             Follower::class => FollowerNormalizer::class,
 
             Metadata::class => MetadataNormalizer::class,
@@ -586,39 +604,25 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             CreateSignatureRequestMetadata::class => CreateSignatureRequestMetadataNormalizer::class,
 
-            CustomExperience::class => CustomExperienceNormalizer::class,
+            Signer::class => SignerNormalizer::class,
 
-            CreateCustomExperience::class => CreateCustomExperienceNormalizer::class,
+            UpdateSigner::class => UpdateSignerNormalizer::class,
 
-            UpdateCustomExperience::class => UpdateCustomExperienceNormalizer::class,
+            SignerAuditTrail::class => SignerAuditTrailNormalizer::class,
 
-            CreateElectronicSealPayload::class => CreateElectronicSealPayloadNormalizer::class,
+            SignerDocument::class => SignerDocumentNormalizer::class,
 
-            ElectronicSeal::class => ElectronicSealNormalizer::class,
+            SignerSign::class => SignerSignNormalizer::class,
 
-            ElectronicSealAuditTrail::class => ElectronicSealAuditTrailNormalizer::class,
+            Template::class => TemplateNormalizer::class,
 
-            UploadElectronicSealDocument::class => UploadElectronicSealDocumentNormalizer::class,
-
-            ElectronicSealDocument::class => ElectronicSealDocumentNormalizer::class,
-
-            ElectronicSealImage::class => ElectronicSealImageNormalizer::class,
-
-            UploadElectronicSealImage::class => UploadElectronicSealImageNormalizer::class,
+            User::class => UserNormalizer::class,
 
             WebhookSubscription::class => WebhookSubscriptionNormalizer::class,
 
             CreateWebhookSubscription::class => CreateWebhookSubscriptionNormalizer::class,
 
             UpdateWebhookSubscription::class => UpdateWebhookSubscriptionNormalizer::class,
-
-            Contact::class => ContactNormalizer::class,
-
-            CreateContact::class => CreateContactNormalizer::class,
-
-            UpdateContact::class => UpdateContactNormalizer::class,
-
-            Consumption::class => ConsumptionNormalizer::class,
 
             Workspace::class => WorkspaceNormalizer::class,
 
@@ -630,9 +634,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             UpdateWorkspace::class => UpdateWorkspaceNormalizer::class,
 
-            User::class => UserNormalizer::class,
+            InitialsArea::class => InitialsAreaNormalizer::class,
 
-            Template::class => TemplateNormalizer::class,
+            CreateElectronicSealFieldSealPayload::class => CreateElectronicSealFieldSealPayloadNormalizer::class,
+
+            CreateElectronicSealFieldReadOnlyTextPayload::class => CreateElectronicSealFieldReadOnlyTextPayloadNormalizer::class,
 
             SignatureRequestSignerFromInfoInput::class => SignatureRequestSignerFromInfoInputNormalizer::class,
 
@@ -654,8 +660,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             ApproverToNotify::class => ApproverToNotifyNormalizer::class,
 
-            InitialsArea::class => InitialsAreaNormalizer::class,
-
             Font::class => FontNormalizer::class,
 
             CreateFieldFont::class => CreateFieldFontNormalizer::class,
@@ -664,29 +668,23 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             SmsNotification::class => SmsNotificationNormalizer::class,
 
-            CreateElectronicSealFieldSealPayload::class => CreateElectronicSealFieldSealPayloadNormalizer::class,
-
-            CreateElectronicSealFieldReadOnlyTextPayload::class => CreateElectronicSealFieldReadOnlyTextPayloadNormalizer::class,
-
             SignatureRequestEmailNotificationSender::class => SignatureRequestEmailNotificationSenderNormalizer::class,
 
             FontVariants::class => FontVariantsNormalizer::class,
 
             OtpMessage::class => OtpMessageNormalizer::class,
 
+            GetConsumptions401Response::class => GetConsumptions401ResponseNormalizer::class,
+
+            GetContacts200Response::class => GetContacts200ResponseNormalizer::class,
+
+            GetCustomExperiences200Response::class => GetCustomExperiences200ResponseNormalizer::class,
+
+            PatchCustomExperienceLogoRequest::class => PatchCustomExperienceLogoRequestNormalizer::class,
+
+            ListElectronicSealImages200Response::class => ListElectronicSealImages200ResponseNormalizer::class,
+
             GetSignatureRequests200Response::class => GetSignatureRequests200ResponseNormalizer::class,
-
-            GetSignatureRequests401Response::class => GetSignatureRequests401ResponseNormalizer::class,
-
-            PostSignatureRequestsSignatureRequestIdCancelRequest::class => PostSignatureRequestsSignatureRequestIdCancelRequestNormalizer::class,
-
-            PostSignatureRequestsSignatureRequestIdReactivateRequest::class => PostSignatureRequestsSignatureRequestIdReactivateRequestNormalizer::class,
-
-            PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequestNormalizer::class,
-
-            GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200ResponseNormalizer::class,
-
-            GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response::class => GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200ResponseNormalizer::class,
 
             FromScratchInfo::class => FromScratchInfoNormalizer::class,
 
@@ -702,21 +700,39 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestNormalizer::class,
 
+            PostSignatureRequestsSignatureRequestIdCancelRequest::class => PostSignatureRequestsSignatureRequestIdCancelRequestNormalizer::class,
+
+            GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200ResponseNormalizer::class,
+
+            PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequestNormalizer::class,
+
             GetSignatureRequestsSignatureRequestIdFollowers200Response::class => GetSignatureRequestsSignatureRequestIdFollowers200ResponseNormalizer::class,
 
-            GetCustomExperiences200Response::class => GetCustomExperiences200ResponseNormalizer::class,
+            PostSignatureRequestsSignatureRequestIdReactivateRequest::class => PostSignatureRequestsSignatureRequestIdReactivateRequestNormalizer::class,
 
-            PatchCustomExperienceLogoRequest::class => PatchCustomExperienceLogoRequestNormalizer::class,
+            GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response::class => GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200ResponseNormalizer::class,
 
-            ListElectronicSealImages200Response::class => ListElectronicSealImages200ResponseNormalizer::class,
-
-            GetContacts200Response::class => GetContacts200ResponseNormalizer::class,
-
-            GetWorkspaces200Response::class => GetWorkspaces200ResponseNormalizer::class,
+            GetTemplates200Response::class => GetTemplates200ResponseNormalizer::class,
 
             GetUsers200Response::class => GetUsers200ResponseNormalizer::class,
 
-            GetTemplates200Response::class => GetTemplates200ResponseNormalizer::class,
+            GetWorkspaces200Response::class => GetWorkspaces200ResponseNormalizer::class,
+
+            ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerificationNormalizer::class,
+
+            ConsumptionAppQualifiedElectronicSignatureIdentificationMode::class => ConsumptionAppQualifiedElectronicSignatureIdentificationModeNormalizer::class,
+
+            ConsumptionApp::class => ConsumptionAppNormalizer::class,
+
+            ConsumptionApi::class => ConsumptionApiNormalizer::class,
+
+            CustomExperienceRedirectUrls::class => CustomExperienceRedirectUrlsNormalizer::class,
+
+            CreateCustomExperienceRedirectUrls::class => CreateCustomExperienceRedirectUrlsNormalizer::class,
+
+            UpdateCustomExperienceRedirectUrls::class => UpdateCustomExperienceRedirectUrlsNormalizer::class,
+
+            DocumentInitials::class => DocumentInitialsNormalizer::class,
 
             SignatureRequestInListReminderSettings::class => SignatureRequestInListReminderSettingsNormalizer::class,
 
@@ -738,7 +754,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             SignatureRequestActivatedDocumentsInner::class => SignatureRequestActivatedDocumentsInnerNormalizer::class,
 
-            DocumentInitials::class => DocumentInitialsNormalizer::class,
+            ApproverInfo::class => ApproverInfoNormalizer::class,
 
             FieldRadioButtonGroupRadiosInner::class => FieldRadioButtonGroupRadiosInnerNormalizer::class,
 
@@ -770,6 +786,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             ReadOnlyText1::class => ReadOnlyText1Normalizer::class,
 
+            CreateFollowersInner::class => CreateFollowersInnerNormalizer::class,
+
             SignerInfo::class => SignerInfoNormalizer::class,
 
             SignerRedirectUrls::class => SignerRedirectUrlsNormalizer::class,
@@ -790,27 +808,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             UpdateSignerInfo::class => UpdateSignerInfoNormalizer::class,
 
-            ApproverInfo::class => ApproverInfoNormalizer::class,
-
-            CreateFollowersInner::class => CreateFollowersInnerNormalizer::class,
-
-            CustomExperienceRedirectUrls::class => CustomExperienceRedirectUrlsNormalizer::class,
-
-            CreateCustomExperienceRedirectUrls::class => CreateCustomExperienceRedirectUrlsNormalizer::class,
-
-            UpdateCustomExperienceRedirectUrls::class => UpdateCustomExperienceRedirectUrlsNormalizer::class,
-
-            ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerificationNormalizer::class,
-
-            ConsumptionAppQualifiedElectronicSignatureIdentificationMode::class => ConsumptionAppQualifiedElectronicSignatureIdentificationModeNormalizer::class,
-
-            ConsumptionApp::class => ConsumptionAppNormalizer::class,
-
-            ConsumptionApi::class => ConsumptionApiNormalizer::class,
+            UserWorkspacesInner::class => UserWorkspacesInnerNormalizer::class,
 
             WorkspaceUsersInner::class => WorkspaceUsersInnerNormalizer::class,
-
-            UserWorkspacesInner::class => UserWorkspacesInnerNormalizer::class,
 
             SignatureRequestSignerFromInfoInputInfo::class => SignatureRequestSignerFromInfoInputInfoNormalizer::class,
 
@@ -885,7 +885,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function getSupportedTypes(?string $format = null): array
         {
-            return [Pagination::class => false, SignatureRequestInList::class => false, ViolationResponse::class => false, CreateSignatureRequest::class => false, SignatureRequest::class => false, UpdateSignatureRequest::class => false, SignatureRequestActivated::class => false, SignerAuditTrail::class => false, Document::class => false, CreateDocument::class => false, UpdateDocument::class => false, FieldSignature::class => false, FieldText::class => false, FieldMention::class => false, FieldCheckbox::class => false, FieldRadioButtonGroup::class => false, FieldReadOnlyText::class => false, CreateSignerDocumentRequest::class => false, SignerDocumentRequest::class => false, Signer::class => false, UpdateSigner::class => false, SignerSign::class => false, SignerDocument::class => false, Approver::class => false, Follower::class => false, Metadata::class => false, UpdateSignatureRequestMetadata::class => false, CreateSignatureRequestMetadata::class => false, CustomExperience::class => false, CreateCustomExperience::class => false, UpdateCustomExperience::class => false, CreateElectronicSealPayload::class => false, ElectronicSeal::class => false, ElectronicSealAuditTrail::class => false, UploadElectronicSealDocument::class => false, ElectronicSealDocument::class => false, ElectronicSealImage::class => false, UploadElectronicSealImage::class => false, WebhookSubscription::class => false, CreateWebhookSubscription::class => false, UpdateWebhookSubscription::class => false, Contact::class => false, CreateContact::class => false, UpdateContact::class => false, Consumption::class => false, Workspace::class => false, CreateWorkspace::class => false, MarkWorkspaceAsDefault::class => false, DeleteWorkspace::class => false, UpdateWorkspace::class => false, User::class => false, Template::class => false, SignatureRequestSignerFromInfoInput::class => false, SignatureRequestSignerFromUserIdInput::class => false, SignatureRequestSignerFromContactIdInput::class => false, SignatureRequestEmailNotification::class => false, SignatureRequestPlaceholderSignerSubstituteFromInfoInput::class => false, SignatureRequestPlaceholderSignerSubstituteFromUserIdInput::class => false, SignatureRequestPlaceholderSignerSubstituteFromContactIdInput::class => false, SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput::class => false, EmbeddedSignerWithSignatureLink::class => false, ApproverToNotify::class => false, InitialsArea::class => false, Font::class => false, CreateFieldFont::class => false, UpdateFieldFont::class => false, SmsNotification::class => false, CreateElectronicSealFieldSealPayload::class => false, CreateElectronicSealFieldReadOnlyTextPayload::class => false, SignatureRequestEmailNotificationSender::class => false, FontVariants::class => false, OtpMessage::class => false, GetSignatureRequests200Response::class => false, GetSignatureRequests401Response::class => false, PostSignatureRequestsSignatureRequestIdCancelRequest::class => false, PostSignatureRequestsSignatureRequestIdReactivateRequest::class => false, PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => false, GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => false, GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response::class => false, FromScratchInfo::class => false, FromScratch::class => false, FromExistingUser::class => false, FromExistingContact::class => false, FromExistingSigner::class => false, PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => false, PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => false, GetSignatureRequestsSignatureRequestIdFollowers200Response::class => false, GetCustomExperiences200Response::class => false, PatchCustomExperienceLogoRequest::class => false, ListElectronicSealImages200Response::class => false, GetContacts200Response::class => false, GetWorkspaces200Response::class => false, GetUsers200Response::class => false, GetTemplates200Response::class => false, SignatureRequestInListReminderSettings::class => false, SignatureRequestInListSignersInner::class => false, SignatureRequestInListApproversInner::class => false, SignatureRequestInListDocumentsInner::class => false, SignatureRequestInListSender::class => false, CreateSignatureRequestReminderSettings::class => false, CreateSignatureRequestTemplatePlaceholders::class => false, SignatureRequestDeclineInformation::class => false, UpdateSignatureRequestReminderSettings::class => false, SignatureRequestActivatedDocumentsInner::class => false, DocumentInitials::class => false, FieldRadioButtonGroupRadiosInner::class => false, Signature::class => false, Mention::class => false, Text::class => false, Checkbox::class => false, RadioGroupRadiosInner::class => false, RadioGroup::class => false, ReadOnlyText::class => false, Signature1::class => false, Mention1::class => false, Text1::class => false, Checkbox1::class => false, RadioGroup1RadiosInner::class => false, RadioGroup1::class => false, ReadOnlyText1::class => false, SignerInfo::class => false, SignerRedirectUrls::class => false, SignerCustomText::class => false, FromScratch1Info::class => false, FromScratch1RedirectUrls::class => false, FromScratch1CustomText::class => false, FromScratch1::class => false, FromExistingUser1::class => false, FromExistingContact1::class => false, UpdateSignerInfo::class => false, ApproverInfo::class => false, CreateFollowersInner::class => false, CustomExperienceRedirectUrls::class => false, CreateCustomExperienceRedirectUrls::class => false, UpdateCustomExperienceRedirectUrls::class => false, ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => false, ConsumptionAppQualifiedElectronicSignatureIdentificationMode::class => false, ConsumptionApp::class => false, ConsumptionApi::class => false, WorkspaceUsersInner::class => false, UserWorkspacesInner::class => false, SignatureRequestSignerFromInfoInputInfo::class => false, SignatureRequestSignerFromInfoInputRedirectUrls::class => false, SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo::class => false, Signature2::class => false, Mention2::class => false, Text2::class => false, Checkbox2::class => false, RadioGroup2RadiosInner::class => false, RadioGroup2::class => false, Reference::class => false];
+            return [Consumption::class => false, ViolationResponse::class => false, Pagination::class => false, Contact::class => false, CreateContact::class => false, UpdateContact::class => false, CustomExperience::class => false, CreateCustomExperience::class => false, UpdateCustomExperience::class => false, CreateDocument::class => false, Document::class => false, UploadElectronicSealDocument::class => false, ElectronicSealDocument::class => false, ElectronicSealImage::class => false, UploadElectronicSealImage::class => false, CreateElectronicSealPayload::class => false, ElectronicSeal::class => false, ElectronicSealAuditTrail::class => false, SignatureRequestInList::class => false, CreateSignatureRequest::class => false, SignatureRequest::class => false, UpdateSignatureRequest::class => false, SignatureRequestActivated::class => false, Approver::class => false, CreateSignerDocumentRequest::class => false, SignerDocumentRequest::class => false, UpdateDocument::class => false, FieldSignature::class => false, FieldText::class => false, FieldMention::class => false, FieldCheckbox::class => false, FieldRadioButtonGroup::class => false, FieldReadOnlyText::class => false, Follower::class => false, Metadata::class => false, UpdateSignatureRequestMetadata::class => false, CreateSignatureRequestMetadata::class => false, Signer::class => false, UpdateSigner::class => false, SignerAuditTrail::class => false, SignerDocument::class => false, SignerSign::class => false, Template::class => false, User::class => false, WebhookSubscription::class => false, CreateWebhookSubscription::class => false, UpdateWebhookSubscription::class => false, Workspace::class => false, CreateWorkspace::class => false, MarkWorkspaceAsDefault::class => false, DeleteWorkspace::class => false, UpdateWorkspace::class => false, InitialsArea::class => false, CreateElectronicSealFieldSealPayload::class => false, CreateElectronicSealFieldReadOnlyTextPayload::class => false, SignatureRequestSignerFromInfoInput::class => false, SignatureRequestSignerFromUserIdInput::class => false, SignatureRequestSignerFromContactIdInput::class => false, SignatureRequestEmailNotification::class => false, SignatureRequestPlaceholderSignerSubstituteFromInfoInput::class => false, SignatureRequestPlaceholderSignerSubstituteFromUserIdInput::class => false, SignatureRequestPlaceholderSignerSubstituteFromContactIdInput::class => false, SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput::class => false, EmbeddedSignerWithSignatureLink::class => false, ApproverToNotify::class => false, Font::class => false, CreateFieldFont::class => false, UpdateFieldFont::class => false, SmsNotification::class => false, SignatureRequestEmailNotificationSender::class => false, FontVariants::class => false, OtpMessage::class => false, GetConsumptions401Response::class => false, GetContacts200Response::class => false, GetCustomExperiences200Response::class => false, PatchCustomExperienceLogoRequest::class => false, ListElectronicSealImages200Response::class => false, GetSignatureRequests200Response::class => false, FromScratchInfo::class => false, FromScratch::class => false, FromExistingUser::class => false, FromExistingContact::class => false, FromExistingSigner::class => false, PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => false, PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => false, PostSignatureRequestsSignatureRequestIdCancelRequest::class => false, GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => false, PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => false, GetSignatureRequestsSignatureRequestIdFollowers200Response::class => false, PostSignatureRequestsSignatureRequestIdReactivateRequest::class => false, GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response::class => false, GetTemplates200Response::class => false, GetUsers200Response::class => false, GetWorkspaces200Response::class => false, ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => false, ConsumptionAppQualifiedElectronicSignatureIdentificationMode::class => false, ConsumptionApp::class => false, ConsumptionApi::class => false, CustomExperienceRedirectUrls::class => false, CreateCustomExperienceRedirectUrls::class => false, UpdateCustomExperienceRedirectUrls::class => false, DocumentInitials::class => false, SignatureRequestInListReminderSettings::class => false, SignatureRequestInListSignersInner::class => false, SignatureRequestInListApproversInner::class => false, SignatureRequestInListDocumentsInner::class => false, SignatureRequestInListSender::class => false, CreateSignatureRequestReminderSettings::class => false, CreateSignatureRequestTemplatePlaceholders::class => false, SignatureRequestDeclineInformation::class => false, UpdateSignatureRequestReminderSettings::class => false, SignatureRequestActivatedDocumentsInner::class => false, ApproverInfo::class => false, FieldRadioButtonGroupRadiosInner::class => false, Signature::class => false, Mention::class => false, Text::class => false, Checkbox::class => false, RadioGroupRadiosInner::class => false, RadioGroup::class => false, ReadOnlyText::class => false, Signature1::class => false, Mention1::class => false, Text1::class => false, Checkbox1::class => false, RadioGroup1RadiosInner::class => false, RadioGroup1::class => false, ReadOnlyText1::class => false, CreateFollowersInner::class => false, SignerInfo::class => false, SignerRedirectUrls::class => false, SignerCustomText::class => false, FromScratch1Info::class => false, FromScratch1RedirectUrls::class => false, FromScratch1CustomText::class => false, FromScratch1::class => false, FromExistingUser1::class => false, FromExistingContact1::class => false, UpdateSignerInfo::class => false, UserWorkspacesInner::class => false, WorkspaceUsersInner::class => false, SignatureRequestSignerFromInfoInputInfo::class => false, SignatureRequestSignerFromInfoInputRedirectUrls::class => false, SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo::class => false, Signature2::class => false, Mention2::class => false, Text2::class => false, Checkbox2::class => false, RadioGroup2RadiosInner::class => false, RadioGroup2::class => false, Reference::class => false];
         }
     }
 }

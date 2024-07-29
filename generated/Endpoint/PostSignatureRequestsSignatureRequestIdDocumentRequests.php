@@ -8,7 +8,7 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocum
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\SignerDocumentRequest;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -73,7 +73,7 @@ class PostSignatureRequestsSignatureRequestIdDocumentRequests extends BaseEndpoi
             throw new PostSignatureRequestsSignatureRequestIdDocumentRequestsBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdDocumentRequestsUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new PostSignatureRequestsSignatureRequestIdDocumentRequestsUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdDocumentRequestsForbiddenException($response);

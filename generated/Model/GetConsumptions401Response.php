@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class GetSignatureRequests401Response extends \ArrayObject
+class GetConsumptions401Response extends \ArrayObject
 {
     /**
      * @var array

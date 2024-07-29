@@ -7,7 +7,7 @@ use Qdequippe\Yousign\Api\Exception\GetSignersSignerIdAuditTrailsDownloadBadRequ
 use Qdequippe\Yousign\Api\Exception\GetSignersSignerIdAuditTrailsDownloadForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetSignersSignerIdAuditTrailsDownloadNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetSignersSignerIdAuditTrailsDownloadUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetSignatureRequests401Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -67,7 +67,7 @@ class GetSignersSignerIdAuditTrailsDownload extends BaseEndpoint implements Endp
             throw new GetSignersSignerIdAuditTrailsDownloadBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignersSignerIdAuditTrailsDownloadUnauthorizedException($serializer->deserialize($body, GetSignatureRequests401Response::class, 'json'), $response);
+            throw new GetSignersSignerIdAuditTrailsDownloadUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignersSignerIdAuditTrailsDownloadForbiddenException($response);
