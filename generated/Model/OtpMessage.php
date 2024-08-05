@@ -14,14 +14,14 @@ class OtpMessage extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Custom text that will be sent as a custom OTP SMS to the recipient.
+     * Custom text contained is the one-time password SMS sent to the Signer. This feature is available from SCALE plan, and disabled by default. Please contact [customer support](https://yousign.app/auth/workspace/help) to request an activation.
      *
      * @var string|null
      */
     protected $customText;
 
     /**
-     * Custom text that will be sent as a custom OTP SMS to the recipient.
+     * Custom text contained is the one-time password SMS sent to the Signer. This feature is available from SCALE plan, and disabled by default. Please contact [customer support](https://yousign.app/auth/workspace/help) to request an activation.
      */
     public function getCustomText(): ?string
     {
@@ -29,7 +29,7 @@ class OtpMessage extends \ArrayObject
     }
 
     /**
-     * Custom text that will be sent as a custom OTP SMS to the recipient.
+     * Custom text contained is the one-time password SMS sent to the Signer. This feature is available from SCALE plan, and disabled by default. Please contact [customer support](https://yousign.app/auth/workspace/help) to request an activation.
      */
     public function setCustomText(?string $customText): self
     {

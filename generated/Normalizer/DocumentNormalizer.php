@@ -30,7 +30,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\Document::class === $data::class;
+            return \is_object($data) && Document::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -136,7 +136,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['sha256'] = $object->getSha256();
             $data['is_protected'] = $object->getIsProtected();
             $data['is_signed'] = $object->getIsSigned();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()?->format('Y-m-d\TH:i:sP');
             $data['total_pages'] = $object->getTotalPages();
             $data['is_locked'] = $object->getIsLocked();
             $data['initials'] = $this->normalizer->normalize($object->getInitials(), 'json', $context);
@@ -170,7 +170,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\Document::class === $data::class;
+            return \is_object($data) && Document::class === $data::class;
         }
 
         /**
@@ -284,7 +284,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['sha256'] = $object->getSha256();
             $data['is_protected'] = $object->getIsProtected();
             $data['is_signed'] = $object->getIsSigned();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()?->format('Y-m-d\TH:i:sP');
             $data['total_pages'] = $object->getTotalPages();
             $data['is_locked'] = $object->getIsLocked();
             $data['initials'] = $this->normalizer->normalize($object->getInitials(), 'json', $context);

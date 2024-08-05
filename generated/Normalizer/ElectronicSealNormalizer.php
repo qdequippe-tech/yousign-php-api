@@ -29,7 +29,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\ElectronicSeal::class === $data::class;
+            return \is_object($data) && ElectronicSeal::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -106,7 +106,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data = [];
             $data['id'] = $object->getId();
             $data['status'] = $object->getStatus();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()?->format('Y-m-d\TH:i:sP');
             $data['document_id'] = $object->getDocumentId();
             $data['timestamp'] = $object->getTimestamp();
             $data['image_id'] = $object->getImageId();
@@ -141,7 +141,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\ElectronicSeal::class === $data::class;
+            return \is_object($data) && ElectronicSeal::class === $data::class;
         }
 
         /**
@@ -226,7 +226,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data = [];
             $data['id'] = $object->getId();
             $data['status'] = $object->getStatus();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()?->format('Y-m-d\TH:i:sP');
             $data['document_id'] = $object->getDocumentId();
             $data['timestamp'] = $object->getTimestamp();
             $data['image_id'] = $object->getImageId();

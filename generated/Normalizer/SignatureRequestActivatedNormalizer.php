@@ -33,7 +33,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\SignatureRequestActivated::class === $data::class;
+            return \is_object($data) && SignatureRequestActivated::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -178,12 +178,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['status'] = $object->getStatus();
             $data['name'] = $object->getName();
             $data['delivery_mode'] = $object->getDeliveryMode();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()?->format('Y-m-d\TH:i:sP');
             $data['ordered_signers'] = $object->getOrderedSigners();
             $data['reminder_settings'] = $this->normalizer->normalize($object->getReminderSettings(), 'json', $context);
             $data['timezone'] = $object->getTimezone();
             $data['email_custom_note'] = $object->getEmailCustomNote();
-            $data['expiration_date'] = $object->getExpirationDate()->format('Y-m-d\TH:i:sP');
+            $data['expiration_date'] = $object->getExpirationDate()?->format('Y-m-d\TH:i:sP');
             $values = [];
             foreach ($object->getSigners() as $value) {
                 $values[] = $this->normalizer->normalize($value, 'json', $context);
@@ -234,7 +234,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\SignatureRequestActivated::class === $data::class;
+            return \is_object($data) && SignatureRequestActivated::class === $data::class;
         }
 
         /**
@@ -387,12 +387,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['status'] = $object->getStatus();
             $data['name'] = $object->getName();
             $data['delivery_mode'] = $object->getDeliveryMode();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()?->format('Y-m-d\TH:i:sP');
             $data['ordered_signers'] = $object->getOrderedSigners();
             $data['reminder_settings'] = $this->normalizer->normalize($object->getReminderSettings(), 'json', $context);
             $data['timezone'] = $object->getTimezone();
             $data['email_custom_note'] = $object->getEmailCustomNote();
-            $data['expiration_date'] = $object->getExpirationDate()->format('Y-m-d\TH:i:sP');
+            $data['expiration_date'] = $object->getExpirationDate()?->format('Y-m-d\TH:i:sP');
             $values = [];
             foreach ($object->getSigners() as $value) {
                 $values[] = $this->normalizer->normalize($value, 'json', $context);
