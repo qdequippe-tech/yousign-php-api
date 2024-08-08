@@ -21,6 +21,7 @@ use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdMeta
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdSignersSignerId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments;
 use Qdequippe\Yousign\Api\Endpoint\DeleteWebhooksWebhookId;
+use Qdequippe\Yousign\Api\Endpoint\DeleteWorkspaceWorkspaceIdUsersUserId;
 use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealAuditTrail;
 use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealImage;
@@ -89,6 +90,7 @@ use Qdequippe\Yousign\Api\Endpoint\PostWebhooksSubscriptions;
 use Qdequippe\Yousign\Api\Endpoint\PostWorkspace;
 use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerId;
 use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdMetadata;
+use Qdequippe\Yousign\Api\Endpoint\PutWorkspacesWorkspaceIdUsers;
 use Qdequippe\Yousign\Api\Endpoint\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId;
 use Qdequippe\Yousign\Api\Model\CreateContact;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
@@ -1732,6 +1734,40 @@ class Client extends Runtime\Client\Client
     public function patchWorkspacesWorkspaceId(string $workspaceId, ?UpdateWorkspace $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PatchWorkspacesWorkspaceId($workspaceId, $requestBody), $fetch);
+    }
+
+    /**
+     * @param string $workspaceId Workspace Id
+     * @param string $userId      User Id
+     * @param string $fetch       Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteWorkspaceWorkspaceIdUsersUserIdBadRequestException
+     * @throws Exception\DeleteWorkspaceWorkspaceIdUsersUserIdUnauthorizedException
+     * @throws Exception\DeleteWorkspaceWorkspaceIdUsersUserIdForbiddenException
+     * @throws Exception\DeleteWorkspaceWorkspaceIdUsersUserIdNotFoundException
+     */
+    public function deleteWorkspaceWorkspaceIdUsersUserId(string $workspaceId, string $userId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteWorkspaceWorkspaceIdUsersUserId($workspaceId, $userId), $fetch);
+    }
+
+    /**
+     * @param string $workspaceId Workspace Id
+     * @param string $userId      User Id
+     * @param string $fetch       Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\PutWorkspacesWorkspaceIdUsersBadRequestException
+     * @throws Exception\PutWorkspacesWorkspaceIdUsersUnauthorizedException
+     * @throws Exception\PutWorkspacesWorkspaceIdUsersForbiddenException
+     * @throws Exception\PutWorkspacesWorkspaceIdUsersNotFoundException
+     */
+    public function putWorkspacesWorkspaceIdUsers(string $workspaceId, string $userId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PutWorkspacesWorkspaceIdUsers($workspaceId, $userId), $fetch);
     }
 
     public static function create($httpClient = null, array $additionalPlugins = [], array $additionalNormalizers = []): static

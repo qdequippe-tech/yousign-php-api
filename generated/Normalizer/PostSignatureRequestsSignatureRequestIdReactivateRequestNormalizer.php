@@ -29,7 +29,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdReactivateRequest::class === $data::class;
+            return \is_object($data) && PostSignatureRequestsSignatureRequestIdReactivateRequest::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -62,7 +62,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
         {
             $data = [];
-            $data['expiration_date'] = $object->getExpirationDate()->format('Y-m-d');
+            $data['expiration_date'] = $object->getExpirationDate()?->format('Y-m-d');
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
@@ -92,7 +92,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdReactivateRequest::class === $data::class;
+            return \is_object($data) && PostSignatureRequestsSignatureRequestIdReactivateRequest::class === $data::class;
         }
 
         /**
@@ -133,7 +133,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
-            $data['expiration_date'] = $object->getExpirationDate()->format('Y-m-d');
+            $data['expiration_date'] = $object->getExpirationDate()?->format('Y-m-d');
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;

@@ -29,7 +29,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\WebhookSubscription::class === $data::class;
+            return \is_object($data) && WebhookSubscription::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -131,7 +131,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['scopes'] = $object->getScopes();
             $data['auto_retry'] = $object->getAutoRetry();
             $data['enabled'] = $object->getEnabled();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()?->format('Y-m-d\TH:i:sP');
             $data['updated_at'] = $object->getUpdatedAt()->format('Y-m-d\TH:i:sP');
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
@@ -162,7 +162,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\WebhookSubscription::class === $data::class;
+            return \is_object($data) && WebhookSubscription::class === $data::class;
         }
 
         /**
@@ -272,7 +272,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['scopes'] = $object->getScopes();
             $data['auto_retry'] = $object->getAutoRetry();
             $data['enabled'] = $object->getEnabled();
-            $data['created_at'] = $object->getCreatedAt()->format('Y-m-d\TH:i:sP');
+            $data['created_at'] = $object->getCreatedAt()?->format('Y-m-d\TH:i:sP');
             $data['updated_at'] = $object->getUpdatedAt()->format('Y-m-d\TH:i:sP');
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {

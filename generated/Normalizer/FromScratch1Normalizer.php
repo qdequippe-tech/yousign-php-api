@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Model\FromScratch1;
 use Qdequippe\Yousign\Api\Model\FromScratch1CustomText;
 use Qdequippe\Yousign\Api\Model\FromScratch1Info;
 use Qdequippe\Yousign\Api\Model\FromScratch1RedirectUrls;
+use Qdequippe\Yousign\Api\Model\SmsNotification1;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\HttpKernel\Kernel;
@@ -32,7 +33,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\FromScratch1::class === $data::class;
+            return \is_object($data) && FromScratch1::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -109,6 +110,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('identification_attestation_id', $data) && null === $data['identification_attestation_id']) {
                 $object->setIdentificationAttestationId(null);
             }
+            if (\array_key_exists('sms_notification', $data) && null !== $data['sms_notification']) {
+                $object->setSmsNotification($this->denormalizer->denormalize($data['sms_notification'], SmsNotification1::class, 'json', $context));
+                unset($data['sms_notification']);
+            } elseif (\array_key_exists('sms_notification', $data) && null === $data['sms_notification']) {
+                $object->setSmsNotification(null);
+            }
             foreach ($data as $key_1 => $value_2) {
                 if (preg_match('/.*/', (string) $key_1)) {
                     $object[$key_1] = $value_2;
@@ -152,6 +159,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if ($object->isInitialized('identificationAttestationId') && null !== $object->getIdentificationAttestationId()) {
                 $data['identification_attestation_id'] = $object->getIdentificationAttestationId();
             }
+            if ($object->isInitialized('smsNotification') && null !== $object->getSmsNotification()) {
+                $data['sms_notification'] = $this->normalizer->normalize($object->getSmsNotification(), 'json', $context);
+            }
             foreach ($object as $key_1 => $value_2) {
                 if (preg_match('/.*/', (string) $key_1)) {
                     $data[$key_1] = $value_2;
@@ -181,7 +191,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && Qdequippe\Yousign\Api\Model\FromScratch1::class === $data::class;
+            return \is_object($data) && FromScratch1::class === $data::class;
         }
 
         /**
@@ -261,6 +271,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('identification_attestation_id', $data) && null === $data['identification_attestation_id']) {
                 $object->setIdentificationAttestationId(null);
             }
+            if (\array_key_exists('sms_notification', $data) && null !== $data['sms_notification']) {
+                $object->setSmsNotification($this->denormalizer->denormalize($data['sms_notification'], SmsNotification1::class, 'json', $context));
+                unset($data['sms_notification']);
+            } elseif (\array_key_exists('sms_notification', $data) && null === $data['sms_notification']) {
+                $object->setSmsNotification(null);
+            }
             foreach ($data as $key_1 => $value_2) {
                 if (preg_match('/.*/', (string) $key_1)) {
                     $object[$key_1] = $value_2;
@@ -308,6 +324,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             if ($object->isInitialized('identificationAttestationId') && null !== $object->getIdentificationAttestationId()) {
                 $data['identification_attestation_id'] = $object->getIdentificationAttestationId();
+            }
+            if ($object->isInitialized('smsNotification') && null !== $object->getSmsNotification()) {
+                $data['sms_notification'] = $this->normalizer->normalize($object->getSmsNotification(), 'json', $context);
             }
             foreach ($object as $key_1 => $value_2) {
                 if (preg_match('/.*/', (string) $key_1)) {
