@@ -25,6 +25,7 @@ use Qdequippe\Yousign\Api\Endpoint\DeleteWorkspaceWorkspaceIdUsersUserId;
 use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealAuditTrail;
 use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealImage;
+use Qdequippe\Yousign\Api\Endpoint\GetArchivesArchivedFileIdDownload;
 use Qdequippe\Yousign\Api\Endpoint\GetConsumptions;
 use Qdequippe\Yousign\Api\Endpoint\GetConsumptionsExport;
 use Qdequippe\Yousign\Api\Endpoint\GetContacts;
@@ -67,6 +68,7 @@ use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdDocum
 use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdSignersSignerId;
 use Qdequippe\Yousign\Api\Endpoint\PatchWebhooksWebhookId;
 use Qdequippe\Yousign\Api\Endpoint\PatchWorkspacesWorkspaceId;
+use Qdequippe\Yousign\Api\Endpoint\PostArchives;
 use Qdequippe\Yousign\Api\Endpoint\PostContact;
 use Qdequippe\Yousign\Api\Endpoint\PostCustomExperience;
 use Qdequippe\Yousign\Api\Endpoint\PostDocuments;
@@ -74,6 +76,7 @@ use Qdequippe\Yousign\Api\Endpoint\PostElectronicSeals;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequests;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdActivate;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdApprovers;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminder;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdCancel;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdDocumentRequests;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdDocuments;
@@ -121,6 +124,7 @@ use Qdequippe\Yousign\Api\Model\UpdateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\UpdateSigner;
 use Qdequippe\Yousign\Api\Model\UpdateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
+use Qdequippe\Yousign\Api\Model\UploadArchivedFile;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealImage;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
@@ -133,6 +137,42 @@ use Symfony\Component\Serializer\Serializer;
 
 class Client extends Runtime\Client\Client
 {
+    /**
+     * Archive a file in a secure digital safe for 10 years.
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\ArchivedFile|ResponseInterface|null
+     *
+     * @throws Exception\PostArchivesBadRequestException
+     * @throws Exception\PostArchivesUnauthorizedException
+     * @throws Exception\PostArchivesForbiddenException
+     * @throws Exception\PostArchivesNotFoundException
+     */
+    public function postArchives(?UploadArchivedFile $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostArchives($requestBody), $fetch);
+    }
+
+    /**
+     * Download the archived file using the ArchivedFileId.
+     *
+     * @param string $archivedFileId ArchivedFileId
+     * @param string $fetch          Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept         Accept content header application/octet-stream|application/json
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\GetArchivesArchivedFileIdDownloadBadRequestException
+     * @throws Exception\GetArchivesArchivedFileIdDownloadUnauthorizedException
+     * @throws Exception\GetArchivesArchivedFileIdDownloadForbiddenException
+     * @throws Exception\GetArchivesArchivedFileIdDownloadNotFoundException
+     */
+    public function getArchivesArchivedFileIdDownload(string $archivedFileId, string $fetch = self::FETCH_OBJECT, array $accept = [])
+    {
+        return $this->executeEndpoint(new GetArchivesArchivedFileIdDownload($archivedFileId, $accept), $fetch);
+    }
+
     /**
      * Get signatures Consumption by source.
      *
@@ -765,6 +805,26 @@ class Client extends Runtime\Client\Client
     public function patchSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, ?PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PatchSignatureRequestsSignatureRequestIdApproversApproverId($signatureRequestId, $approverId, $requestBody), $fetch);
+    }
+
+    /**
+     * Sends a reminder to a given Approver to review their Signature Request.
+     * Only possible when the Signature Request status is `approval` and the Approver status is `notified`.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $approverId         Approver Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderNotFoundException
+     */
+    public function postSignatureRequestsSignatureRequestIdApproversApproverIdSendReminder(string $signatureRequestId, string $approverId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminder($signatureRequestId, $approverId), $fetch);
     }
 
     /**

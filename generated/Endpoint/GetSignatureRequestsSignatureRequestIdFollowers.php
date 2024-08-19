@@ -6,8 +6,8 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdFollowersForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdFollowersNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdFollowersUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdFollowers200Response;
+use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -61,7 +61,7 @@ class GetSignatureRequestsSignatureRequestIdFollowers extends BaseEndpoint imple
             return $serializer->deserialize($body, GetSignatureRequestsSignatureRequestIdFollowers200Response::class, 'json');
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignatureRequestsSignatureRequestIdFollowersUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
+            throw new GetSignatureRequestsSignatureRequestIdFollowersUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdFollowersForbiddenException($response);

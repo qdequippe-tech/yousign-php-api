@@ -8,7 +8,7 @@ use Qdequippe\Yousign\Api\Exception\GetElectronicSealAuditTrailForbiddenExceptio
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealAuditTrailNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealAuditTrailUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\ElectronicSealAuditTrail;
-use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
+use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -65,7 +65,7 @@ class GetElectronicSealAuditTrail extends BaseEndpoint implements Endpoint
             throw new GetElectronicSealAuditTrailBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetElectronicSealAuditTrailUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
+            throw new GetElectronicSealAuditTrailUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetElectronicSealAuditTrailForbiddenException($response);

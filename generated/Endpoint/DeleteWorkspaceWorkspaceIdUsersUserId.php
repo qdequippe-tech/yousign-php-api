@@ -7,7 +7,7 @@ use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceWorkspaceIdUsersUserIdBadRequ
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceWorkspaceIdUsersUserIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceWorkspaceIdUsersUserIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceWorkspaceIdUsersUserIdUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
+use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -63,7 +63,7 @@ class DeleteWorkspaceWorkspaceIdUsersUserId extends BaseEndpoint implements Endp
             throw new DeleteWorkspaceWorkspaceIdUsersUserIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteWorkspaceWorkspaceIdUsersUserIdUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
+            throw new DeleteWorkspaceWorkspaceIdUsersUserIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DeleteWorkspaceWorkspaceIdUsersUserIdForbiddenException($response);

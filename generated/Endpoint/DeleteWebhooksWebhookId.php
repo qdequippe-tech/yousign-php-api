@@ -7,7 +7,7 @@ use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
+use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -64,7 +64,7 @@ class DeleteWebhooksWebhookId extends BaseEndpoint implements Endpoint
             throw new DeleteWebhooksWebhookIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteWebhooksWebhookIdUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
+            throw new DeleteWebhooksWebhookIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DeleteWebhooksWebhookIdForbiddenException($response);

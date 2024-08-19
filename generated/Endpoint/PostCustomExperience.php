@@ -8,7 +8,7 @@ use Qdequippe\Yousign\Api\Exception\PostCustomExperienceForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostCustomExperienceUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
-use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
+use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -69,7 +69,7 @@ class PostCustomExperience extends BaseEndpoint implements Endpoint
             throw new PostCustomExperienceBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostCustomExperienceUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
+            throw new PostCustomExperienceUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostCustomExperienceForbiddenException($response);

@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class GetConsumptions401Response extends \ArrayObject
+class PostArchives401Response extends \ArrayObject
 {
     /**
      * @var array

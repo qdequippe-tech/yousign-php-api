@@ -44,10 +44,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
-            if (\array_key_exists('workspaceId', $data) && null !== $data['workspaceId']) {
-                $object->setWorkspaceId($data['workspaceId']);
-                unset($data['workspaceId']);
-            } elseif (\array_key_exists('workspaceId', $data) && null === $data['workspaceId']) {
+            if (\array_key_exists('workspace_id', $data) && null !== $data['workspace_id']) {
+                $object->setWorkspaceId($data['workspace_id']);
+                unset($data['workspace_id']);
+            } elseif (\array_key_exists('workspace_id', $data) && null === $data['workspace_id']) {
                 $object->setWorkspaceId(null);
             }
             foreach ($data as $key => $value) {
@@ -62,7 +62,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
         {
             $data = [];
-            $data['workspaceId'] = $object->getWorkspaceId();
+            $data['workspace_id'] = $object->getWorkspaceId();
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
@@ -110,10 +110,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
-            if (\array_key_exists('workspaceId', $data) && null !== $data['workspaceId']) {
-                $object->setWorkspaceId($data['workspaceId']);
-                unset($data['workspaceId']);
-            } elseif (\array_key_exists('workspaceId', $data) && null === $data['workspaceId']) {
+            if (\array_key_exists('workspace_id', $data) && null !== $data['workspace_id']) {
+                $object->setWorkspaceId($data['workspace_id']);
+                unset($data['workspace_id']);
+            } elseif (\array_key_exists('workspace_id', $data) && null === $data['workspace_id']) {
                 $object->setWorkspaceId(null);
             }
             foreach ($data as $key => $value) {
@@ -133,7 +133,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
-            $data['workspaceId'] = $object->getWorkspaceId();
+            $data['workspace_id'] = $object->getWorkspaceId();
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;

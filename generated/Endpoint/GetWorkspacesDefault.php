@@ -7,7 +7,7 @@ use Qdequippe\Yousign\Api\Exception\GetWorkspacesDefaultBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesDefaultForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesDefaultNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesDefaultUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
+use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Model\Workspace;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -58,7 +58,7 @@ class GetWorkspacesDefault extends BaseEndpoint implements Endpoint
             throw new GetWorkspacesDefaultBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWorkspacesDefaultUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
+            throw new GetWorkspacesDefaultUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetWorkspacesDefaultForbiddenException($response);

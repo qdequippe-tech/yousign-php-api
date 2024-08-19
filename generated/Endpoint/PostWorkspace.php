@@ -8,7 +8,7 @@ use Qdequippe\Yousign\Api\Exception\PostWorkspaceForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostWorkspaceNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostWorkspaceUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\CreateWorkspace;
-use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
+use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Model\Workspace;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -71,7 +71,7 @@ class PostWorkspace extends BaseEndpoint implements Endpoint
             throw new PostWorkspaceBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostWorkspaceUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
+            throw new PostWorkspaceUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostWorkspaceForbiddenException($response);
