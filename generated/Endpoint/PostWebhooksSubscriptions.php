@@ -8,7 +8,7 @@ use Qdequippe\Yousign\Api\Exception\PostWebhooksSubscriptionsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostWebhooksSubscriptionsNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostWebhooksSubscriptionsUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\CreateWebhookSubscription;
-use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
+use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -71,7 +71,7 @@ class PostWebhooksSubscriptions extends BaseEndpoint implements Endpoint
             throw new PostWebhooksSubscriptionsBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostWebhooksSubscriptionsUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
+            throw new PostWebhooksSubscriptionsUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostWebhooksSubscriptionsForbiddenException($response);

@@ -8,7 +8,7 @@ use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdForb
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
-use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
+use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\UpdateCustomExperience;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -74,7 +74,7 @@ class PatchCustomExperiencesCustomExperienceId extends BaseEndpoint implements E
             throw new PatchCustomExperiencesCustomExperienceIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PatchCustomExperiencesCustomExperienceIdUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
+            throw new PatchCustomExperiencesCustomExperienceIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchCustomExperiencesCustomExperienceIdForbiddenException($response);

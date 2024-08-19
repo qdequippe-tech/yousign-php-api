@@ -6,6 +6,7 @@ use Jane\Component\JsonSchemaRuntime\Reference;
 use Qdequippe\Yousign\Api\Model\Approver;
 use Qdequippe\Yousign\Api\Model\ApproverInfo;
 use Qdequippe\Yousign\Api\Model\ApproverToNotify;
+use Qdequippe\Yousign\Api\Model\ArchivedFile;
 use Qdequippe\Yousign\Api\Model\Checkbox;
 use Qdequippe\Yousign\Api\Model\Checkbox1;
 use Qdequippe\Yousign\Api\Model\Checkbox2;
@@ -62,7 +63,6 @@ use Qdequippe\Yousign\Api\Model\FromScratch1CustomText;
 use Qdequippe\Yousign\Api\Model\FromScratch1Info;
 use Qdequippe\Yousign\Api\Model\FromScratch1RedirectUrls;
 use Qdequippe\Yousign\Api\Model\FromScratchInfo;
-use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
 use Qdequippe\Yousign\Api\Model\GetContacts200Response;
 use Qdequippe\Yousign\Api\Model\GetCustomExperiences200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequests200Response;
@@ -84,6 +84,7 @@ use Qdequippe\Yousign\Api\Model\Pagination;
 use Qdequippe\Yousign\Api\Model\PatchCustomExperienceLogoRequest;
 use Qdequippe\Yousign\Api\Model\PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest;
 use Qdequippe\Yousign\Api\Model\PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo;
+use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdCancelRequest;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdReactivateRequest;
@@ -146,6 +147,7 @@ use Qdequippe\Yousign\Api\Model\UpdateSigner;
 use Qdequippe\Yousign\Api\Model\UpdateSignerInfo;
 use Qdequippe\Yousign\Api\Model\UpdateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
+use Qdequippe\Yousign\Api\Model\UploadArchivedFile;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealImage;
 use Qdequippe\Yousign\Api\Model\User;
@@ -173,9 +175,13 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         use NormalizerAwareTrait;
         use ValidatorTrait;
         protected $normalizers = [
-            Consumption::class => ConsumptionNormalizer::class,
+            UploadArchivedFile::class => UploadArchivedFileNormalizer::class,
+
+            ArchivedFile::class => ArchivedFileNormalizer::class,
 
             ViolationResponse::class => ViolationResponseNormalizer::class,
+
+            Consumption::class => ConsumptionNormalizer::class,
 
             Pagination::class => PaginationNormalizer::class,
 
@@ -319,7 +325,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             OtpMessage::class => OtpMessageNormalizer::class,
 
-            GetConsumptions401Response::class => GetConsumptions401ResponseNormalizer::class,
+            PostArchives401Response::class => PostArchives401ResponseNormalizer::class,
 
             GetContacts200Response::class => GetContacts200ResponseNormalizer::class,
 
@@ -525,8 +531,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         public function getSupportedTypes(?string $format = null): array
         {
             return [
-                Consumption::class => false,
+                UploadArchivedFile::class => false,
+                ArchivedFile::class => false,
                 ViolationResponse::class => false,
+                Consumption::class => false,
                 Pagination::class => false,
                 Contact::class => false,
                 CreateContact::class => false,
@@ -598,7 +606,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 SignatureRequestEmailNotificationSender::class => false,
                 FontVariants::class => false,
                 OtpMessage::class => false,
-                GetConsumptions401Response::class => false,
+                PostArchives401Response::class => false,
                 GetContacts200Response::class => false,
                 GetCustomExperiences200Response::class => false,
                 PatchCustomExperienceLogoRequest::class => false,
@@ -689,9 +697,13 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         use NormalizerAwareTrait;
         use ValidatorTrait;
         protected $normalizers = [
-            Consumption::class => ConsumptionNormalizer::class,
+            UploadArchivedFile::class => UploadArchivedFileNormalizer::class,
+
+            ArchivedFile::class => ArchivedFileNormalizer::class,
 
             ViolationResponse::class => ViolationResponseNormalizer::class,
+
+            Consumption::class => ConsumptionNormalizer::class,
 
             Pagination::class => PaginationNormalizer::class,
 
@@ -835,7 +847,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             OtpMessage::class => OtpMessageNormalizer::class,
 
-            GetConsumptions401Response::class => GetConsumptions401ResponseNormalizer::class,
+            PostArchives401Response::class => PostArchives401ResponseNormalizer::class,
 
             GetContacts200Response::class => GetContacts200ResponseNormalizer::class,
 
@@ -1049,8 +1061,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         public function getSupportedTypes(?string $format = null): array
         {
             return [
-                Consumption::class => false,
+                UploadArchivedFile::class => false,
+                ArchivedFile::class => false,
                 ViolationResponse::class => false,
+                Consumption::class => false,
                 Pagination::class => false,
                 Contact::class => false,
                 CreateContact::class => false,
@@ -1122,7 +1136,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 SignatureRequestEmailNotificationSender::class => false,
                 FontVariants::class => false,
                 OtpMessage::class => false,
-                GetConsumptions401Response::class => false,
+                PostArchives401Response::class => false,
                 GetContacts200Response::class => false,
                 GetCustomExperiences200Response::class => false,
                 PatchCustomExperienceLogoRequest::class => false,

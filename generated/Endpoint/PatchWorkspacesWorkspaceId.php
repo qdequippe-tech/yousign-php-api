@@ -7,7 +7,7 @@ use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdBadRequestExceptio
 use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\GetConsumptions401Response;
+use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Model\Workspace;
@@ -74,7 +74,7 @@ class PatchWorkspacesWorkspaceId extends BaseEndpoint implements Endpoint
             throw new PatchWorkspacesWorkspaceIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PatchWorkspacesWorkspaceIdUnauthorizedException($serializer->deserialize($body, GetConsumptions401Response::class, 'json'), $response);
+            throw new PatchWorkspacesWorkspaceIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchWorkspacesWorkspaceIdForbiddenException($response);
