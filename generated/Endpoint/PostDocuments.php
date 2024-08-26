@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\CreateDocument;
+use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\Document;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
@@ -23,7 +23,7 @@ class PostDocuments extends BaseEndpoint implements Endpoint
     /**
      * Deprecated endpoint, do not use.
      */
-    public function __construct(?CreateDocument $requestBody = null)
+    public function __construct(?CreateDocumentFromMultipart $requestBody = null)
     {
         $this->body = $requestBody;
     }
@@ -40,7 +40,7 @@ class PostDocuments extends BaseEndpoint implements Endpoint
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
-        if ($this->body instanceof CreateDocument) {
+        if ($this->body instanceof CreateDocumentFromMultipart) {
             $bodyBuilder = new MultipartStreamBuilder($streamFactory);
             $formParameters = $serializer->normalize($this->body, 'json');
             foreach ($formParameters as $key => $value) {

@@ -15,6 +15,7 @@ use Qdequippe\Yousign\Api\Endpoint\DeleteElectronicSealImage;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdApproversApproverId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestId;
+use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdMetadata;
@@ -97,7 +98,7 @@ use Qdequippe\Yousign\Api\Endpoint\PutWorkspacesWorkspaceIdUsers;
 use Qdequippe\Yousign\Api\Endpoint\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId;
 use Qdequippe\Yousign\Api\Model\CreateContact;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
-use Qdequippe\Yousign\Api\Model\CreateDocument;
+use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
 use Qdequippe\Yousign\Api\Model\CreateFollowersInner;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
@@ -115,7 +116,6 @@ use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdCancelReq
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdReactivateRequest;
 use Qdequippe\Yousign\Api\Model\Signer;
-use Qdequippe\Yousign\Api\Model\SignerSign;
 use Qdequippe\Yousign\Api\Model\UpdateContact;
 use Qdequippe\Yousign\Api\Model\UpdateCustomExperience;
 use Qdequippe\Yousign\Api\Model\UpdateDocument;
@@ -452,7 +452,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostDocumentsUnauthorizedException
      * @throws Exception\PostDocumentsForbiddenException
      */
-    public function postDocuments(?CreateDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    public function postDocuments(?CreateDocumentFromMultipart $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PostDocuments($requestBody), $fetch);
     }
@@ -491,6 +491,7 @@ class Client extends Runtime\Client\Client
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
+     * @var int    $limit The limit of items count to retrieve.
      *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -906,6 +907,26 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Remove a Signer to a given Signer Document Request. This action is only permitted when the Signature Request is a draft.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $documentRequestId  Signer Document Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerId(string $signatureRequestId, string $documentRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerId($signatureRequestId, $documentRequestId, $signerId), $fetch);
+    }
+
+    /**
      * Adds a Signer to a given Signer Document Request. This action is only permitted when the Signature Request is a draft.
      *
      * @param string $signatureRequestId Signature Request Id
@@ -961,7 +982,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsNotFoundException
      */
-    public function postSignatureRequestsSignatureRequestIdDocuments(string $signatureRequestId, ?CreateDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequestsSignatureRequestIdDocuments(string $signatureRequestId, ?CreateDocumentFromMultipart $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdDocuments($signatureRequestId, $requestBody), $fetch);
     }
@@ -1075,6 +1096,7 @@ class Client extends Runtime\Client\Client
      *
      * @var array  $types[] Filter by Field type
      * @var string $after After cursor (pagination)
+     * @var int    $limit The limit of items count to retrieve.
      *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -1527,9 +1549,10 @@ class Client extends Runtime\Client\Client
     /**
      * Sign a Signature Request on behalf of a given Signer.
      *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $signerId           Signer Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param string                                                           $signatureRequestId Signature Request Id
+     * @param string                                                           $signerId           Signer Id
+     * @param Model\SignerSign|Model\SignerSignWithUploadedSignatureImage|null $requestBody
+     * @param string                                                           $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return ResponseInterface|null
      *
@@ -1538,7 +1561,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignNotFoundException
      */
-    public function postSignatureRequestsSignatureRequestIdSignersSignerIdSign(string $signatureRequestId, string $signerId, ?SignerSign $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequestsSignatureRequestIdSignersSignerIdSign(string $signatureRequestId, string $signerId, $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdSignersSignerIdSign($signatureRequestId, $signerId, $requestBody), $fetch);
     }
@@ -1549,6 +1572,7 @@ class Client extends Runtime\Client\Client
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
+     * @var int    $limit The limit of items count to retrieve.
      *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)

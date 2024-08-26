@@ -27,6 +27,7 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields extends Ba
      *
      * @var array  $types[] Filter by Field type
      * @var string $after After cursor (pagination)
+     * @var int    $limit The limit of items count to retrieve.
      *             }
      */
     public function __construct(protected string $signatureRequestId, protected string $documentId, array $queryParameters = [])
@@ -57,11 +58,12 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields extends Ba
     protected function getQueryOptionsResolver(): OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['types', 'after']);
+        $optionsResolver->setDefined(['types', 'after', 'limit']);
         $optionsResolver->setRequired([]);
-        $optionsResolver->setDefaults([]);
+        $optionsResolver->setDefaults(['limit' => 100]);
         $optionsResolver->addAllowedTypes('types', ['array']);
         $optionsResolver->addAllowedTypes('after', ['string']);
+        $optionsResolver->addAllowedTypes('limit', ['int']);
 
         return $optionsResolver;
     }
