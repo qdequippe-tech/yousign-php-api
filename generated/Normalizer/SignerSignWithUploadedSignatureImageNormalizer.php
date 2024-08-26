@@ -3,7 +3,7 @@
 namespace Qdequippe\Yousign\Api\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Qdequippe\Yousign\Api\Model\SignerSign;
+use Qdequippe\Yousign\Api\Model\SignerSignWithUploadedSignatureImage;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\HttpKernel\Kernel;
@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR_VERSION === 6 && Kernel::MINOR_VERSION === 4)) {
-    class SignerSignNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+    class SignerSignWithUploadedSignatureImageNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
         use CheckArray;
         use DenormalizerAwareTrait;
@@ -24,12 +24,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
         {
-            return SignerSign::class === $type;
+            return SignerSignWithUploadedSignatureImage::class === $type;
         }
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && SignerSign::class === $data::class;
+            return \is_object($data) && SignerSignWithUploadedSignatureImage::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -40,7 +40,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if (isset($data['$recursiveRef'])) {
                 return new Reference($data['$recursiveRef'], $context['document-origin']);
             }
-            $object = new SignerSign();
+            $object = new SignerSignWithUploadedSignatureImage();
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
@@ -61,6 +61,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 unset($data['consent_given_at']);
             } elseif (\array_key_exists('consent_given_at', $data) && null === $data['consent_given_at']) {
                 $object->setConsentGivenAt(null);
+            }
+            if (\array_key_exists('signature_image', $data) && null !== $data['signature_image']) {
+                $object->setSignatureImage($data['signature_image']);
+                unset($data['signature_image']);
+            } elseif (\array_key_exists('signature_image', $data) && null === $data['signature_image']) {
+                $object->setSignatureImage(null);
             }
             foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
@@ -79,6 +85,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             $data['ip_address'] = $object->getIpAddress();
             $data['consent_given_at'] = $object->getConsentGivenAt()?->format('Y-m-d\TH:i:sP');
+            $data['signature_image'] = $object->getSignatureImage();
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
@@ -90,11 +97,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function getSupportedTypes(?string $format = null): array
         {
-            return [SignerSign::class => false];
+            return [SignerSignWithUploadedSignatureImage::class => false];
         }
     }
 } else {
-    class SignerSignNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+    class SignerSignWithUploadedSignatureImageNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
         use CheckArray;
         use DenormalizerAwareTrait;
@@ -103,12 +110,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsDenormalization($data, $type, ?string $format = null, array $context = []): bool
         {
-            return SignerSign::class === $type;
+            return SignerSignWithUploadedSignatureImage::class === $type;
         }
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && SignerSign::class === $data::class;
+            return \is_object($data) && SignerSignWithUploadedSignatureImage::class === $data::class;
         }
 
         /**
@@ -122,7 +129,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if (isset($data['$recursiveRef'])) {
                 return new Reference($data['$recursiveRef'], $context['document-origin']);
             }
-            $object = new SignerSign();
+            $object = new SignerSignWithUploadedSignatureImage();
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
@@ -143,6 +150,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 unset($data['consent_given_at']);
             } elseif (\array_key_exists('consent_given_at', $data) && null === $data['consent_given_at']) {
                 $object->setConsentGivenAt(null);
+            }
+            if (\array_key_exists('signature_image', $data) && null !== $data['signature_image']) {
+                $object->setSignatureImage($data['signature_image']);
+                unset($data['signature_image']);
+            } elseif (\array_key_exists('signature_image', $data) && null === $data['signature_image']) {
+                $object->setSignatureImage(null);
             }
             foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
@@ -166,6 +179,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             $data['ip_address'] = $object->getIpAddress();
             $data['consent_given_at'] = $object->getConsentGivenAt()?->format('Y-m-d\TH:i:sP');
+            $data['signature_image'] = $object->getSignatureImage();
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
@@ -177,7 +191,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function getSupportedTypes(?string $format = null): array
         {
-            return [SignerSign::class => false];
+            return [SignerSignWithUploadedSignatureImage::class => false];
         }
     }
 }

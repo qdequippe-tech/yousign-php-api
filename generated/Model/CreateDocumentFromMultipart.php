@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateDocument extends \ArrayObject
+class CreateDocumentFromMultipart extends \ArrayObject
 {
     /**
      * @var array

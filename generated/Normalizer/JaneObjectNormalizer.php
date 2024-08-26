@@ -19,7 +19,7 @@ use Qdequippe\Yousign\Api\Model\Contact;
 use Qdequippe\Yousign\Api\Model\CreateContact;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperienceRedirectUrls;
-use Qdequippe\Yousign\Api\Model\CreateDocument;
+use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealFieldReadOnlyTextPayload;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealFieldSealPayload;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
@@ -129,6 +129,7 @@ use Qdequippe\Yousign\Api\Model\SignerDocumentRequest;
 use Qdequippe\Yousign\Api\Model\SignerInfo;
 use Qdequippe\Yousign\Api\Model\SignerRedirectUrls;
 use Qdequippe\Yousign\Api\Model\SignerSign;
+use Qdequippe\Yousign\Api\Model\SignerSignWithUploadedSignatureImage;
 use Qdequippe\Yousign\Api\Model\SmsNotification;
 use Qdequippe\Yousign\Api\Model\SmsNotification1;
 use Qdequippe\Yousign\Api\Model\Template;
@@ -197,7 +198,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             UpdateCustomExperience::class => UpdateCustomExperienceNormalizer::class,
 
-            CreateDocument::class => CreateDocumentNormalizer::class,
+            CreateDocumentFromMultipart::class => CreateDocumentFromMultipartNormalizer::class,
 
             Document::class => DocumentNormalizer::class,
 
@@ -262,6 +263,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             SignerDocument::class => SignerDocumentNormalizer::class,
 
             SignerSign::class => SignerSignNormalizer::class,
+
+            SignerSignWithUploadedSignatureImage::class => SignerSignWithUploadedSignatureImageNormalizer::class,
 
             Template::class => TemplateNormalizer::class,
 
@@ -542,7 +545,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 CustomExperience::class => false,
                 CreateCustomExperience::class => false,
                 UpdateCustomExperience::class => false,
-                CreateDocument::class => false,
+                CreateDocumentFromMultipart::class => false,
                 Document::class => false,
                 UploadElectronicSealDocument::class => false,
                 ElectronicSealDocument::class => false,
@@ -575,6 +578,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 SignerAuditTrail::class => false,
                 SignerDocument::class => false,
                 SignerSign::class => false,
+                SignerSignWithUploadedSignatureImage::class => false,
                 Template::class => false,
                 User::class => false,
                 WebhookSubscription::class => false,
@@ -719,7 +723,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             UpdateCustomExperience::class => UpdateCustomExperienceNormalizer::class,
 
-            CreateDocument::class => CreateDocumentNormalizer::class,
+            CreateDocumentFromMultipart::class => CreateDocumentFromMultipartNormalizer::class,
 
             Document::class => DocumentNormalizer::class,
 
@@ -784,6 +788,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             SignerDocument::class => SignerDocumentNormalizer::class,
 
             SignerSign::class => SignerSignNormalizer::class,
+
+            SignerSignWithUploadedSignatureImage::class => SignerSignWithUploadedSignatureImageNormalizer::class,
 
             Template::class => TemplateNormalizer::class,
 
@@ -1072,7 +1078,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 CustomExperience::class => false,
                 CreateCustomExperience::class => false,
                 UpdateCustomExperience::class => false,
-                CreateDocument::class => false,
+                CreateDocumentFromMultipart::class => false,
                 Document::class => false,
                 UploadElectronicSealDocument::class => false,
                 ElectronicSealDocument::class => false,
@@ -1105,6 +1111,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 SignerAuditTrail::class => false,
                 SignerDocument::class => false,
                 SignerSign::class => false,
+                SignerSignWithUploadedSignatureImage::class => false,
                 Template::class => false,
                 User::class => false,
                 WebhookSubscription::class => false,

@@ -8,7 +8,7 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocum
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\CreateDocument;
+use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\Document;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
@@ -26,7 +26,7 @@ class PostSignatureRequestsSignatureRequestIdDocuments extends BaseEndpoint impl
      *
      * @param string $signatureRequestId Signature Request Id
      */
-    public function __construct(protected string $signatureRequestId, ?CreateDocument $requestBody = null)
+    public function __construct(protected string $signatureRequestId, ?CreateDocumentFromMultipart $requestBody = null)
     {
         $this->body = $requestBody;
     }
@@ -43,7 +43,7 @@ class PostSignatureRequestsSignatureRequestIdDocuments extends BaseEndpoint impl
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
-        if ($this->body instanceof CreateDocument) {
+        if ($this->body instanceof CreateDocumentFromMultipart) {
             $bodyBuilder = new MultipartStreamBuilder($streamFactory);
             $formParameters = $serializer->normalize($this->body, 'json');
             foreach ($formParameters as $key => $value) {

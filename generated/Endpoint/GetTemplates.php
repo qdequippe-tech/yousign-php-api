@@ -25,6 +25,7 @@ class GetTemplates extends BaseEndpoint implements Endpoint
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
+     * @var int    $limit The limit of items count to retrieve.
      *             }
      */
     public function __construct(array $queryParameters = [])
@@ -55,10 +56,11 @@ class GetTemplates extends BaseEndpoint implements Endpoint
     protected function getQueryOptionsResolver(): OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['after']);
+        $optionsResolver->setDefined(['after', 'limit']);
         $optionsResolver->setRequired([]);
-        $optionsResolver->setDefaults([]);
+        $optionsResolver->setDefaults(['limit' => 100]);
         $optionsResolver->addAllowedTypes('after', ['string']);
+        $optionsResolver->addAllowedTypes('limit', ['int']);
 
         return $optionsResolver;
     }
