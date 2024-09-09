@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostCustomExperienceBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostCustomExperienceForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostCustomExperienceUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PostCustomExperienceUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
@@ -57,6 +58,7 @@ class PostCustomExperience extends BaseEndpoint implements Endpoint
      * @throws PostCustomExperienceBadRequestException
      * @throws PostCustomExperienceUnauthorizedException
      * @throws PostCustomExperienceForbiddenException
+     * @throws PostCustomExperienceUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -73,6 +75,9 @@ class PostCustomExperience extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostCustomExperienceForbiddenException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostCustomExperienceUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

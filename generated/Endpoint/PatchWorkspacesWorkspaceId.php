@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdBadRequestExceptio
 use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
@@ -62,6 +63,7 @@ class PatchWorkspacesWorkspaceId extends BaseEndpoint implements Endpoint
      * @throws PatchWorkspacesWorkspaceIdUnauthorizedException
      * @throws PatchWorkspacesWorkspaceIdForbiddenException
      * @throws PatchWorkspacesWorkspaceIdNotFoundException
+     * @throws PatchWorkspacesWorkspaceIdUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -81,6 +83,9 @@ class PatchWorkspacesWorkspaceId extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchWorkspacesWorkspaceIdNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchWorkspacesWorkspaceIdUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

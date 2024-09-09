@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\Contact;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\UpdateContact;
@@ -62,6 +63,7 @@ class PatchContactsContactId extends BaseEndpoint implements Endpoint
      * @throws PatchContactsContactIdUnauthorizedException
      * @throws PatchContactsContactIdForbiddenException
      * @throws PatchContactsContactIdNotFoundException
+     * @throws PatchContactsContactIdUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -81,6 +83,9 @@ class PatchContactsContactId extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchContactsContactIdNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchContactsContactIdUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

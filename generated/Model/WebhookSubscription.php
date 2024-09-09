@@ -34,6 +34,8 @@ class WebhookSubscription extends \ArrayObject
      */
     protected $sandbox;
     /**
+     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
+     *
      * @var mixed|null
      */
     protected $subscribedEvents;
@@ -47,6 +49,10 @@ class WebhookSubscription extends \ArrayObject
      * @var mixed|null
      */
     protected $scopes;
+    /**
+     * @var mixed|null
+     */
+    protected $workspaces;
     /**
      * If a Webhook request fails for any reason, Yousign will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
      *
@@ -132,11 +138,17 @@ class WebhookSubscription extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
+     */
     public function getSubscribedEvents()
     {
         return $this->subscribedEvents;
     }
 
+    /**
+     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
+     */
     public function setSubscribedEvents($subscribedEvents): self
     {
         $this->initialized['subscribedEvents'] = true;
@@ -173,6 +185,19 @@ class WebhookSubscription extends \ArrayObject
     {
         $this->initialized['scopes'] = true;
         $this->scopes = $scopes;
+
+        return $this;
+    }
+
+    public function getWorkspaces()
+    {
+        return $this->workspaces;
+    }
+
+    public function setWorkspaces($workspaces): self
+    {
+        $this->initialized['workspaces'] = true;
+        $this->workspaces = $workspaces;
 
         return $this;
     }

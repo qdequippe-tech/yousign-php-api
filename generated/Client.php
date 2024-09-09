@@ -306,6 +306,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchContactsContactIdUnauthorizedException
      * @throws Exception\PatchContactsContactIdForbiddenException
      * @throws Exception\PatchContactsContactIdNotFoundException
+     * @throws Exception\PatchContactsContactIdUnsupportedMediaTypeException
      */
     public function patchContactsContactId(string $contactId, ?UpdateContact $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -345,6 +346,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostCustomExperienceBadRequestException
      * @throws Exception\PostCustomExperienceUnauthorizedException
      * @throws Exception\PostCustomExperienceForbiddenException
+     * @throws Exception\PostCustomExperienceUnsupportedMediaTypeException
      */
     public function postCustomExperience(?CreateCustomExperience $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -559,6 +561,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostElectronicSealsBadRequestException
      * @throws Exception\PostElectronicSealsUnauthorizedException
      * @throws Exception\PostElectronicSealsForbiddenException
+     * @throws Exception\PostElectronicSealsUnsupportedMediaTypeException
      */
     public function postElectronicSeals(?CreateElectronicSealPayload $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -650,6 +653,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsUnauthorizedException
      * @throws Exception\PostSignatureRequestsForbiddenException
      * @throws Exception\PostSignatureRequestsNotFoundException
+     * @throws Exception\PostSignatureRequestsUnsupportedMediaTypeException
      */
     public function postSignatureRequests(?CreateSignatureRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -709,6 +713,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdUnauthorizedException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdForbiddenException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdNotFoundException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdUnsupportedMediaTypeException
      */
     public function patchSignatureRequestsSignatureRequestId(string $signatureRequestId, ?UpdateSignatureRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -746,6 +751,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversUnsupportedMediaTypeException
      */
     public function postSignatureRequestsSignatureRequestIdApprovers(string $signatureRequestId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -802,6 +808,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnsupportedMediaTypeException
      */
     public function patchSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, ?PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -863,6 +870,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelUnsupportedMediaTypeException
      */
     public function postSignatureRequestsSignatureRequestIdCancel(string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdCancelRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -881,6 +889,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsUnsupportedMediaTypeException
      */
     public function postSignatureRequestsSignatureRequestIdDocumentRequests(string $signatureRequestId, ?CreateSignerDocumentRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1061,6 +1070,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnsupportedMediaTypeException
      */
     public function patchSignatureRequestsSignatureRequestIdDocumentsDocumentId(string $signatureRequestId, string $documentId, ?UpdateDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1125,6 +1135,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsUnsupportedMediaTypeException
      */
     public function postSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields(string $signatureRequestId, string $documentId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1220,6 +1231,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersUnsupportedMediaTypeException
      */
     public function postSignatureRequestsSignatureRequestIdFollowers(string $signatureRequestId, ?array $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1272,6 +1284,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataUnsupportedMediaTypeException
      */
     public function postSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, ?CreateSignatureRequestMetadata $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1308,6 +1321,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateUnsupportedMediaTypeException
      */
     public function postSignatureRequestsSignatureRequestIdReactivate(string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdReactivateRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1343,6 +1357,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersUnsupportedMediaTypeException
      */
     public function postSignatureRequestsSignatureRequestIdSigners(string $signatureRequestId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1400,6 +1415,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdUnauthorizedException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdForbiddenException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdNotFoundException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdUnsupportedMediaTypeException
      */
     public function patchSignatureRequestsSignatureRequestIdSignersSignerId(string $signatureRequestId, string $signerId, ?UpdateSigner $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1634,6 +1650,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostWebhooksSubscriptionsUnauthorizedException
      * @throws Exception\PostWebhooksSubscriptionsForbiddenException
      * @throws Exception\PostWebhooksSubscriptionsNotFoundException
+     * @throws Exception\PostWebhooksSubscriptionsUnsupportedMediaTypeException
      */
     public function postWebhooksSubscriptions(?CreateWebhookSubscription $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1728,6 +1745,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostWorkspaceUnauthorizedException
      * @throws Exception\PostWorkspaceForbiddenException
      * @throws Exception\PostWorkspaceNotFoundException
+     * @throws Exception\PostWorkspaceUnsupportedMediaTypeException
      */
     public function postWorkspace(?CreateWorkspace $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1759,6 +1777,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\MarkWorkspaceAsDefaultBadRequestException
      * @throws Exception\MarkWorkspaceAsDefaultUnauthorizedException
      * @throws Exception\MarkWorkspaceAsDefaultForbiddenException
+     * @throws Exception\MarkWorkspaceAsDefaultUnsupportedMediaTypeException
      */
     public function markWorkspaceAsDefault(?MarkWorkspaceAsDefault $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1777,6 +1796,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteWorkspaceUnauthorizedException
      * @throws Exception\DeleteWorkspaceForbiddenException
      * @throws Exception\DeleteWorkspaceNotFoundException
+     * @throws Exception\DeleteWorkspaceUnsupportedMediaTypeException
      */
     public function deleteWorkspace(string $workspaceId, ?DeleteWorkspace $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1814,6 +1834,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchWorkspacesWorkspaceIdUnauthorizedException
      * @throws Exception\PatchWorkspacesWorkspaceIdForbiddenException
      * @throws Exception\PatchWorkspacesWorkspaceIdNotFoundException
+     * @throws Exception\PatchWorkspacesWorkspaceIdUnsupportedMediaTypeException
      */
     public function patchWorkspacesWorkspaceId(string $workspaceId, ?UpdateWorkspace $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {

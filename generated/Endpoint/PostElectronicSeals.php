@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostElectronicSealsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostElectronicSealsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostElectronicSealsUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PostElectronicSealsUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
 use Qdequippe\Yousign\Api\Model\ElectronicSeal;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
@@ -54,6 +55,7 @@ class PostElectronicSeals extends BaseEndpoint implements Endpoint
      * @throws PostElectronicSealsBadRequestException
      * @throws PostElectronicSealsUnauthorizedException
      * @throws PostElectronicSealsForbiddenException
+     * @throws PostElectronicSealsUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -70,6 +72,9 @@ class PostElectronicSeals extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostElectronicSealsForbiddenException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostElectronicSealsUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollo
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\CreateFollowersInner;
 use Qdequippe\Yousign\Api\Model\Follower;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
@@ -62,6 +63,7 @@ class PostSignatureRequestsSignatureRequestIdFollowers extends BaseEndpoint impl
      * @throws PostSignatureRequestsSignatureRequestIdFollowersUnauthorizedException
      * @throws PostSignatureRequestsSignatureRequestIdFollowersForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdFollowersNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdFollowersUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -81,6 +83,9 @@ class PostSignatureRequestsSignatureRequestIdFollowers extends BaseEndpoint impl
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdFollowersNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdFollowersUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

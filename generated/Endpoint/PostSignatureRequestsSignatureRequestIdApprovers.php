@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdAppro
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\Approver;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
@@ -60,6 +61,7 @@ class PostSignatureRequestsSignatureRequestIdApprovers extends BaseEndpoint impl
      * @throws PostSignatureRequestsSignatureRequestIdApproversUnauthorizedException
      * @throws PostSignatureRequestsSignatureRequestIdApproversForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdApproversNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdApproversUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -79,6 +81,9 @@ class PostSignatureRequestsSignatureRequestIdApprovers extends BaseEndpoint impl
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdApproversNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdApproversUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

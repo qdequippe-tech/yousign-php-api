@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\MarkWorkspaceAsDefaultBadRequestException;
 use Qdequippe\Yousign\Api\Exception\MarkWorkspaceAsDefaultForbiddenException;
 use Qdequippe\Yousign\Api\Exception\MarkWorkspaceAsDefaultUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\MarkWorkspaceAsDefaultUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -53,6 +54,7 @@ class MarkWorkspaceAsDefault extends BaseEndpoint implements Endpoint
      * @throws MarkWorkspaceAsDefaultBadRequestException
      * @throws MarkWorkspaceAsDefaultUnauthorizedException
      * @throws MarkWorkspaceAsDefaultForbiddenException
+     * @throws MarkWorkspaceAsDefaultUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -69,6 +71,9 @@ class MarkWorkspaceAsDefault extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new MarkWorkspaceAsDefaultForbiddenException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new MarkWorkspaceAsDefaultUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;
