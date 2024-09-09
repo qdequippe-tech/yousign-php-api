@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -57,6 +58,7 @@ class DeleteWorkspace extends BaseEndpoint implements Endpoint
      * @throws DeleteWorkspaceUnauthorizedException
      * @throws DeleteWorkspaceForbiddenException
      * @throws DeleteWorkspaceNotFoundException
+     * @throws DeleteWorkspaceUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -76,6 +78,9 @@ class DeleteWorkspace extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DeleteWorkspaceNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteWorkspaceUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

@@ -30,6 +30,8 @@ class UpdateWebhookSubscription extends \ArrayObject
      */
     protected $sandbox;
     /**
+     * Choose between a wildcard symbol to select all subscribed events or specify a list of specific subscribed events.
+     *
      * @var mixed|null
      */
     protected $subscribedEvents;
@@ -40,9 +42,17 @@ class UpdateWebhookSubscription extends \ArrayObject
      */
     protected $secretKey;
     /**
+     * Choose between a wildcard symbol to select all scopes or specify a list of specific scopes.
+     *
      * @var mixed|null
      */
     protected $scopes;
+    /**
+     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
+     *
+     * @var mixed|null
+     */
+    protected $workspaces;
     /**
      * If a Webhook request fails for any reason, Yousign will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
      *
@@ -107,11 +117,17 @@ class UpdateWebhookSubscription extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Choose between a wildcard symbol to select all subscribed events or specify a list of specific subscribed events.
+     */
     public function getSubscribedEvents()
     {
         return $this->subscribedEvents;
     }
 
+    /**
+     * Choose between a wildcard symbol to select all subscribed events or specify a list of specific subscribed events.
+     */
     public function setSubscribedEvents($subscribedEvents): self
     {
         $this->initialized['subscribedEvents'] = true;
@@ -139,15 +155,40 @@ class UpdateWebhookSubscription extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Choose between a wildcard symbol to select all scopes or specify a list of specific scopes.
+     */
     public function getScopes()
     {
         return $this->scopes;
     }
 
+    /**
+     * Choose between a wildcard symbol to select all scopes or specify a list of specific scopes.
+     */
     public function setScopes($scopes): self
     {
         $this->initialized['scopes'] = true;
         $this->scopes = $scopes;
+
+        return $this;
+    }
+
+    /**
+     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
+     */
+    public function getWorkspaces()
+    {
+        return $this->workspaces;
+    }
+
+    /**
+     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
+     */
+    public function setWorkspaces($workspaces): self
+    {
+        $this->initialized['workspaces'] = true;
+        $this->workspaces = $workspaces;
 
         return $this;
     }

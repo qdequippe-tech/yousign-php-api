@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdAppr
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\Approver;
 use Qdequippe\Yousign\Api\Model\PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
@@ -62,6 +63,7 @@ class PatchSignatureRequestsSignatureRequestIdApproversApproverId extends BaseEn
      * @throws PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
      * @throws PatchSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
      * @throws PatchSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
+     * @throws PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -81,6 +83,9 @@ class PatchSignatureRequestsSignatureRequestIdApproversApproverId extends BaseEn
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

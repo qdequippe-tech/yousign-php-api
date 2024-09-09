@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdMetad
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdMetadataForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdMetadataNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdMetadataUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdMetadataUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\Metadata;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
@@ -61,6 +62,7 @@ class PostSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint imple
      * @throws PostSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
      * @throws PostSignatureRequestsSignatureRequestIdMetadataForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdMetadataNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdMetadataUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -80,6 +82,9 @@ class PostSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint imple
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdMetadataNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdMetadataUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

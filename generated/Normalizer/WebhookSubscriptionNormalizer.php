@@ -86,6 +86,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('scopes', $data) && null === $data['scopes']) {
                 $object->setScopes(null);
             }
+            if (\array_key_exists('workspaces', $data) && null !== $data['workspaces']) {
+                $object->setWorkspaces($data['workspaces']);
+                unset($data['workspaces']);
+            } elseif (\array_key_exists('workspaces', $data) && null === $data['workspaces']) {
+                $object->setWorkspaces(null);
+            }
             if (\array_key_exists('auto_retry', $data) && null !== $data['auto_retry']) {
                 $object->setAutoRetry($data['auto_retry']);
                 unset($data['auto_retry']);
@@ -129,6 +135,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['subscribed_events'] = $object->getSubscribedEvents();
             $data['secret_key'] = $object->getSecretKey();
             $data['scopes'] = $object->getScopes();
+            $data['workspaces'] = $object->getWorkspaces();
             $data['auto_retry'] = $object->getAutoRetry();
             $data['enabled'] = $object->getEnabled();
             $data['created_at'] = $object->getCreatedAt()?->format('Y-m-d\TH:i:sP');
@@ -222,6 +229,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('scopes', $data) && null === $data['scopes']) {
                 $object->setScopes(null);
             }
+            if (\array_key_exists('workspaces', $data) && null !== $data['workspaces']) {
+                $object->setWorkspaces($data['workspaces']);
+                unset($data['workspaces']);
+            } elseif (\array_key_exists('workspaces', $data) && null === $data['workspaces']) {
+                $object->setWorkspaces(null);
+            }
             if (\array_key_exists('auto_retry', $data) && null !== $data['auto_retry']) {
                 $object->setAutoRetry($data['auto_retry']);
                 unset($data['auto_retry']);
@@ -270,6 +283,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['subscribed_events'] = $object->getSubscribedEvents();
             $data['secret_key'] = $object->getSecretKey();
             $data['scopes'] = $object->getScopes();
+            $data['workspaces'] = $object->getWorkspaces();
             $data['auto_retry'] = $object->getAutoRetry();
             $data['enabled'] = $object->getEnabled();
             $data['created_at'] = $object->getCreatedAt()?->format('Y-m-d\TH:i:sP');

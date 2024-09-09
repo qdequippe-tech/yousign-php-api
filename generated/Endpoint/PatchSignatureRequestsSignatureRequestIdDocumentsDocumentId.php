@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocu
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\Document;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\UpdateDocument;
@@ -62,6 +63,7 @@ class PatchSignatureRequestsSignatureRequestIdDocumentsDocumentId extends BaseEn
      * @throws PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException
      * @throws PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException
      * @throws PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException
+     * @throws PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -81,6 +83,9 @@ class PatchSignatureRequestsSignatureRequestIdDocumentsDocumentId extends BaseEn
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

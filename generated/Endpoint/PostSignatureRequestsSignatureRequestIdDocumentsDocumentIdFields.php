@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocum
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -58,6 +59,7 @@ class PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields extends B
      * @throws PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsUnauthorizedException
      * @throws PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -77,6 +79,9 @@ class PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields extends B
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

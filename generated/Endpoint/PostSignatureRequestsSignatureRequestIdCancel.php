@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCance
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCancelForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCancelNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCancelUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCancelUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdCancelRequest;
 use Qdequippe\Yousign\Api\Model\SignatureRequest;
@@ -61,6 +62,7 @@ class PostSignatureRequestsSignatureRequestIdCancel extends BaseEndpoint impleme
      * @throws PostSignatureRequestsSignatureRequestIdCancelUnauthorizedException
      * @throws PostSignatureRequestsSignatureRequestIdCancelForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdCancelNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdCancelUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -80,6 +82,9 @@ class PostSignatureRequestsSignatureRequestIdCancel extends BaseEndpoint impleme
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdCancelNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdCancelUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

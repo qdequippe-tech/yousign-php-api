@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdBadR
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\SignatureRequest;
 use Qdequippe\Yousign\Api\Model\UpdateSignatureRequest;
@@ -61,6 +62,7 @@ class PatchSignatureRequestsSignatureRequestId extends BaseEndpoint implements E
      * @throws PatchSignatureRequestsSignatureRequestIdUnauthorizedException
      * @throws PatchSignatureRequestsSignatureRequestIdForbiddenException
      * @throws PatchSignatureRequestsSignatureRequestIdNotFoundException
+     * @throws PatchSignatureRequestsSignatureRequestIdUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -80,6 +82,9 @@ class PatchSignatureRequestsSignatureRequestId extends BaseEndpoint implements E
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchSignatureRequestsSignatureRequestIdUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;
