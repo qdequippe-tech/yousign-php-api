@@ -19,6 +19,8 @@ class PutWorkspacesWorkspaceIdUsers extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Associates a User with a given Workspace.
+     *
      * @param string $workspaceId Workspace Id
      * @param string $userId      User Id
      */

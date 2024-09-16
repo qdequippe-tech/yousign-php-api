@@ -99,6 +99,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('is_active', $data) && null === $data['is_active']) {
                 $object->setIsActive(null);
             }
+            if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
+                unset($data['created_at']);
+            } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
+                $object->setCreatedAt(null);
+            }
             if (\array_key_exists('role', $data) && null !== $data['role']) {
                 $object->setRole($data['role']);
                 unset($data['role']);
@@ -244,6 +250,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 unset($data['is_active']);
             } elseif (\array_key_exists('is_active', $data) && null === $data['is_active']) {
                 $object->setIsActive(null);
+            }
+            if (\array_key_exists('created_at', $data) && null !== $data['created_at']) {
+                $object->setCreatedAt(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']));
+                unset($data['created_at']);
+            } elseif (\array_key_exists('created_at', $data) && null === $data['created_at']) {
+                $object->setCreatedAt(null);
             }
             if (\array_key_exists('role', $data) && null !== $data['role']) {
                 $object->setRole($data['role']);

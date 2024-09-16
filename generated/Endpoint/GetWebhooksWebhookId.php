@@ -7,6 +7,7 @@ use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
@@ -55,6 +56,7 @@ class GetWebhooksWebhookId extends BaseEndpoint implements Endpoint
      * @throws GetWebhooksWebhookIdUnauthorizedException
      * @throws GetWebhooksWebhookIdForbiddenException
      * @throws GetWebhooksWebhookIdNotFoundException
+     * @throws GetWebhooksWebhookIdUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -74,6 +76,9 @@ class GetWebhooksWebhookId extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetWebhooksWebhookIdNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetWebhooksWebhookIdUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

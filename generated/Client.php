@@ -148,6 +148,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostArchivesUnauthorizedException
      * @throws Exception\PostArchivesForbiddenException
      * @throws Exception\PostArchivesNotFoundException
+     * @throws Exception\PostArchivesUnsupportedMediaTypeException
      */
     public function postArchives(?UploadArchivedFile $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -402,6 +403,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchCustomExperiencesCustomExperienceIdUnauthorizedException
      * @throws Exception\PatchCustomExperiencesCustomExperienceIdForbiddenException
      * @throws Exception\PatchCustomExperiencesCustomExperienceIdNotFoundException
+     * @throws Exception\PatchCustomExperiencesCustomExperienceIdUnsupportedMediaTypeException
      */
     public function patchCustomExperiencesCustomExperienceId(string $customExperienceId, ?UpdateCustomExperience $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -437,6 +439,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchCustomExperienceLogoBadRequestException
      * @throws Exception\PatchCustomExperienceLogoUnauthorizedException
      * @throws Exception\PatchCustomExperienceLogoForbiddenException
+     * @throws Exception\PatchCustomExperienceLogoUnsupportedMediaTypeException
      */
     public function patchCustomExperienceLogo(string $customExperienceId, ?PatchCustomExperienceLogoRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -453,6 +456,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostDocumentsBadRequestException
      * @throws Exception\PostDocumentsUnauthorizedException
      * @throws Exception\PostDocumentsForbiddenException
+     * @throws Exception\PostDocumentsUnsupportedMediaTypeException
      */
     public function postDocuments(?CreateDocumentFromMultipart $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -469,6 +473,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\UploadElectronicSealDocumentBadRequestException
      * @throws Exception\UploadElectronicSealDocumentUnauthorizedException
      * @throws Exception\UploadElectronicSealDocumentForbiddenException
+     * @throws Exception\UploadElectronicSealDocumentUnsupportedMediaTypeException
      */
     public function uploadElectronicSealDocument(?UploadElectronicSealDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -519,6 +524,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\UploadElectronicSealImageBadRequestException
      * @throws Exception\UploadElectronicSealImageUnauthorizedException
      * @throws Exception\UploadElectronicSealImageForbiddenException
+     * @throws Exception\UploadElectronicSealImageUnsupportedMediaTypeException
      */
     public function uploadElectronicSealImage(?UploadElectronicSealImage $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -990,6 +996,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsUnsupportedMediaTypeException
      */
     public function postSignatureRequestsSignatureRequestIdDocuments(string $signatureRequestId, ?CreateDocumentFromMultipart $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1176,6 +1183,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdUnauthorizedException
      * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdForbiddenException
      * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdNotFoundException
+     * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdUnsupportedMediaTypeException
      */
     public function updateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId(string $signatureRequestId, string $documentId, string $fieldId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1195,6 +1203,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnsupportedMediaTypeException
      */
     public function postSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace(string $signatureRequestId, string $documentId, ?PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1576,6 +1585,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignUnsupportedMediaTypeException
      */
     public function postSignatureRequestsSignatureRequestIdSignersSignerIdSign(string $signatureRequestId, string $signerId, $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1687,6 +1697,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetWebhooksWebhookIdUnauthorizedException
      * @throws Exception\GetWebhooksWebhookIdForbiddenException
      * @throws Exception\GetWebhooksWebhookIdNotFoundException
+     * @throws Exception\GetWebhooksWebhookIdUnsupportedMediaTypeException
      */
     public function getWebhooksWebhookId(string $webhookId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1842,6 +1853,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Removes a User from a given Workspace.
+     *
      * @param string $workspaceId Workspace Id
      * @param string $userId      User Id
      * @param string $fetch       Fetch mode to use (can be OBJECT or RESPONSE)
@@ -1859,6 +1872,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Associates a User with a given Workspace.
+     *
      * @param string $workspaceId Workspace Id
      * @param string $userId      User Id
      * @param string $fetch       Fetch mode to use (can be OBJECT or RESPONSE)

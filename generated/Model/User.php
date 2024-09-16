@@ -52,6 +52,10 @@ class User extends \ArrayObject
      */
     protected $isActive;
     /**
+     * @var \DateTime|null
+     */
+    protected $createdAt;
+    /**
      * @var string|null
      */
     protected $role;
@@ -179,6 +183,19 @@ class User extends \ArrayObject
     {
         $this->initialized['isActive'] = true;
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTime $createdAt): self
+    {
+        $this->initialized['createdAt'] = true;
+        $this->createdAt = $createdAt;
 
         return $this;
     }

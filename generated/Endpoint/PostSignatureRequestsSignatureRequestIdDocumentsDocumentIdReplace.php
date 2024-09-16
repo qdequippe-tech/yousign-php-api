@@ -8,6 +8,7 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocum
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\Document;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest;
@@ -70,6 +71,7 @@ class PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace extends 
      * @throws PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnauthorizedException
      * @throws PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -89,6 +91,9 @@ class PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace extends 
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

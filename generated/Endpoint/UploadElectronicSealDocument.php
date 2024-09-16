@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealDocumentBadRequestException;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealDocumentForbiddenException;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealDocumentUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\UploadElectronicSealDocumentUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\ElectronicSealDocument;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\ViolationResponse;
@@ -64,6 +65,7 @@ class UploadElectronicSealDocument extends BaseEndpoint implements Endpoint
      * @throws UploadElectronicSealDocumentBadRequestException
      * @throws UploadElectronicSealDocumentUnauthorizedException
      * @throws UploadElectronicSealDocumentForbiddenException
+     * @throws UploadElectronicSealDocumentUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -80,6 +82,9 @@ class UploadElectronicSealDocument extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new UploadElectronicSealDocumentForbiddenException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new UploadElectronicSealDocumentUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

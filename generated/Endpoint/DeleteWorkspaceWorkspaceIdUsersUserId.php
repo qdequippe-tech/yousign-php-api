@@ -19,6 +19,8 @@ class DeleteWorkspaceWorkspaceIdUsersUserId extends BaseEndpoint implements Endp
     use EndpointTrait;
 
     /**
+     * Removes a User from a given Workspace.
+     *
      * @param string $workspaceId Workspace Id
      * @param string $userId      User Id
      */
