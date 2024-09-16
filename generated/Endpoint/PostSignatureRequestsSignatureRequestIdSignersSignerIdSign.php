@@ -8,6 +8,7 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSigne
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\SignerSign;
 use Qdequippe\Yousign\Api\Model\SignerSignWithUploadedSignatureImage;
@@ -72,6 +73,7 @@ class PostSignatureRequestsSignatureRequestIdSignersSignerIdSign extends BaseEnd
      * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSignUnauthorizedException
      * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSignForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSignNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSignUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -91,6 +93,9 @@ class PostSignatureRequestsSignatureRequestIdSignersSignerIdSign extends BaseEnd
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSignNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSignUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

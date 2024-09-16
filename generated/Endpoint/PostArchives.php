@@ -8,6 +8,7 @@ use Qdequippe\Yousign\Api\Exception\PostArchivesBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostArchivesForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostArchivesNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostArchivesUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PostArchivesUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\ArchivedFile;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\UploadArchivedFile;
@@ -67,6 +68,7 @@ class PostArchives extends BaseEndpoint implements Endpoint
      * @throws PostArchivesUnauthorizedException
      * @throws PostArchivesForbiddenException
      * @throws PostArchivesNotFoundException
+     * @throws PostArchivesUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -86,6 +88,9 @@ class PostArchives extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostArchivesNotFoundException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostArchivesUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;

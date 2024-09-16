@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperienceLogoBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperienceLogoForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperienceLogoUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\PatchCustomExperienceLogoUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
 use Qdequippe\Yousign\Api\Model\PatchCustomExperienceLogoRequest;
 use Qdequippe\Yousign\Api\Model\PostArchives401Response;
@@ -67,12 +68,13 @@ class PatchCustomExperienceLogo extends BaseEndpoint implements Endpoint
      * @throws PatchCustomExperienceLogoBadRequestException
      * @throws PatchCustomExperienceLogoUnauthorizedException
      * @throws PatchCustomExperienceLogoForbiddenException
+     * @throws PatchCustomExperienceLogoUnsupportedMediaTypeException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if (null !== $contentType && (201 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             return $serializer->deserialize($body, CustomExperience::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
@@ -83,6 +85,9 @@ class PatchCustomExperienceLogo extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchCustomExperienceLogoForbiddenException($response);
+        }
+        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchCustomExperienceLogoUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
         }
 
         return null;
