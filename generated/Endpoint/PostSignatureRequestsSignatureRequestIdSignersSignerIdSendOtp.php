@@ -7,8 +7,10 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSigne
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -62,16 +64,16 @@ class PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp extends Base
             return null;
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException($response);
+            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException($response);
+            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

@@ -7,8 +7,10 @@ use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdBad
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -78,16 +80,16 @@ class DeleteSignatureRequestsSignatureRequestId extends BaseEndpoint implements 
             return null;
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteSignatureRequestsSignatureRequestIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new DeleteSignatureRequestsSignatureRequestIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteSignatureRequestsSignatureRequestIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new DeleteSignatureRequestsSignatureRequestIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteSignatureRequestsSignatureRequestIdForbiddenException($response);
+            throw new DeleteSignatureRequestsSignatureRequestIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteSignatureRequestsSignatureRequestIdNotFoundException($response);
+            throw new DeleteSignatureRequestsSignatureRequestIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

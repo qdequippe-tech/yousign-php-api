@@ -3,18 +3,18 @@
 namespace Qdequippe\Yousign\Api\Exception;
 
 use Psr\Http\Message\ResponseInterface;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 
 class DeleteWorkspaceUnsupportedMediaTypeException extends UnsupportedMediaTypeException
 {
-    public function __construct(private readonly ViolationResponse $violationResponse, private readonly ResponseInterface $response)
+    public function __construct(private readonly UnsupportedMediaTypeResponse $unsupportedMediaTypeResponse, private readonly ResponseInterface $response)
     {
         parent::__construct('UnsupportedMediaType');
     }
 
-    public function getViolationResponse(): ViolationResponse
+    public function getUnsupportedMediaTypeResponse(): UnsupportedMediaTypeResponse
     {
-        return $this->violationResponse;
+        return $this->unsupportedMediaTypeResponse;
     }
 
     public function getResponse(): ResponseInterface

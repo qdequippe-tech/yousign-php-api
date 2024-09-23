@@ -7,9 +7,11 @@ use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesCustomExperienceIdBadReq
 use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesCustomExperienceIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesCustomExperienceIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesCustomExperienceIdUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -64,16 +66,16 @@ class GetCustomExperiencesCustomExperienceId extends BaseEndpoint implements End
             return $serializer->deserialize($body, CustomExperience::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetCustomExperiencesCustomExperienceIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new GetCustomExperiencesCustomExperienceIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetCustomExperiencesCustomExperienceIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new GetCustomExperiencesCustomExperienceIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetCustomExperiencesCustomExperienceIdForbiddenException($response);
+            throw new GetCustomExperiencesCustomExperienceIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetCustomExperiencesCustomExperienceIdNotFoundException($response);
+            throw new GetCustomExperiencesCustomExperienceIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

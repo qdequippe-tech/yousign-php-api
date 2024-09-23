@@ -7,10 +7,12 @@ use Qdequippe\Yousign\Api\Exception\PostCustomExperienceBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostCustomExperienceForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostCustomExperienceUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostCustomExperienceUnsupportedMediaTypeException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
+use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -68,16 +70,16 @@ class PostCustomExperience extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, CustomExperience::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostCustomExperienceBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostCustomExperienceBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostCustomExperienceUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new PostCustomExperienceUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostCustomExperienceForbiddenException($response);
+            throw new PostCustomExperienceForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostCustomExperienceUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostCustomExperienceUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
 
         return null;

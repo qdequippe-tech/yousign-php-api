@@ -8,10 +8,13 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollo
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersUnsupportedMediaTypeException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CreateFollowersInner;
 use Qdequippe\Yousign\Api\Model\Follower;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
+use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -73,19 +76,19 @@ class PostSignatureRequestsSignatureRequestIdFollowers extends BaseEndpoint impl
             return $serializer->deserialize($body, 'Qdequippe\Yousign\Api\Model\Follower[]', 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdFollowersBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostSignatureRequestsSignatureRequestIdFollowersBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdFollowersUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new PostSignatureRequestsSignatureRequestIdFollowersUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdFollowersForbiddenException($response);
+            throw new PostSignatureRequestsSignatureRequestIdFollowersForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdFollowersNotFoundException($response);
+            throw new PostSignatureRequestsSignatureRequestIdFollowersNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdFollowersUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostSignatureRequestsSignatureRequestIdFollowersUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
 
         return null;

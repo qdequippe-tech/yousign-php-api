@@ -7,8 +7,10 @@ use Qdequippe\Yousign\Api\Exception\GetWorkspacesWorkspaceIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesWorkspaceIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesWorkspaceIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesWorkspaceIdUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\Workspace;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -64,16 +66,16 @@ class GetWorkspacesWorkspaceId extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, Workspace::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWorkspacesWorkspaceIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new GetWorkspacesWorkspaceIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWorkspacesWorkspaceIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new GetWorkspacesWorkspaceIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWorkspacesWorkspaceIdForbiddenException($response);
+            throw new GetWorkspacesWorkspaceIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWorkspacesWorkspaceIdNotFoundException($response);
+            throw new GetWorkspacesWorkspaceIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

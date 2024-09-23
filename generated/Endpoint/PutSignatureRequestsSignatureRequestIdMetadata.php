@@ -7,10 +7,12 @@ use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdMetada
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdMetadataForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdMetadataNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdMetadataUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\Metadata;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UpdateSignatureRequestMetadata;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -70,16 +72,16 @@ class PutSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint implem
             return $serializer->deserialize($body, Metadata::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PutSignatureRequestsSignatureRequestIdMetadataBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PutSignatureRequestsSignatureRequestIdMetadataBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PutSignatureRequestsSignatureRequestIdMetadataUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new PutSignatureRequestsSignatureRequestIdMetadataUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PutSignatureRequestsSignatureRequestIdMetadataForbiddenException($response);
+            throw new PutSignatureRequestsSignatureRequestIdMetadataForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PutSignatureRequestsSignatureRequestIdMetadataNotFoundException($response);
+            throw new PutSignatureRequestsSignatureRequestIdMetadataNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

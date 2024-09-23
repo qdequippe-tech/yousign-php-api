@@ -7,8 +7,10 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdAppro
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -63,16 +65,16 @@ class PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminder ext
             return null;
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderForbiddenException($response);
+            throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderNotFoundException($response);
+            throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

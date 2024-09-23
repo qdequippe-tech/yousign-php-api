@@ -7,10 +7,12 @@ use Qdequippe\Yousign\Api\Exception\PostContactBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostContactForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostContactNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostContactUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\Contact;
 use Qdequippe\Yousign\Api\Model\CreateContact;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -68,16 +70,16 @@ class PostContact extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, Contact::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostContactBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostContactBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostContactUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new PostContactUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostContactForbiddenException($response);
+            throw new PostContactForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostContactNotFoundException($response);
+            throw new PostContactNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

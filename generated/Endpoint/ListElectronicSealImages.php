@@ -6,9 +6,10 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\ListElectronicSealImagesBadRequestException;
 use Qdequippe\Yousign\Api\Exception\ListElectronicSealImagesForbiddenException;
 use Qdequippe\Yousign\Api\Exception\ListElectronicSealImagesUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\ListElectronicSealImages200Response;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -78,13 +79,13 @@ class ListElectronicSealImages extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, ListElectronicSealImages200Response::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new ListElectronicSealImagesBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new ListElectronicSealImagesBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new ListElectronicSealImagesUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new ListElectronicSealImagesUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new ListElectronicSealImagesForbiddenException($response);
+            throw new ListElectronicSealImagesForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
 
         return null;

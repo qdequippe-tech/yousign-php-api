@@ -3,18 +3,18 @@
 namespace Qdequippe\Yousign\Api\Exception;
 
 use Psr\Http\Message\ResponseInterface;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 
 class UploadElectronicSealImageUnauthorizedException extends UnauthorizedException
 {
-    public function __construct(private readonly PostArchives401Response $postArchives401Response, private readonly ResponseInterface $response)
+    public function __construct(private readonly UnauthorizedResponse $unauthorizedResponse, private readonly ResponseInterface $response)
     {
         parent::__construct('Access unauthorized');
     }
 
-    public function getPostArchives401Response(): PostArchives401Response
+    public function getUnauthorizedResponse(): UnauthorizedResponse
     {
-        return $this->postArchives401Response;
+        return $this->unauthorizedResponse;
     }
 
     public function getResponse(): ResponseInterface

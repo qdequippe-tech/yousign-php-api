@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class PostArchives401Response extends \ArrayObject
+class UnauthorizedResponse extends \ArrayObject
 {
     /**
      * @var array
@@ -16,7 +16,24 @@ class PostArchives401Response extends \ArrayObject
     /**
      * @var string|null
      */
+    protected $type;
+    /**
+     * @var string|null
+     */
     protected $detail;
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->initialized['type'] = true;
+        $this->type = $type;
+
+        return $this;
+    }
 
     public function getDetail(): ?string
     {

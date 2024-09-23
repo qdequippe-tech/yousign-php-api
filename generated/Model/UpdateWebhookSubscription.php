@@ -48,7 +48,7 @@ class UpdateWebhookSubscription extends \ArrayObject
      */
     protected $scopes;
     /**
-     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
+     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs. The association of specific Workspaces with Webhook is temporarily restricted in the sandbox environment, only the value wildcard ("*") for Workspaces is allowed in this context.
      *
      * @var mixed|null
      */
@@ -175,7 +175,7 @@ class UpdateWebhookSubscription extends \ArrayObject
     }
 
     /**
-     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
+     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs. The association of specific Workspaces with Webhook is temporarily restricted in the sandbox environment, only the value wildcard ("*") for Workspaces is allowed in this context.
      */
     public function getWorkspaces()
     {
@@ -183,7 +183,7 @@ class UpdateWebhookSubscription extends \ArrayObject
     }
 
     /**
-     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
+     * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs. The association of specific Workspaces with Webhook is temporarily restricted in the sandbox environment, only the value wildcard ("*") for Workspaces is allowed in this context.
      */
     public function setWorkspaces($workspaces): self
     {

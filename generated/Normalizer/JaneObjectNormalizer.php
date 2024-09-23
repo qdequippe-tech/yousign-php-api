@@ -3,10 +3,12 @@
 namespace Qdequippe\Yousign\Api\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Qdequippe\Yousign\Api\Model\AddonConsumption;
 use Qdequippe\Yousign\Api\Model\Approver;
 use Qdequippe\Yousign\Api\Model\ApproverInfo;
 use Qdequippe\Yousign\Api\Model\ApproverToNotify;
 use Qdequippe\Yousign\Api\Model\ArchivedFile;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\Checkbox;
 use Qdequippe\Yousign\Api\Model\Checkbox1;
 use Qdequippe\Yousign\Api\Model\Checkbox2;
@@ -35,6 +37,7 @@ use Qdequippe\Yousign\Api\Model\CreateWorkspace;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
 use Qdequippe\Yousign\Api\Model\CustomExperienceRedirectUrls;
 use Qdequippe\Yousign\Api\Model\DeleteWorkspace;
+use Qdequippe\Yousign\Api\Model\DetailedConsumption;
 use Qdequippe\Yousign\Api\Model\Document;
 use Qdequippe\Yousign\Api\Model\DocumentInitials;
 use Qdequippe\Yousign\Api\Model\ElectronicSeal;
@@ -52,6 +55,7 @@ use Qdequippe\Yousign\Api\Model\FieldText;
 use Qdequippe\Yousign\Api\Model\Follower;
 use Qdequippe\Yousign\Api\Model\Font;
 use Qdequippe\Yousign\Api\Model\FontVariants;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\FromExistingContact;
 use Qdequippe\Yousign\Api\Model\FromExistingContact1;
 use Qdequippe\Yousign\Api\Model\FromExistingSigner;
@@ -63,6 +67,8 @@ use Qdequippe\Yousign\Api\Model\FromScratch1CustomText;
 use Qdequippe\Yousign\Api\Model\FromScratch1Info;
 use Qdequippe\Yousign\Api\Model\FromScratch1RedirectUrls;
 use Qdequippe\Yousign\Api\Model\FromScratchInfo;
+use Qdequippe\Yousign\Api\Model\GetConsumptionAddon200Response;
+use Qdequippe\Yousign\Api\Model\GetConsumptionDetail200Response;
 use Qdequippe\Yousign\Api\Model\GetContacts200Response;
 use Qdequippe\Yousign\Api\Model\GetCustomExperiences200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequests200Response;
@@ -79,12 +85,13 @@ use Qdequippe\Yousign\Api\Model\Mention;
 use Qdequippe\Yousign\Api\Model\Mention1;
 use Qdequippe\Yousign\Api\Model\Mention2;
 use Qdequippe\Yousign\Api\Model\Metadata;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\OtpMessage;
 use Qdequippe\Yousign\Api\Model\Pagination;
+use Qdequippe\Yousign\Api\Model\PaginationWithUpdatedAt;
 use Qdequippe\Yousign\Api\Model\PatchCustomExperienceLogoRequest;
 use Qdequippe\Yousign\Api\Model\PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest;
 use Qdequippe\Yousign\Api\Model\PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdCancelRequest;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdReactivateRequest;
@@ -136,6 +143,8 @@ use Qdequippe\Yousign\Api\Model\Template;
 use Qdequippe\Yousign\Api\Model\Text;
 use Qdequippe\Yousign\Api\Model\Text1;
 use Qdequippe\Yousign\Api\Model\Text2;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
+use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Model\UpdateContact;
 use Qdequippe\Yousign\Api\Model\UpdateCustomExperience;
 use Qdequippe\Yousign\Api\Model\UpdateCustomExperienceRedirectUrls;
@@ -153,7 +162,6 @@ use Qdequippe\Yousign\Api\Model\UploadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealImage;
 use Qdequippe\Yousign\Api\Model\User;
 use Qdequippe\Yousign\Api\Model\UserWorkspacesInner;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
 use Qdequippe\Yousign\Api\Model\Workspace;
 use Qdequippe\Yousign\Api\Model\WorkspaceUsersInner;
@@ -180,9 +188,13 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             ArchivedFile::class => ArchivedFileNormalizer::class,
 
-            ViolationResponse::class => ViolationResponseNormalizer::class,
-
             Consumption::class => ConsumptionNormalizer::class,
+
+            AddonConsumption::class => AddonConsumptionNormalizer::class,
+
+            PaginationWithUpdatedAt::class => PaginationWithUpdatedAtNormalizer::class,
+
+            DetailedConsumption::class => DetailedConsumptionNormalizer::class,
 
             Pagination::class => PaginationNormalizer::class,
 
@@ -328,7 +340,19 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             OtpMessage::class => OtpMessageNormalizer::class,
 
-            PostArchives401Response::class => PostArchives401ResponseNormalizer::class,
+            BadRequestResponse::class => BadRequestResponseNormalizer::class,
+
+            UnauthorizedResponse::class => UnauthorizedResponseNormalizer::class,
+
+            ForbiddenResponse::class => ForbiddenResponseNormalizer::class,
+
+            NotFoundResponse::class => NotFoundResponseNormalizer::class,
+
+            UnsupportedMediaTypeResponse::class => UnsupportedMediaTypeResponseNormalizer::class,
+
+            GetConsumptionAddon200Response::class => GetConsumptionAddon200ResponseNormalizer::class,
+
+            GetConsumptionDetail200Response::class => GetConsumptionDetail200ResponseNormalizer::class,
 
             GetContacts200Response::class => GetContacts200ResponseNormalizer::class,
 
@@ -536,8 +560,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             return [
                 UploadArchivedFile::class => false,
                 ArchivedFile::class => false,
-                ViolationResponse::class => false,
                 Consumption::class => false,
+                AddonConsumption::class => false,
+                PaginationWithUpdatedAt::class => false,
+                DetailedConsumption::class => false,
                 Pagination::class => false,
                 Contact::class => false,
                 CreateContact::class => false,
@@ -610,7 +636,13 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 SignatureRequestEmailNotificationSender::class => false,
                 FontVariants::class => false,
                 OtpMessage::class => false,
-                PostArchives401Response::class => false,
+                BadRequestResponse::class => false,
+                UnauthorizedResponse::class => false,
+                ForbiddenResponse::class => false,
+                NotFoundResponse::class => false,
+                UnsupportedMediaTypeResponse::class => false,
+                GetConsumptionAddon200Response::class => false,
+                GetConsumptionDetail200Response::class => false,
                 GetContacts200Response::class => false,
                 GetCustomExperiences200Response::class => false,
                 PatchCustomExperienceLogoRequest::class => false,
@@ -705,9 +737,13 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             ArchivedFile::class => ArchivedFileNormalizer::class,
 
-            ViolationResponse::class => ViolationResponseNormalizer::class,
-
             Consumption::class => ConsumptionNormalizer::class,
+
+            AddonConsumption::class => AddonConsumptionNormalizer::class,
+
+            PaginationWithUpdatedAt::class => PaginationWithUpdatedAtNormalizer::class,
+
+            DetailedConsumption::class => DetailedConsumptionNormalizer::class,
 
             Pagination::class => PaginationNormalizer::class,
 
@@ -853,7 +889,19 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             OtpMessage::class => OtpMessageNormalizer::class,
 
-            PostArchives401Response::class => PostArchives401ResponseNormalizer::class,
+            BadRequestResponse::class => BadRequestResponseNormalizer::class,
+
+            UnauthorizedResponse::class => UnauthorizedResponseNormalizer::class,
+
+            ForbiddenResponse::class => ForbiddenResponseNormalizer::class,
+
+            NotFoundResponse::class => NotFoundResponseNormalizer::class,
+
+            UnsupportedMediaTypeResponse::class => UnsupportedMediaTypeResponseNormalizer::class,
+
+            GetConsumptionAddon200Response::class => GetConsumptionAddon200ResponseNormalizer::class,
+
+            GetConsumptionDetail200Response::class => GetConsumptionDetail200ResponseNormalizer::class,
 
             GetContacts200Response::class => GetContacts200ResponseNormalizer::class,
 
@@ -1069,8 +1117,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             return [
                 UploadArchivedFile::class => false,
                 ArchivedFile::class => false,
-                ViolationResponse::class => false,
                 Consumption::class => false,
+                AddonConsumption::class => false,
+                PaginationWithUpdatedAt::class => false,
+                DetailedConsumption::class => false,
                 Pagination::class => false,
                 Contact::class => false,
                 CreateContact::class => false,
@@ -1143,7 +1193,13 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 SignatureRequestEmailNotificationSender::class => false,
                 FontVariants::class => false,
                 OtpMessage::class => false,
-                PostArchives401Response::class => false,
+                BadRequestResponse::class => false,
+                UnauthorizedResponse::class => false,
+                ForbiddenResponse::class => false,
+                NotFoundResponse::class => false,
+                UnsupportedMediaTypeResponse::class => false,
+                GetConsumptionAddon200Response::class => false,
+                GetConsumptionDetail200Response::class => false,
                 GetContacts200Response::class => false,
                 GetCustomExperiences200Response::class => false,
                 PatchCustomExperienceLogoRequest::class => false,

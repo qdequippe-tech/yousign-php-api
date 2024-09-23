@@ -7,8 +7,10 @@ use Qdequippe\Yousign\Api\Exception\GetSignersSignerIdAuditTrailsDownloadBadRequ
 use Qdequippe\Yousign\Api\Exception\GetSignersSignerIdAuditTrailsDownloadForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetSignersSignerIdAuditTrailsDownloadNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetSignersSignerIdAuditTrailsDownloadUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -64,16 +66,16 @@ class GetSignersSignerIdAuditTrailsDownload extends BaseEndpoint implements Endp
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignersSignerIdAuditTrailsDownloadBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new GetSignersSignerIdAuditTrailsDownloadBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignersSignerIdAuditTrailsDownloadUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new GetSignersSignerIdAuditTrailsDownloadUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignersSignerIdAuditTrailsDownloadForbiddenException($response);
+            throw new GetSignersSignerIdAuditTrailsDownloadForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignersSignerIdAuditTrailsDownloadNotFoundException($response);
+            throw new GetSignersSignerIdAuditTrailsDownloadNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
     }
 

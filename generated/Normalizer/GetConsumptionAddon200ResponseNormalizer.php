@@ -3,7 +3,8 @@
 namespace Qdequippe\Yousign\Api\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
+use Qdequippe\Yousign\Api\Model\AddonConsumption;
+use Qdequippe\Yousign\Api\Model\GetConsumptionAddon200Response;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\HttpKernel\Kernel;
@@ -15,7 +16,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR_VERSION === 6 && Kernel::MINOR_VERSION === 4)) {
-    class PostArchives401ResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+    class GetConsumptionAddon200ResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
         use CheckArray;
         use DenormalizerAwareTrait;
@@ -24,12 +25,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
         {
-            return PostArchives401Response::class === $type;
+            return GetConsumptionAddon200Response::class === $type;
         }
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && PostArchives401Response::class === $data::class;
+            return \is_object($data) && GetConsumptionAddon200Response::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -40,19 +41,23 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if (isset($data['$recursiveRef'])) {
                 return new Reference($data['$recursiveRef'], $context['document-origin']);
             }
-            $object = new PostArchives401Response();
+            $object = new GetConsumptionAddon200Response();
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
-            if (\array_key_exists('detail', $data) && null !== $data['detail']) {
-                $object->setDetail($data['detail']);
-                unset($data['detail']);
-            } elseif (\array_key_exists('detail', $data) && null === $data['detail']) {
-                $object->setDetail(null);
+            if (\array_key_exists('data', $data) && null !== $data['data']) {
+                $values = [];
+                foreach ($data['data'] as $value) {
+                    $values[] = $this->denormalizer->denormalize($value, AddonConsumption::class, 'json', $context);
+                }
+                $object->setData($values);
+                unset($data['data']);
+            } elseif (\array_key_exists('data', $data) && null === $data['data']) {
+                $object->setData(null);
             }
-            foreach ($data as $key => $value) {
+            foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $object[$key] = $value;
+                    $object[$key] = $value_1;
                 }
             }
 
@@ -62,10 +67,14 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
         {
             $data = [];
-            $data['detail'] = $object->getDetail();
-            foreach ($object as $key => $value) {
+            $values = [];
+            foreach ($object->getData() as $value) {
+                $values[] = $this->normalizer->normalize($value, 'json', $context);
+            }
+            $data['data'] = $values;
+            foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $data[$key] = $value;
+                    $data[$key] = $value_1;
                 }
             }
 
@@ -74,11 +83,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function getSupportedTypes(?string $format = null): array
         {
-            return [PostArchives401Response::class => false];
+            return [GetConsumptionAddon200Response::class => false];
         }
     }
 } else {
-    class PostArchives401ResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+    class GetConsumptionAddon200ResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
         use CheckArray;
         use DenormalizerAwareTrait;
@@ -87,12 +96,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsDenormalization($data, $type, ?string $format = null, array $context = []): bool
         {
-            return PostArchives401Response::class === $type;
+            return GetConsumptionAddon200Response::class === $type;
         }
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && PostArchives401Response::class === $data::class;
+            return \is_object($data) && GetConsumptionAddon200Response::class === $data::class;
         }
 
         /**
@@ -106,19 +115,23 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if (isset($data['$recursiveRef'])) {
                 return new Reference($data['$recursiveRef'], $context['document-origin']);
             }
-            $object = new PostArchives401Response();
+            $object = new GetConsumptionAddon200Response();
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
-            if (\array_key_exists('detail', $data) && null !== $data['detail']) {
-                $object->setDetail($data['detail']);
-                unset($data['detail']);
-            } elseif (\array_key_exists('detail', $data) && null === $data['detail']) {
-                $object->setDetail(null);
+            if (\array_key_exists('data', $data) && null !== $data['data']) {
+                $values = [];
+                foreach ($data['data'] as $value) {
+                    $values[] = $this->denormalizer->denormalize($value, AddonConsumption::class, 'json', $context);
+                }
+                $object->setData($values);
+                unset($data['data']);
+            } elseif (\array_key_exists('data', $data) && null === $data['data']) {
+                $object->setData(null);
             }
-            foreach ($data as $key => $value) {
+            foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $object[$key] = $value;
+                    $object[$key] = $value_1;
                 }
             }
 
@@ -133,10 +146,14 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
-            $data['detail'] = $object->getDetail();
-            foreach ($object as $key => $value) {
+            $values = [];
+            foreach ($object->getData() as $value) {
+                $values[] = $this->normalizer->normalize($value, 'json', $context);
+            }
+            $data['data'] = $values;
+            foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $data[$key] = $value;
+                    $data[$key] = $value_1;
                 }
             }
 
@@ -145,7 +162,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function getSupportedTypes(?string $format = null): array
         {
-            return [PostArchives401Response::class => false];
+            return [GetConsumptionAddon200Response::class => false];
         }
     }
 }

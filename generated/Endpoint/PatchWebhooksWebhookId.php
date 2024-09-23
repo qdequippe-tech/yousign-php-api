@@ -7,9 +7,11 @@ use Qdequippe\Yousign\Api\Exception\PatchWebhooksWebhookIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchWebhooksWebhookIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchWebhooksWebhookIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchWebhooksWebhookIdUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UpdateWebhookSubscription;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -71,16 +73,16 @@ class PatchWebhooksWebhookId extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, WebhookSubscription::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PatchWebhooksWebhookIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PatchWebhooksWebhookIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PatchWebhooksWebhookIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new PatchWebhooksWebhookIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PatchWebhooksWebhookIdForbiddenException($response);
+            throw new PatchWebhooksWebhookIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PatchWebhooksWebhookIdNotFoundException($response);
+            throw new PatchWebhooksWebhookIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

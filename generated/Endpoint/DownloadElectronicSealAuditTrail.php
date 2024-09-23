@@ -7,8 +7,10 @@ use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealAuditTrailBadRequestEx
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealAuditTrailForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealAuditTrailNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealAuditTrailUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -62,16 +64,16 @@ class DownloadElectronicSealAuditTrail extends BaseEndpoint implements Endpoint
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DownloadElectronicSealAuditTrailBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new DownloadElectronicSealAuditTrailBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DownloadElectronicSealAuditTrailUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new DownloadElectronicSealAuditTrailUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DownloadElectronicSealAuditTrailForbiddenException($response);
+            throw new DownloadElectronicSealAuditTrailForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DownloadElectronicSealAuditTrailNotFoundException($response);
+            throw new DownloadElectronicSealAuditTrailNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
     }
 
