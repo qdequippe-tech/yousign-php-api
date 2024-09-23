@@ -27,6 +27,8 @@ use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealAuditTrail;
 use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealImage;
 use Qdequippe\Yousign\Api\Endpoint\GetArchivesArchivedFileIdDownload;
+use Qdequippe\Yousign\Api\Endpoint\GetConsumptionAddon;
+use Qdequippe\Yousign\Api\Endpoint\GetConsumptionDetail;
 use Qdequippe\Yousign\Api\Endpoint\GetConsumptions;
 use Qdequippe\Yousign\Api\Endpoint\GetConsumptionsExport;
 use Qdequippe\Yousign\Api\Endpoint\GetContacts;
@@ -54,6 +56,7 @@ use Qdequippe\Yousign\Api\Endpoint\GetSignersSignerIdAuditTrailsDownload;
 use Qdequippe\Yousign\Api\Endpoint\GetSignersSignersId;
 use Qdequippe\Yousign\Api\Endpoint\GetTemplates;
 use Qdequippe\Yousign\Api\Endpoint\GetUsers;
+use Qdequippe\Yousign\Api\Endpoint\GetUsersUserId;
 use Qdequippe\Yousign\Api\Endpoint\GetWebhooks;
 use Qdequippe\Yousign\Api\Endpoint\GetWebhooksWebhookId;
 use Qdequippe\Yousign\Api\Endpoint\GetWorkspaces;
@@ -196,6 +199,54 @@ class Client extends Runtime\Client\Client
     public function getConsumptions(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new GetConsumptions($queryParameters), $fetch);
+    }
+
+    /**
+     * Get detailed addon consumption for the current subscription period.
+     *
+     * @param array $queryParameters {
+     *
+     * @var array $addons
+     *            }
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetConsumptionAddon200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetConsumptionAddonBadRequestException
+     * @throws Exception\GetConsumptionAddonUnauthorizedException
+     * @throws Exception\GetConsumptionAddonForbiddenException
+     * @throws Exception\GetConsumptionAddonNotFoundException
+     */
+    public function getConsumptionAddon(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetConsumptionAddon($queryParameters), $fetch);
+    }
+
+    /**
+     * Get detailed Consumption data aggregated on workspace or organization.
+     *
+     * @param array $queryParameters {
+     *
+     * @var string $after After cursor (pagination)
+     * @var int    $limit the limit of items count to retrieve
+     * @var string $from from when to start data retrieval
+     * @var string $to Until when data will be retrieved. The "to" date must be more recent than the "from" date and should not exceed one year after the "from".
+     * @var string $breakdown_type either if the breakdown is made at the workspace level or at the organization level
+     * @var array  $workspace_ids Workspaces IDs to filter on.
+     *             }
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetConsumptionDetail200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetConsumptionDetailBadRequestException
+     * @throws Exception\GetConsumptionDetailUnauthorizedException
+     * @throws Exception\GetConsumptionDetailForbiddenException
+     */
+    public function getConsumptionDetail(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetConsumptionDetail($queryParameters), $fetch);
     }
 
     /**
@@ -1633,6 +1684,24 @@ class Client extends Runtime\Client\Client
     public function getUsers(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new GetUsers($queryParameters), $fetch);
+    }
+
+    /**
+     * Retrieves a given User within your organization.
+     *
+     * @param string $userId User Id
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\User|ResponseInterface|null
+     *
+     * @throws Exception\GetUsersUserIdBadRequestException
+     * @throws Exception\GetUsersUserIdUnauthorizedException
+     * @throws Exception\GetUsersUserIdForbiddenException
+     * @throws Exception\GetUsersUserIdNotFoundException
+     */
+    public function getUsersUserId(string $userId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetUsersUserId($userId), $fetch);
     }
 
     /**

@@ -8,10 +8,13 @@ use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdUnsupportedMediaTypeException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\Contact;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
+use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Model\UpdateContact;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -73,19 +76,19 @@ class PatchContactsContactId extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, Contact::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PatchContactsContactIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PatchContactsContactIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PatchContactsContactIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new PatchContactsContactIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PatchContactsContactIdForbiddenException($response);
+            throw new PatchContactsContactIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PatchContactsContactIdNotFoundException($response);
+            throw new PatchContactsContactIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PatchContactsContactIdUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PatchContactsContactIdUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
 
         return null;

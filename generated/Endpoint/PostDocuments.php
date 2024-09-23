@@ -8,10 +8,12 @@ use Qdequippe\Yousign\Api\Exception\PostDocumentsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsUnsupportedMediaTypeException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\Document;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
+use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -76,16 +78,16 @@ class PostDocuments extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, Document::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostDocumentsBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostDocumentsBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostDocumentsUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new PostDocumentsUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostDocumentsForbiddenException($response);
+            throw new PostDocumentsForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostDocumentsUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostDocumentsUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
 
         return null;

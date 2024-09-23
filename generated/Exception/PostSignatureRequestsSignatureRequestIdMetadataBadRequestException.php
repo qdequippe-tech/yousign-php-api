@@ -3,18 +3,18 @@
 namespace Qdequippe\Yousign\Api\Exception;
 
 use Psr\Http\Message\ResponseInterface;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 
 class PostSignatureRequestsSignatureRequestIdMetadataBadRequestException extends BadRequestException
 {
-    public function __construct(private readonly ViolationResponse $violationResponse, private readonly ResponseInterface $response)
+    public function __construct(private readonly BadRequestResponse $badRequestResponse, private readonly ResponseInterface $response)
     {
         parent::__construct('Bad request');
     }
 
-    public function getViolationResponse(): ViolationResponse
+    public function getBadRequestResponse(): BadRequestResponse
     {
-        return $this->violationResponse;
+        return $this->badRequestResponse;
     }
 
     public function getResponse(): ResponseInterface

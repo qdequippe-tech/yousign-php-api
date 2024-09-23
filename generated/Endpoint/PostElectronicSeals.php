@@ -7,10 +7,12 @@ use Qdequippe\Yousign\Api\Exception\PostElectronicSealsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostElectronicSealsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostElectronicSealsUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostElectronicSealsUnsupportedMediaTypeException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
 use Qdequippe\Yousign\Api\Model\ElectronicSeal;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
+use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -65,16 +67,16 @@ class PostElectronicSeals extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, ElectronicSeal::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostElectronicSealsBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostElectronicSealsBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostElectronicSealsUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new PostElectronicSealsUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostElectronicSealsForbiddenException($response);
+            throw new PostElectronicSealsForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostElectronicSealsUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostElectronicSealsUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
 
         return null;

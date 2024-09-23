@@ -6,8 +6,9 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -53,13 +54,13 @@ class GetWebhooks extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, 'Qdequippe\Yousign\Api\Model\WebhookSubscription[]', 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWebhooksBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new GetWebhooksBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWebhooksUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new GetWebhooksUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWebhooksForbiddenException($response);
+            throw new GetWebhooksForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
 
         return null;

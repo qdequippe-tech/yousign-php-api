@@ -7,8 +7,10 @@ use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdDoc
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -62,16 +64,16 @@ class DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestId
             return null;
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdForbiddenException($response);
+            throw new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdNotFoundException($response);
+            throw new DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

@@ -7,9 +7,11 @@ use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocume
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\Document;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -81,16 +83,16 @@ class GetSignatureRequestsSignatureRequestIdDocuments extends BaseEndpoint imple
             return $serializer->deserialize($body, 'Qdequippe\Yousign\Api\Model\Document[]', 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignatureRequestsSignatureRequestIdDocumentsBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new GetSignatureRequestsSignatureRequestIdDocumentsBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignatureRequestsSignatureRequestIdDocumentsUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new GetSignatureRequestsSignatureRequestIdDocumentsUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignatureRequestsSignatureRequestIdDocumentsForbiddenException($response);
+            throw new GetSignatureRequestsSignatureRequestIdDocumentsForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignatureRequestsSignatureRequestIdDocumentsNotFoundException($response);
+            throw new GetSignatureRequestsSignatureRequestIdDocumentsNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

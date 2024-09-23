@@ -5,7 +5,8 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealDocumentNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealDocumentUnauthorizedException;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -55,10 +56,10 @@ class DownloadElectronicSealDocument extends BaseEndpoint implements Endpoint
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DownloadElectronicSealDocumentUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new DownloadElectronicSealDocumentUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new DownloadElectronicSealDocumentNotFoundException($response);
+            throw new DownloadElectronicSealDocumentNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
     }
 

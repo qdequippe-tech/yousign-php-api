@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class ViolationResponse extends \ArrayObject
+class BadRequestResponse extends \ArrayObject
 {
     /**
      * @var array

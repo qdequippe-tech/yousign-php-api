@@ -7,9 +7,11 @@ use Qdequippe\Yousign\Api\Exception\GetElectronicSealAuditTrailBadRequestExcepti
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealAuditTrailForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealAuditTrailNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealAuditTrailUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ElectronicSealAuditTrail;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -62,16 +64,16 @@ class GetElectronicSealAuditTrail extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, ElectronicSealAuditTrail::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetElectronicSealAuditTrailBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new GetElectronicSealAuditTrailBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetElectronicSealAuditTrailUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new GetElectronicSealAuditTrailUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetElectronicSealAuditTrailForbiddenException($response);
+            throw new GetElectronicSealAuditTrailForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetElectronicSealAuditTrailNotFoundException($response);
+            throw new GetElectronicSealAuditTrailNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

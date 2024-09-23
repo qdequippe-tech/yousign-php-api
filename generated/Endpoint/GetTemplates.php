@@ -6,9 +6,10 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetTemplatesBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetTemplatesForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetTemplatesUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\GetTemplates200Response;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -80,13 +81,13 @@ class GetTemplates extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, GetTemplates200Response::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetTemplatesBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new GetTemplatesBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetTemplatesUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new GetTemplatesUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetTemplatesForbiddenException($response);
+            throw new GetTemplatesForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
 
         return null;

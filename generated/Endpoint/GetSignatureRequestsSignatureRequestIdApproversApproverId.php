@@ -7,7 +7,9 @@ use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdApprov
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\Approver;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -62,13 +64,13 @@ class GetSignatureRequestsSignatureRequestIdApproversApproverId extends BaseEndp
             return $serializer->deserialize($body, Approver::class, 'json');
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new GetSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException($response);
+            throw new GetSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException($response);
+            throw new GetSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
 
         return null;

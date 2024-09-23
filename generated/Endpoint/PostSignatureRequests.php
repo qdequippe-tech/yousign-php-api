@@ -8,10 +8,13 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsUnsupportedMediaTypeException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\SignatureRequest;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
+use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -70,19 +73,19 @@ class PostSignatureRequests extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, SignatureRequest::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostSignatureRequestsBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new PostSignatureRequestsUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsForbiddenException($response);
+            throw new PostSignatureRequestsForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsNotFoundException($response);
+            throw new PostSignatureRequestsNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new PostSignatureRequestsUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new PostSignatureRequestsUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
 
         return null;

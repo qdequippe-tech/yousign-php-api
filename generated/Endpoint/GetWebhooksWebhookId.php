@@ -8,8 +8,11 @@ use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksWebhookIdUnsupportedMediaTypeException;
-use Qdequippe\Yousign\Api\Model\PostArchives401Response;
-use Qdequippe\Yousign\Api\Model\ViolationResponse;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
+use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -66,19 +69,19 @@ class GetWebhooksWebhookId extends BaseEndpoint implements Endpoint
             return $serializer->deserialize($body, WebhookSubscription::class, 'json');
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWebhooksWebhookIdBadRequestException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new GetWebhooksWebhookIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWebhooksWebhookIdUnauthorizedException($serializer->deserialize($body, PostArchives401Response::class, 'json'), $response);
+            throw new GetWebhooksWebhookIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWebhooksWebhookIdForbiddenException($response);
+            throw new GetWebhooksWebhookIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWebhooksWebhookIdNotFoundException($response);
+            throw new GetWebhooksWebhookIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetWebhooksWebhookIdUnsupportedMediaTypeException($serializer->deserialize($body, ViolationResponse::class, 'json'), $response);
+            throw new GetWebhooksWebhookIdUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
 
         return null;
