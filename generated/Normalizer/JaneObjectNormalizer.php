@@ -31,6 +31,8 @@ use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestReminderSettings;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestTemplatePlaceholders;
+use Qdequippe\Yousign\Api\Model\CreateSignerConsentRequest;
+use Qdequippe\Yousign\Api\Model\CreateSignerConsentRequestSettings;
 use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
 use Qdequippe\Yousign\Api\Model\CreateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\CreateWorkspace;
@@ -74,6 +76,8 @@ use Qdequippe\Yousign\Api\Model\GetCustomExperiences200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequests200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdFollowers200Response;
+use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdSignerConsentRequests200Response;
+use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response;
 use Qdequippe\Yousign\Api\Model\GetTemplates200Response;
 use Qdequippe\Yousign\Api\Model\GetUsers200Response;
@@ -130,6 +134,8 @@ use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromInfoInputRedirectUrls;
 use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromUserIdInput;
 use Qdequippe\Yousign\Api\Model\Signer;
 use Qdequippe\Yousign\Api\Model\SignerAuditTrail;
+use Qdequippe\Yousign\Api\Model\SignerConsentRequest;
+use Qdequippe\Yousign\Api\Model\SignerConsentRequestSettings;
 use Qdequippe\Yousign\Api\Model\SignerCustomText;
 use Qdequippe\Yousign\Api\Model\SignerDocument;
 use Qdequippe\Yousign\Api\Model\SignerDocumentRequest;
@@ -154,7 +160,9 @@ use Qdequippe\Yousign\Api\Model\UpdateSignatureRequest;
 use Qdequippe\Yousign\Api\Model\UpdateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\UpdateSignatureRequestReminderSettings;
 use Qdequippe\Yousign\Api\Model\UpdateSigner;
+use Qdequippe\Yousign\Api\Model\UpdateSignerConsentRequest;
 use Qdequippe\Yousign\Api\Model\UpdateSignerInfo;
+use Qdequippe\Yousign\Api\Model\UpdateUser;
 use Qdequippe\Yousign\Api\Model\UpdateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
 use Qdequippe\Yousign\Api\Model\UploadArchivedFile;
@@ -240,9 +248,15 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             Approver::class => ApproverNormalizer::class,
 
-            CreateSignerDocumentRequest::class => CreateSignerDocumentRequestNormalizer::class,
+            SignerConsentRequest::class => SignerConsentRequestNormalizer::class,
+
+            CreateSignerConsentRequest::class => CreateSignerConsentRequestNormalizer::class,
+
+            UpdateSignerConsentRequest::class => UpdateSignerConsentRequestNormalizer::class,
 
             SignerDocumentRequest::class => SignerDocumentRequestNormalizer::class,
+
+            CreateSignerDocumentRequest::class => CreateSignerDocumentRequestNormalizer::class,
 
             UpdateDocument::class => UpdateDocumentNormalizer::class,
 
@@ -281,6 +295,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             Template::class => TemplateNormalizer::class,
 
             User::class => UserNormalizer::class,
+
+            UpdateUser::class => UpdateUserNormalizer::class,
 
             WebhookSubscription::class => WebhookSubscriptionNormalizer::class,
 
@@ -380,6 +396,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             PostSignatureRequestsSignatureRequestIdCancelRequest::class => PostSignatureRequestsSignatureRequestIdCancelRequestNormalizer::class,
 
+            GetSignatureRequestsSignatureRequestIdSignerConsentRequests200Response::class => GetSignatureRequestsSignatureRequestIdSignerConsentRequests200ResponseNormalizer::class,
+
+            GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response::class => GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200ResponseNormalizer::class,
+
             GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200ResponseNormalizer::class,
 
             PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequestNormalizer::class,
@@ -433,6 +453,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             SignatureRequestActivatedDocumentsInner::class => SignatureRequestActivatedDocumentsInnerNormalizer::class,
 
             ApproverInfo::class => ApproverInfoNormalizer::class,
+
+            SignerConsentRequestSettings::class => SignerConsentRequestSettingsNormalizer::class,
+
+            CreateSignerConsentRequestSettings::class => CreateSignerConsentRequestSettingsNormalizer::class,
 
             FieldRadioButtonGroupRadiosInner::class => FieldRadioButtonGroupRadiosInnerNormalizer::class,
 
@@ -586,8 +610,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 UpdateSignatureRequest::class => false,
                 SignatureRequestActivated::class => false,
                 Approver::class => false,
-                CreateSignerDocumentRequest::class => false,
+                SignerConsentRequest::class => false,
+                CreateSignerConsentRequest::class => false,
+                UpdateSignerConsentRequest::class => false,
                 SignerDocumentRequest::class => false,
+                CreateSignerDocumentRequest::class => false,
                 UpdateDocument::class => false,
                 FieldSignature::class => false,
                 FieldText::class => false,
@@ -607,6 +634,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 SignerSignWithUploadedSignatureImage::class => false,
                 Template::class => false,
                 User::class => false,
+                UpdateUser::class => false,
                 WebhookSubscription::class => false,
                 CreateWebhookSubscription::class => false,
                 UpdateWebhookSubscription::class => false,
@@ -656,6 +684,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => false,
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => false,
                 PostSignatureRequestsSignatureRequestIdCancelRequest::class => false,
+                GetSignatureRequestsSignatureRequestIdSignerConsentRequests200Response::class => false,
+                GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response::class => false,
                 GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => false,
                 PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => false,
                 GetSignatureRequestsSignatureRequestIdFollowers200Response::class => false,
@@ -683,6 +713,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 UpdateSignatureRequestReminderSettings::class => false,
                 SignatureRequestActivatedDocumentsInner::class => false,
                 ApproverInfo::class => false,
+                SignerConsentRequestSettings::class => false,
+                CreateSignerConsentRequestSettings::class => false,
                 FieldRadioButtonGroupRadiosInner::class => false,
                 Signature::class => false,
                 Mention::class => false,
@@ -789,9 +821,15 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             Approver::class => ApproverNormalizer::class,
 
-            CreateSignerDocumentRequest::class => CreateSignerDocumentRequestNormalizer::class,
+            SignerConsentRequest::class => SignerConsentRequestNormalizer::class,
+
+            CreateSignerConsentRequest::class => CreateSignerConsentRequestNormalizer::class,
+
+            UpdateSignerConsentRequest::class => UpdateSignerConsentRequestNormalizer::class,
 
             SignerDocumentRequest::class => SignerDocumentRequestNormalizer::class,
+
+            CreateSignerDocumentRequest::class => CreateSignerDocumentRequestNormalizer::class,
 
             UpdateDocument::class => UpdateDocumentNormalizer::class,
 
@@ -830,6 +868,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             Template::class => TemplateNormalizer::class,
 
             User::class => UserNormalizer::class,
+
+            UpdateUser::class => UpdateUserNormalizer::class,
 
             WebhookSubscription::class => WebhookSubscriptionNormalizer::class,
 
@@ -929,6 +969,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             PostSignatureRequestsSignatureRequestIdCancelRequest::class => PostSignatureRequestsSignatureRequestIdCancelRequestNormalizer::class,
 
+            GetSignatureRequestsSignatureRequestIdSignerConsentRequests200Response::class => GetSignatureRequestsSignatureRequestIdSignerConsentRequests200ResponseNormalizer::class,
+
+            GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response::class => GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200ResponseNormalizer::class,
+
             GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200ResponseNormalizer::class,
 
             PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequestNormalizer::class,
@@ -982,6 +1026,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             SignatureRequestActivatedDocumentsInner::class => SignatureRequestActivatedDocumentsInnerNormalizer::class,
 
             ApproverInfo::class => ApproverInfoNormalizer::class,
+
+            SignerConsentRequestSettings::class => SignerConsentRequestSettingsNormalizer::class,
+
+            CreateSignerConsentRequestSettings::class => CreateSignerConsentRequestSettingsNormalizer::class,
 
             FieldRadioButtonGroupRadiosInner::class => FieldRadioButtonGroupRadiosInnerNormalizer::class,
 
@@ -1143,8 +1191,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 UpdateSignatureRequest::class => false,
                 SignatureRequestActivated::class => false,
                 Approver::class => false,
-                CreateSignerDocumentRequest::class => false,
+                SignerConsentRequest::class => false,
+                CreateSignerConsentRequest::class => false,
+                UpdateSignerConsentRequest::class => false,
                 SignerDocumentRequest::class => false,
+                CreateSignerDocumentRequest::class => false,
                 UpdateDocument::class => false,
                 FieldSignature::class => false,
                 FieldText::class => false,
@@ -1164,6 +1215,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 SignerSignWithUploadedSignatureImage::class => false,
                 Template::class => false,
                 User::class => false,
+                UpdateUser::class => false,
                 WebhookSubscription::class => false,
                 CreateWebhookSubscription::class => false,
                 UpdateWebhookSubscription::class => false,
@@ -1213,6 +1265,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => false,
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => false,
                 PostSignatureRequestsSignatureRequestIdCancelRequest::class => false,
+                GetSignatureRequestsSignatureRequestIdSignerConsentRequests200Response::class => false,
+                GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response::class => false,
                 GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response::class => false,
                 PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest::class => false,
                 GetSignatureRequestsSignatureRequestIdFollowers200Response::class => false,
@@ -1240,6 +1294,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 UpdateSignatureRequestReminderSettings::class => false,
                 SignatureRequestActivatedDocumentsInner::class => false,
                 ApproverInfo::class => false,
+                SignerConsentRequestSettings::class => false,
+                CreateSignerConsentRequestSettings::class => false,
                 FieldRadioButtonGroupRadiosInner::class => false,
                 Signature::class => false,
                 Mention::class => false,

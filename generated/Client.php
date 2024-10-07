@@ -14,6 +14,8 @@ use Qdequippe\Yousign\Api\Endpoint\DeleteCustomExperienceLogo;
 use Qdequippe\Yousign\Api\Endpoint\DeleteElectronicSealImage;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdApproversApproverId;
+use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestId;
+use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentId;
@@ -48,6 +50,8 @@ use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdDocumen
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdDocumentsDownload;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdFollowers;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdMetadata;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdSignerConsentRequests;
+use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdSignerDocumentRequests;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdSigners;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments;
@@ -68,8 +72,10 @@ use Qdequippe\Yousign\Api\Endpoint\PatchCustomExperienceLogo;
 use Qdequippe\Yousign\Api\Endpoint\PatchCustomExperiencesCustomExperienceId;
 use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestId;
 use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdApproversApproverId;
+use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestId;
 use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentId;
 use Qdequippe\Yousign\Api\Endpoint\PatchSignatureRequestsSignatureRequestIdSignersSignerId;
+use Qdequippe\Yousign\Api\Endpoint\PatchUsersUserId;
 use Qdequippe\Yousign\Api\Endpoint\PatchWebhooksWebhookId;
 use Qdequippe\Yousign\Api\Endpoint\PatchWorkspacesWorkspaceId;
 use Qdequippe\Yousign\Api\Endpoint\PostArchives;
@@ -82,6 +88,7 @@ use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdActiva
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdApprovers;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminder;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdCancel;
+use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdConsentRequests;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdDocumentRequests;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdDocuments;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields;
@@ -95,6 +102,7 @@ use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSigner
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSign;
 use Qdequippe\Yousign\Api\Endpoint\PostWebhooksSubscriptions;
 use Qdequippe\Yousign\Api\Endpoint\PostWorkspace;
+use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerId;
 use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerId;
 use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdMetadata;
 use Qdequippe\Yousign\Api\Endpoint\PutWorkspacesWorkspaceIdUsers;
@@ -106,6 +114,7 @@ use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
 use Qdequippe\Yousign\Api\Model\CreateFollowersInner;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestMetadata;
+use Qdequippe\Yousign\Api\Model\CreateSignerConsentRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
 use Qdequippe\Yousign\Api\Model\CreateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\CreateWorkspace;
@@ -125,6 +134,8 @@ use Qdequippe\Yousign\Api\Model\UpdateDocument;
 use Qdequippe\Yousign\Api\Model\UpdateSignatureRequest;
 use Qdequippe\Yousign\Api\Model\UpdateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\UpdateSigner;
+use Qdequippe\Yousign\Api\Model\UpdateSignerConsentRequest;
+use Qdequippe\Yousign\Api\Model\UpdateUser;
 use Qdequippe\Yousign\Api\Model\UpdateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
 use Qdequippe\Yousign\Api\Model\UploadArchivedFile;
@@ -935,6 +946,139 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Returns a list of Signer Consent Requests for a given Signature Request.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetSignatureRequestsSignatureRequestIdSignerConsentRequests200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerConsentRequestsUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerConsentRequestsForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerConsentRequestsNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSignerConsentRequests(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignerConsentRequests($signatureRequestId), $fetch);
+    }
+
+    /**
+     * Adds a Signer Consent Request to a given Signature Request. This action is only permitted when the Signature Request is a draft.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\SignerConsentRequest|ResponseInterface|null
+     *
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdConsentRequestsBadRequestException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdConsentRequestsUnauthorizedException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdConsentRequestsForbiddenException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdConsentRequestsNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdConsentRequestsUnsupportedMediaTypeException
+     */
+    public function postSignatureRequestsSignatureRequestIdConsentRequests(string $signatureRequestId, ?CreateSignerConsentRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdConsentRequests($signatureRequestId, $requestBody), $fetch);
+    }
+
+    /**
+     * Delete a Signer Consent Request from signature request. This action is only permitted when the Signature Request is a draft.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $consentRequestId   Signer Consent Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestId(string $signatureRequestId, string $consentRequestId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestId($signatureRequestId, $consentRequestId), $fetch);
+    }
+
+    /**
+     * Updates a given Signer Consent Request.
+     * Any parameters not provided are left unchanged.
+     * This action is only permitted when the Signature Request is a draft.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $consentRequestId   Signer Consent Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\SignerConsentRequest|ResponseInterface|null
+     *
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdBadRequestException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdUnauthorizedException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdForbiddenException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdNotFoundException
+     */
+    public function patchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestId(string $signatureRequestId, string $consentRequestId, ?UpdateSignerConsentRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestId($signatureRequestId, $consentRequestId, $requestBody), $fetch);
+    }
+
+    /**
+     * Remove a Signer from a given Signer Consent Request. This action is only permitted when the Signature Request is a draft.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $consentRequestId   Signer Consent Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdBadRequestException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdUnauthorizedException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdForbiddenException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdNotFoundException
+     */
+    public function deleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerId(string $signatureRequestId, string $consentRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerId($signatureRequestId, $consentRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * Adds a Signer to a given Signer Consent Request. This action is only permitted when the Signature Request is a draft.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $consentRequestId   Signer Consent Request Id
+     * @param string $signerId           Signer Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdBadRequestException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdUnauthorizedException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdForbiddenException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdNotFoundException
+     */
+    public function putSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerId(string $signatureRequestId, string $consentRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerId($signatureRequestId, $consentRequestId, $signerId), $fetch);
+    }
+
+    /**
+     * Returns a list of Signer Document Requests for a given Signature Request.
+     *
+     * @param string $signatureRequestId Signature Request Id
+     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsUnauthorizedException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsForbiddenException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsNotFoundException
+     */
+    public function getSignatureRequestsSignatureRequestIdSignerDocumentRequests(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetSignatureRequestsSignatureRequestIdSignerDocumentRequests($signatureRequestId), $fetch);
+    }
+
+    /**
      * Adds a Signer Document Request to a given Signature Request.
      *
      * @param string $signatureRequestId Signature Request Id
@@ -1702,6 +1846,26 @@ class Client extends Runtime\Client\Client
     public function getUsersUserId(string $userId, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new GetUsersUserId($userId), $fetch);
+    }
+
+    /**
+     * Updates a given User.
+     * Any parameters not provided are left unchanged.
+     *
+     * @param string $userId User Id
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\User|ResponseInterface|null
+     *
+     * @throws Exception\PatchUsersUserIdBadRequestException
+     * @throws Exception\PatchUsersUserIdUnauthorizedException
+     * @throws Exception\PatchUsersUserIdForbiddenException
+     * @throws Exception\PatchUsersUserIdNotFoundException
+     * @throws Exception\PatchUsersUserIdUnsupportedMediaTypeException
+     */
+    public function patchUsersUserId(string $userId, ?UpdateUser $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PatchUsersUserId($userId, $requestBody), $fetch);
     }
 
     /**
