@@ -5,12 +5,14 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\Approver;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -67,6 +69,7 @@ class PatchSignatureRequestsSignatureRequestIdApproversApproverId extends BaseEn
      * @throws PatchSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
      * @throws PatchSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
      * @throws PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnsupportedMediaTypeException
+     * @throws PatchSignatureRequestsSignatureRequestIdApproversApproverIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -89,6 +92,9 @@ class PatchSignatureRequestsSignatureRequestIdApproversApproverId extends BaseEn
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchSignatureRequestsSignatureRequestIdApproversApproverIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

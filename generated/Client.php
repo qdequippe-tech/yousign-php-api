@@ -877,6 +877,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnsupportedMediaTypeException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdInternalServerErrorException
      */
     public function patchSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, ?PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
