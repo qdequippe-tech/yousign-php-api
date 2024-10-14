@@ -83,6 +83,7 @@ use Qdequippe\Yousign\Api\Model\GetTemplates200Response;
 use Qdequippe\Yousign\Api\Model\GetUsers200Response;
 use Qdequippe\Yousign\Api\Model\GetWorkspaces200Response;
 use Qdequippe\Yousign\Api\Model\InitialsArea;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\ListElectronicSealImages200Response;
 use Qdequippe\Yousign\Api\Model\MarkWorkspaceAsDefault;
 use Qdequippe\Yousign\Api\Model\Mention;
@@ -394,6 +395,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestNormalizer::class,
 
+            InternalServerError::class => InternalServerErrorNormalizer::class,
+
             PostSignatureRequestsSignatureRequestIdCancelRequest::class => PostSignatureRequestsSignatureRequestIdCancelRequestNormalizer::class,
 
             GetSignatureRequestsSignatureRequestIdSignerConsentRequests200Response::class => GetSignatureRequestsSignatureRequestIdSignerConsentRequests200ResponseNormalizer::class,
@@ -683,6 +686,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 FromExistingSigner::class => false,
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => false,
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => false,
+                InternalServerError::class => false,
                 PostSignatureRequestsSignatureRequestIdCancelRequest::class => false,
                 GetSignatureRequestsSignatureRequestIdSignerConsentRequests200Response::class => false,
                 GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response::class => false,
@@ -966,6 +970,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfoNormalizer::class,
 
             PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestNormalizer::class,
+
+            InternalServerError::class => InternalServerErrorNormalizer::class,
 
             PostSignatureRequestsSignatureRequestIdCancelRequest::class => PostSignatureRequestsSignatureRequestIdCancelRequestNormalizer::class,
 
@@ -1264,6 +1270,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 FromExistingSigner::class => false,
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => false,
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => false,
+                InternalServerError::class => false,
                 PostSignatureRequestsSignatureRequestIdCancelRequest::class => false,
                 GetSignatureRequestsSignatureRequestIdSignerConsentRequests200Response::class => false,
                 GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response::class => false,

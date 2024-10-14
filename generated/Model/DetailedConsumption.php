@@ -22,6 +22,8 @@ class DetailedConsumption extends \ArrayObject
      */
     protected $type;
     /**
+     * Only set when type is either `invited_signer`, `electronic_seals`, `identification_attempts`.
+     *
      * @var string|null
      */
     protected $level;
@@ -70,11 +72,17 @@ class DetailedConsumption extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Only set when type is either `invited_signer`, `electronic_seals`, `identification_attempts`.
+     */
     public function getLevel(): ?string
     {
         return $this->level;
     }
 
+    /**
+     * Only set when type is either `invited_signer`, `electronic_seals`, `identification_attempts`.
+     */
     public function setLevel(?string $level): self
     {
         $this->initialized['level'] = true;
