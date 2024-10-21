@@ -21,6 +21,7 @@ use Qdequippe\Yousign\Api\Model\Contact;
 use Qdequippe\Yousign\Api\Model\CreateContact;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperienceRedirectUrls;
+use Qdequippe\Yousign\Api\Model\CreateDocumentFromJson;
 use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealFieldReadOnlyTextPayload;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealFieldSealPayload;
@@ -258,6 +259,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             SignerDocumentRequest::class => SignerDocumentRequestNormalizer::class,
 
             CreateSignerDocumentRequest::class => CreateSignerDocumentRequestNormalizer::class,
+
+            CreateDocumentFromJson::class => CreateDocumentFromJsonNormalizer::class,
 
             UpdateDocument::class => UpdateDocumentNormalizer::class,
 
@@ -618,6 +621,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 UpdateSignerConsentRequest::class => false,
                 SignerDocumentRequest::class => false,
                 CreateSignerDocumentRequest::class => false,
+                CreateDocumentFromJson::class => false,
                 UpdateDocument::class => false,
                 FieldSignature::class => false,
                 FieldText::class => false,
@@ -834,6 +838,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             SignerDocumentRequest::class => SignerDocumentRequestNormalizer::class,
 
             CreateSignerDocumentRequest::class => CreateSignerDocumentRequestNormalizer::class,
+
+            CreateDocumentFromJson::class => CreateDocumentFromJsonNormalizer::class,
 
             UpdateDocument::class => UpdateDocumentNormalizer::class,
 
@@ -1202,6 +1208,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 UpdateSignerConsentRequest::class => false,
                 SignerDocumentRequest::class => false,
                 CreateSignerDocumentRequest::class => false,
+                CreateDocumentFromJson::class => false,
                 UpdateDocument::class => false,
                 FieldSignature::class => false,
                 FieldText::class => false,

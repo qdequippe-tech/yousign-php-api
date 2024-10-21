@@ -121,6 +121,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('workspaces', $data) && null === $data['workspaces']) {
                 $object->setWorkspaces(null);
             }
+            if (\array_key_exists('status', $data) && null !== $data['status']) {
+                $object->setStatus($data['status']);
+                unset($data['status']);
+            } elseif (\array_key_exists('status', $data) && null === $data['status']) {
+                $object->setStatus(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -143,13 +149,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['job_title'] = $object->getJobTitle();
             $data['is_active'] = $object->getIsActive();
             $data['role'] = $object->getRole();
-            if ($object->isInitialized('workspaces') && null !== $object->getWorkspaces()) {
-                $values = [];
-                foreach ($object->getWorkspaces() as $value) {
-                    $values[] = $this->normalizer->normalize($value, 'json', $context);
-                }
-                $data['workspaces'] = $values;
+            $values = [];
+            foreach ($object->getWorkspaces() as $value) {
+                $values[] = $this->normalizer->normalize($value, 'json', $context);
             }
+            $data['workspaces'] = $values;
+            $data['status'] = $object->getStatus();
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;
@@ -273,6 +278,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('workspaces', $data) && null === $data['workspaces']) {
                 $object->setWorkspaces(null);
             }
+            if (\array_key_exists('status', $data) && null !== $data['status']) {
+                $object->setStatus($data['status']);
+                unset($data['status']);
+            } elseif (\array_key_exists('status', $data) && null === $data['status']) {
+                $object->setStatus(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -300,13 +311,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['job_title'] = $object->getJobTitle();
             $data['is_active'] = $object->getIsActive();
             $data['role'] = $object->getRole();
-            if ($object->isInitialized('workspaces') && null !== $object->getWorkspaces()) {
-                $values = [];
-                foreach ($object->getWorkspaces() as $value) {
-                    $values[] = $this->normalizer->normalize($value, 'json', $context);
-                }
-                $data['workspaces'] = $values;
+            $values = [];
+            foreach ($object->getWorkspaces() as $value) {
+                $values[] = $this->normalizer->normalize($value, 'json', $context);
             }
+            $data['workspaces'] = $values;
+            $data['status'] = $object->getStatus();
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;

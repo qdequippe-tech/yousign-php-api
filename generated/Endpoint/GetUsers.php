@@ -4,9 +4,11 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetUsersBadRequestException;
+use Qdequippe\Yousign\Api\Exception\GetUsersInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetUsersUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\GetUsers200Response;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -69,6 +71,7 @@ class GetUsers extends BaseEndpoint implements Endpoint
      *
      * @throws GetUsersBadRequestException
      * @throws GetUsersUnauthorizedException
+     * @throws GetUsersInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -82,6 +85,9 @@ class GetUsers extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetUsersUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetUsersInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;
