@@ -1183,8 +1183,9 @@ class Client extends Runtime\Client\Client
     /**
      * Adds a Document to a given Signature Request.
      *
-     * @param string $signatureRequestId Signature Request Id
-     * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param string                                                        $signatureRequestId Signature Request Id
+     * @param CreateDocumentFromMultipart|Model\CreateDocumentFromJson|null $requestBody
+     * @param string                                                        $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return Document|ResponseInterface|null
      *
@@ -1194,7 +1195,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsUnsupportedMediaTypeException
      */
-    public function postSignatureRequestsSignatureRequestIdDocuments(string $signatureRequestId, ?CreateDocumentFromMultipart $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequestsSignatureRequestIdDocuments(string $signatureRequestId, $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdDocuments($signatureRequestId, $requestBody), $fetch);
     }
@@ -1825,6 +1826,7 @@ class Client extends Runtime\Client\Client
      *
      * @throws Exception\GetUsersBadRequestException
      * @throws Exception\GetUsersUnauthorizedException
+     * @throws Exception\GetUsersInternalServerErrorException
      */
     public function getUsers(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -1843,6 +1845,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetUsersUserIdUnauthorizedException
      * @throws Exception\GetUsersUserIdForbiddenException
      * @throws Exception\GetUsersUserIdNotFoundException
+     * @throws Exception\GetUsersUserIdInternalServerErrorException
      */
     public function getUsersUserId(string $userId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1863,6 +1866,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchUsersUserIdForbiddenException
      * @throws Exception\PatchUsersUserIdNotFoundException
      * @throws Exception\PatchUsersUserIdUnsupportedMediaTypeException
+     * @throws Exception\PatchUsersUserIdInternalServerErrorException
      */
     public function patchUsersUserId(string $userId, ?UpdateUser $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {

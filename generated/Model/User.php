@@ -63,6 +63,10 @@ class User extends \ArrayObject
      * @var list<UserWorkspacesInner>|null
      */
     protected $workspaces;
+    /**
+     * @var string|null
+     */
+    protected $status;
 
     public function getId(): ?string
     {
@@ -228,6 +232,19 @@ class User extends \ArrayObject
     {
         $this->initialized['workspaces'] = true;
         $this->workspaces = $workspaces;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): self
+    {
+        $this->initialized['status'] = true;
+        $this->status = $status;
 
         return $this;
     }

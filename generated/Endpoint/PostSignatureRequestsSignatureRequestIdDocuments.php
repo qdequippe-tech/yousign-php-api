@@ -10,6 +10,7 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocum
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentsUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\CreateDocumentFromJson;
 use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\Document;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
@@ -28,9 +29,10 @@ class PostSignatureRequestsSignatureRequestIdDocuments extends BaseEndpoint impl
     /**
      * Adds a Document to a given Signature Request.
      *
-     * @param string $signatureRequestId Signature Request Id
+     * @param string                                                  $signatureRequestId Signature Request Id
+     * @param CreateDocumentFromMultipart|CreateDocumentFromJson|null $requestBody
      */
-    public function __construct(protected string $signatureRequestId, ?CreateDocumentFromMultipart $requestBody = null)
+    public function __construct(protected string $signatureRequestId, $requestBody = null)
     {
         $this->body = $requestBody;
     }
@@ -56,6 +58,9 @@ class PostSignatureRequestsSignatureRequestIdDocuments extends BaseEndpoint impl
             }
 
             return [['Content-Type' => ['multipart/form-data; boundary="'.($bodyBuilder->getBoundary().'"')]], $bodyBuilder->build()];
+        }
+        if ($this->body instanceof CreateDocumentFromJson) {
+            return [['Content-Type' => ['application/json']], $serializer->serialize($this->body, 'json')];
         }
 
         return [[], null];
