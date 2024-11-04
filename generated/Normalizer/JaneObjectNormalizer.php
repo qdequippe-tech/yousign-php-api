@@ -35,6 +35,7 @@ use Qdequippe\Yousign\Api\Model\CreateSignatureRequestTemplatePlaceholders;
 use Qdequippe\Yousign\Api\Model\CreateSignerConsentRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignerConsentRequestSettings;
 use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
+use Qdequippe\Yousign\Api\Model\CreateVideoIdentityVerification;
 use Qdequippe\Yousign\Api\Model\CreateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\CreateWorkspace;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
@@ -172,6 +173,11 @@ use Qdequippe\Yousign\Api\Model\UploadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealImage;
 use Qdequippe\Yousign\Api\Model\User;
 use Qdequippe\Yousign\Api\Model\UserWorkspacesInner;
+use Qdequippe\Yousign\Api\Model\VideoIdentityVerification;
+use Qdequippe\Yousign\Api\Model\VideoIdentityVerificationCreated;
+use Qdequippe\Yousign\Api\Model\VideoIdentityVerificationDeclared;
+use Qdequippe\Yousign\Api\Model\VideoIdentityVerificationDocument;
+use Qdequippe\Yousign\Api\Model\VideoIdentityVerificationVerified;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
 use Qdequippe\Yousign\Api\Model\Workspace;
 use Qdequippe\Yousign\Api\Model\WorkspaceUsersInner;
@@ -302,6 +308,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             UpdateUser::class => UpdateUserNormalizer::class,
 
+            CreateVideoIdentityVerification::class => CreateVideoIdentityVerificationNormalizer::class,
+
+            VideoIdentityVerificationCreated::class => VideoIdentityVerificationCreatedNormalizer::class,
+
+            VideoIdentityVerification::class => VideoIdentityVerificationNormalizer::class,
+
             WebhookSubscription::class => WebhookSubscriptionNormalizer::class,
 
             CreateWebhookSubscription::class => CreateWebhookSubscriptionNormalizer::class,
@@ -353,6 +365,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             SmsNotification::class => SmsNotificationNormalizer::class,
 
             SmsNotification1::class => SmsNotification1Normalizer::class,
+
+            VideoIdentityVerificationVerified::class => VideoIdentityVerificationVerifiedNormalizer::class,
+
+            VideoIdentityVerificationDeclared::class => VideoIdentityVerificationDeclaredNormalizer::class,
+
+            VideoIdentityVerificationDocument::class => VideoIdentityVerificationDocumentNormalizer::class,
 
             SignatureRequestEmailNotificationSender::class => SignatureRequestEmailNotificationSenderNormalizer::class,
 
@@ -642,6 +660,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 Template::class => false,
                 User::class => false,
                 UpdateUser::class => false,
+                CreateVideoIdentityVerification::class => false,
+                VideoIdentityVerificationCreated::class => false,
+                VideoIdentityVerification::class => false,
                 WebhookSubscription::class => false,
                 CreateWebhookSubscription::class => false,
                 UpdateWebhookSubscription::class => false,
@@ -668,6 +689,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 UpdateFieldFont::class => false,
                 SmsNotification::class => false,
                 SmsNotification1::class => false,
+                VideoIdentityVerificationVerified::class => false,
+                VideoIdentityVerificationDeclared::class => false,
+                VideoIdentityVerificationDocument::class => false,
                 SignatureRequestEmailNotificationSender::class => false,
                 FontVariants::class => false,
                 OtpMessage::class => false,
@@ -881,6 +905,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             UpdateUser::class => UpdateUserNormalizer::class,
 
+            CreateVideoIdentityVerification::class => CreateVideoIdentityVerificationNormalizer::class,
+
+            VideoIdentityVerificationCreated::class => VideoIdentityVerificationCreatedNormalizer::class,
+
+            VideoIdentityVerification::class => VideoIdentityVerificationNormalizer::class,
+
             WebhookSubscription::class => WebhookSubscriptionNormalizer::class,
 
             CreateWebhookSubscription::class => CreateWebhookSubscriptionNormalizer::class,
@@ -932,6 +962,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             SmsNotification::class => SmsNotificationNormalizer::class,
 
             SmsNotification1::class => SmsNotification1Normalizer::class,
+
+            VideoIdentityVerificationVerified::class => VideoIdentityVerificationVerifiedNormalizer::class,
+
+            VideoIdentityVerificationDeclared::class => VideoIdentityVerificationDeclaredNormalizer::class,
+
+            VideoIdentityVerificationDocument::class => VideoIdentityVerificationDocumentNormalizer::class,
 
             SignatureRequestEmailNotificationSender::class => SignatureRequestEmailNotificationSenderNormalizer::class,
 
@@ -1229,6 +1265,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 Template::class => false,
                 User::class => false,
                 UpdateUser::class => false,
+                CreateVideoIdentityVerification::class => false,
+                VideoIdentityVerificationCreated::class => false,
+                VideoIdentityVerification::class => false,
                 WebhookSubscription::class => false,
                 CreateWebhookSubscription::class => false,
                 UpdateWebhookSubscription::class => false,
@@ -1255,6 +1294,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 UpdateFieldFont::class => false,
                 SmsNotification::class => false,
                 SmsNotification1::class => false,
+                VideoIdentityVerificationVerified::class => false,
+                VideoIdentityVerificationDeclared::class => false,
+                VideoIdentityVerificationDocument::class => false,
                 SignatureRequestEmailNotificationSender::class => false,
                 FontVariants::class => false,
                 OtpMessage::class => false,

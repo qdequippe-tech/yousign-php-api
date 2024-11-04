@@ -21,12 +21,13 @@ class GetUsers extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * Returns the list of all the Users within your organization.
+     * Returns the list of all the Users within your Organization.
      *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
-     * @var int    $limit The limit of items count to retrieve.
+     * @var int    $limit the limit of items count to retrieve
+     * @var string $email A given e-mail address to filter on.
      *             }
      */
     public function __construct(array $queryParameters = [])
@@ -57,11 +58,12 @@ class GetUsers extends BaseEndpoint implements Endpoint
     protected function getQueryOptionsResolver(): OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
-        $optionsResolver->setDefined(['after', 'limit']);
+        $optionsResolver->setDefined(['after', 'limit', 'email']);
         $optionsResolver->setRequired([]);
         $optionsResolver->setDefaults(['limit' => 100]);
         $optionsResolver->addAllowedTypes('after', ['string']);
         $optionsResolver->addAllowedTypes('limit', ['int']);
+        $optionsResolver->addAllowedTypes('email', ['string', 'null']);
 
         return $optionsResolver;
     }

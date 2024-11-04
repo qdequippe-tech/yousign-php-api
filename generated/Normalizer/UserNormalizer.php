@@ -127,6 +127,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('status', $data) && null === $data['status']) {
                 $object->setStatus(null);
             }
+            if (\array_key_exists('source', $data) && null !== $data['source']) {
+                $object->setSource($data['source']);
+                unset($data['source']);
+            } elseif (\array_key_exists('source', $data) && null === $data['source']) {
+                $object->setSource(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -155,6 +161,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             $data['workspaces'] = $values;
             $data['status'] = $object->getStatus();
+            $data['source'] = $object->getSource();
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;
@@ -284,6 +291,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('status', $data) && null === $data['status']) {
                 $object->setStatus(null);
             }
+            if (\array_key_exists('source', $data) && null !== $data['source']) {
+                $object->setSource($data['source']);
+                unset($data['source']);
+            } elseif (\array_key_exists('source', $data) && null === $data['source']) {
+                $object->setSource(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -317,6 +330,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             $data['workspaces'] = $values;
             $data['status'] = $object->getStatus();
+            $data['source'] = $object->getSource();
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;

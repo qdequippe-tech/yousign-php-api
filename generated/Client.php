@@ -39,6 +39,7 @@ use Qdequippe\Yousign\Api\Endpoint\GetCustomExperiences;
 use Qdequippe\Yousign\Api\Endpoint\GetCustomExperiencesCustomExperienceId;
 use Qdequippe\Yousign\Api\Endpoint\GetElectronicSeal;
 use Qdequippe\Yousign\Api\Endpoint\GetElectronicSealAuditTrail;
+use Qdequippe\Yousign\Api\Endpoint\GetIdentityVerificationsIdentityVerificationId;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequests;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestId;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdApproversApproverId;
@@ -83,6 +84,7 @@ use Qdequippe\Yousign\Api\Endpoint\PostContact;
 use Qdequippe\Yousign\Api\Endpoint\PostCustomExperience;
 use Qdequippe\Yousign\Api\Endpoint\PostDocuments;
 use Qdequippe\Yousign\Api\Endpoint\PostElectronicSeals;
+use Qdequippe\Yousign\Api\Endpoint\PostIdentityVerifications;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequests;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdActivate;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdApprovers;
@@ -116,6 +118,7 @@ use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\CreateSignerConsentRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
+use Qdequippe\Yousign\Api\Model\CreateVideoIdentityVerification;
 use Qdequippe\Yousign\Api\Model\CreateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\CreateWorkspace;
 use Qdequippe\Yousign\Api\Model\DeleteWorkspace;
@@ -1812,12 +1815,13 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Returns the list of all the Users within your organization.
+     * Returns the list of all the Users within your Organization.
      *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
-     * @var int    $limit The limit of items count to retrieve.
+     * @var int    $limit the limit of items count to retrieve
+     * @var string $email A given e-mail address to filter on.
      *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -1871,6 +1875,39 @@ class Client extends Runtime\Client\Client
     public function patchUsersUserId(string $userId, ?UpdateUser $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PatchUsersUserId($userId, $requestBody), $fetch);
+    }
+
+    /**
+     * Creates a new Identity Verification resource.
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\VideoIdentityVerificationCreated|ResponseInterface|null
+     *
+     * @throws Exception\PostIdentityVerificationsBadRequestException
+     * @throws Exception\PostIdentityVerificationsForbiddenException
+     * @throws Exception\PostIdentityVerificationsNotFoundException
+     */
+    public function postIdentityVerifications(?CreateVideoIdentityVerification $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostIdentityVerifications($requestBody), $fetch);
+    }
+
+    /**
+     * Get the detailed results of an Identity Verification.
+     *
+     * @param string $identityVerificationId The Identity verification ID
+     * @param string $fetch                  Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\VideoIdentityVerification|ResponseInterface|null
+     *
+     * @throws Exception\GetIdentityVerificationsIdentityVerificationIdBadRequestException
+     * @throws Exception\GetIdentityVerificationsIdentityVerificationIdForbiddenException
+     * @throws Exception\GetIdentityVerificationsIdentityVerificationIdNotFoundException
+     */
+    public function getIdentityVerificationsIdentityVerificationId(string $identityVerificationId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetIdentityVerificationsIdentityVerificationId($identityVerificationId), $fetch);
     }
 
     /**

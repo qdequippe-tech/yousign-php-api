@@ -26,6 +26,8 @@ class UpdateContact extends \ArrayObject
      */
     protected $email;
     /**
+     * Locale settings used for communication.
+     *
      * @var string|null
      */
     protected $locale;
@@ -119,11 +121,17 @@ class UpdateContact extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Locale settings used for communication.
+     */
     public function getLocale(): ?string
     {
         return $this->locale;
     }
 
+    /**
+     * Locale settings used for communication.
+     */
     public function setLocale(?string $locale): self
     {
         $this->initialized['locale'] = true;
