@@ -32,6 +32,8 @@ class PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo ext
      */
     protected $phoneNumber;
     /**
+     * Locale settings used for communication.
+     *
      * @var string|null
      */
     protected $locale;
@@ -94,11 +96,17 @@ class PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo ext
         return $this;
     }
 
+    /**
+     * Locale settings used for communication.
+     */
     public function getLocale(): ?string
     {
         return $this->locale;
     }
 
+    /**
+     * Locale settings used for communication.
+     */
     public function setLocale(?string $locale): self
     {
         $this->initialized['locale'] = true;

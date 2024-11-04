@@ -67,6 +67,12 @@ class User extends \ArrayObject
      * @var string|null
      */
     protected $status;
+    /**
+     * The application used to create the `User`.
+     *
+     * @var string|null
+     */
+    protected $source;
 
     public function getId(): ?string
     {
@@ -245,6 +251,25 @@ class User extends \ArrayObject
     {
         $this->initialized['status'] = true;
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * The application used to create the `User`.
+     */
+    public function getSource(): ?string
+    {
+        return $this->source;
+    }
+
+    /**
+     * The application used to create the `User`.
+     */
+    public function setSource(?string $source): self
+    {
+        $this->initialized['source'] = true;
+        $this->source = $source;
 
         return $this;
     }
