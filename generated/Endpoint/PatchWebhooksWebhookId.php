@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchWebhooksWebhookIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchWebhooksWebhookIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PatchWebhooksWebhookIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PatchWebhooksWebhookIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PatchWebhooksWebhookIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PatchWebhooksWebhookIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UpdateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
@@ -64,6 +68,8 @@ class PatchWebhooksWebhookId extends BaseEndpoint implements Endpoint
      * @throws PatchWebhooksWebhookIdUnauthorizedException
      * @throws PatchWebhooksWebhookIdForbiddenException
      * @throws PatchWebhooksWebhookIdNotFoundException
+     * @throws PatchWebhooksWebhookIdTooManyRequestsException
+     * @throws PatchWebhooksWebhookIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -83,6 +89,12 @@ class PatchWebhooksWebhookId extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchWebhooksWebhookIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchWebhooksWebhookIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchWebhooksWebhookIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

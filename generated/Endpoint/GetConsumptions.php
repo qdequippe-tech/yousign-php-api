@@ -5,12 +5,16 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetConsumptionsInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetConsumptionsTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\Consumption;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -29,7 +33,7 @@ class GetConsumptions extends BaseEndpoint implements Endpoint
      *
      * @var string $from The "from" date must not be more than 1 year in the past
      * @var string $to The "to" date must be more recent than the "from" date
-     * @var string $authentication_key
+     * @var string $authentication_key The API authentication key to use to retrieve the data
      *             }
      */
     public function __construct(array $queryParameters = [])
@@ -77,6 +81,8 @@ class GetConsumptions extends BaseEndpoint implements Endpoint
      * @throws GetConsumptionsUnauthorizedException
      * @throws GetConsumptionsForbiddenException
      * @throws GetConsumptionsNotFoundException
+     * @throws GetConsumptionsTooManyRequestsException
+     * @throws GetConsumptionsInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -96,6 +102,12 @@ class GetConsumptions extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetConsumptionsNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetConsumptionsTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetConsumptionsInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

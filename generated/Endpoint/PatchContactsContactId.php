@@ -5,13 +5,17 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PatchContactsContactIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\Contact;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Model\UpdateContact;
@@ -67,6 +71,8 @@ class PatchContactsContactId extends BaseEndpoint implements Endpoint
      * @throws PatchContactsContactIdForbiddenException
      * @throws PatchContactsContactIdNotFoundException
      * @throws PatchContactsContactIdUnsupportedMediaTypeException
+     * @throws PatchContactsContactIdTooManyRequestsException
+     * @throws PatchContactsContactIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -89,6 +95,12 @@ class PatchContactsContactId extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchContactsContactIdUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchContactsContactIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchContactsContactIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

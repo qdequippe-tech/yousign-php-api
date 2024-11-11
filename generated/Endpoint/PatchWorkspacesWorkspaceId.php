@@ -5,12 +5,16 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PatchWorkspacesWorkspaceIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
@@ -67,6 +71,8 @@ class PatchWorkspacesWorkspaceId extends BaseEndpoint implements Endpoint
      * @throws PatchWorkspacesWorkspaceIdForbiddenException
      * @throws PatchWorkspacesWorkspaceIdNotFoundException
      * @throws PatchWorkspacesWorkspaceIdUnsupportedMediaTypeException
+     * @throws PatchWorkspacesWorkspaceIdTooManyRequestsException
+     * @throws PatchWorkspacesWorkspaceIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -89,6 +95,12 @@ class PatchWorkspacesWorkspaceId extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchWorkspacesWorkspaceIdUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchWorkspacesWorkspaceIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchWorkspacesWorkspaceIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

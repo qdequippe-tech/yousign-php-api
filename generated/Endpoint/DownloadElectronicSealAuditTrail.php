@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealAuditTrailBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealAuditTrailForbiddenException;
+use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealAuditTrailInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealAuditTrailNotFoundException;
+use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealAuditTrailTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealAuditTrailUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -23,7 +27,8 @@ class DownloadElectronicSealAuditTrail extends BaseEndpoint implements Endpoint
     /**
      * Electronic Seal Audit Trail is only available when the Electronic Seal is "done".
      *
-     * @param array $accept Accept content header application/pdf|application/json
+     * @param string $electronicSealId Electronic Seal Id
+     * @param array  $accept           Accept content header application/pdf|application/json
      */
     public function __construct(protected string $electronicSealId, protected array $accept = [])
     {
@@ -58,6 +63,8 @@ class DownloadElectronicSealAuditTrail extends BaseEndpoint implements Endpoint
      * @throws DownloadElectronicSealAuditTrailUnauthorizedException
      * @throws DownloadElectronicSealAuditTrailForbiddenException
      * @throws DownloadElectronicSealAuditTrailNotFoundException
+     * @throws DownloadElectronicSealAuditTrailTooManyRequestsException
+     * @throws DownloadElectronicSealAuditTrailInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -74,6 +81,12 @@ class DownloadElectronicSealAuditTrail extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DownloadElectronicSealAuditTrailNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DownloadElectronicSealAuditTrailTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DownloadElectronicSealAuditTrailInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
     }
 

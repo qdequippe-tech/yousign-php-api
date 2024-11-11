@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesWorkspaceIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesWorkspaceIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetWorkspacesWorkspaceIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesWorkspaceIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetWorkspacesWorkspaceIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesWorkspaceIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\Workspace;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -57,6 +61,8 @@ class GetWorkspacesWorkspaceId extends BaseEndpoint implements Endpoint
      * @throws GetWorkspacesWorkspaceIdUnauthorizedException
      * @throws GetWorkspacesWorkspaceIdForbiddenException
      * @throws GetWorkspacesWorkspaceIdNotFoundException
+     * @throws GetWorkspacesWorkspaceIdTooManyRequestsException
+     * @throws GetWorkspacesWorkspaceIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -76,6 +82,12 @@ class GetWorkspacesWorkspaceId extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetWorkspacesWorkspaceIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetWorkspacesWorkspaceIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetWorkspacesWorkspaceIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

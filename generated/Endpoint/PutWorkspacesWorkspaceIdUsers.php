@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -55,6 +59,8 @@ class PutWorkspacesWorkspaceIdUsers extends BaseEndpoint implements Endpoint
      * @throws PutWorkspacesWorkspaceIdUsersUnauthorizedException
      * @throws PutWorkspacesWorkspaceIdUsersForbiddenException
      * @throws PutWorkspacesWorkspaceIdUsersNotFoundException
+     * @throws PutWorkspacesWorkspaceIdUsersTooManyRequestsException
+     * @throws PutWorkspacesWorkspaceIdUsersInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -74,6 +80,12 @@ class PutWorkspacesWorkspaceIdUsers extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PutWorkspacesWorkspaceIdUsersNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PutWorkspacesWorkspaceIdUsersTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PutWorkspacesWorkspaceIdUsersInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

@@ -6,12 +6,16 @@ use Http\Message\MultipartStream\MultipartStreamBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PostDocumentsInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PostDocumentsTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\Document;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -69,6 +73,8 @@ class PostDocuments extends BaseEndpoint implements Endpoint
      * @throws PostDocumentsUnauthorizedException
      * @throws PostDocumentsForbiddenException
      * @throws PostDocumentsUnsupportedMediaTypeException
+     * @throws PostDocumentsTooManyRequestsException
+     * @throws PostDocumentsInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -88,6 +94,12 @@ class PostDocuments extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostDocumentsUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostDocumentsTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostDocumentsInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

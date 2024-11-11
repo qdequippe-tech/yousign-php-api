@@ -5,10 +5,16 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetIdentityVerificationsIdentityVerificationIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetIdentityVerificationsIdentityVerificationIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetIdentityVerificationsIdentityVerificationIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetIdentityVerificationsIdentityVerificationIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetIdentityVerificationsIdentityVerificationIdTooManyRequestsException;
+use Qdequippe\Yousign\Api\Exception\GetIdentityVerificationsIdentityVerificationIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\VideoIdentityVerification;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -52,8 +58,11 @@ class GetIdentityVerificationsIdentityVerificationId extends BaseEndpoint implem
      * @return VideoIdentityVerification|null
      *
      * @throws GetIdentityVerificationsIdentityVerificationIdBadRequestException
+     * @throws GetIdentityVerificationsIdentityVerificationIdUnauthorizedException
      * @throws GetIdentityVerificationsIdentityVerificationIdForbiddenException
      * @throws GetIdentityVerificationsIdentityVerificationIdNotFoundException
+     * @throws GetIdentityVerificationsIdentityVerificationIdTooManyRequestsException
+     * @throws GetIdentityVerificationsIdentityVerificationIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -65,11 +74,20 @@ class GetIdentityVerificationsIdentityVerificationId extends BaseEndpoint implem
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetIdentityVerificationsIdentityVerificationIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
+        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetIdentityVerificationsIdentityVerificationIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
+        }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetIdentityVerificationsIdentityVerificationIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetIdentityVerificationsIdentityVerificationIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetIdentityVerificationsIdentityVerificationIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetIdentityVerificationsIdentityVerificationIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

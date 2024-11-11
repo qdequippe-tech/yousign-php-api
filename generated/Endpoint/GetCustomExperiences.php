@@ -5,10 +5,14 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\GetCustomExperiences200Response;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -73,6 +77,8 @@ class GetCustomExperiences extends BaseEndpoint implements Endpoint
      * @throws GetCustomExperiencesBadRequestException
      * @throws GetCustomExperiencesUnauthorizedException
      * @throws GetCustomExperiencesForbiddenException
+     * @throws GetCustomExperiencesTooManyRequestsException
+     * @throws GetCustomExperiencesInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -89,6 +95,12 @@ class GetCustomExperiences extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetCustomExperiencesForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetCustomExperiencesTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetCustomExperiencesInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

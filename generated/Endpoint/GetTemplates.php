@@ -5,10 +5,14 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetTemplatesBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetTemplatesForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetTemplatesInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\GetTemplatesTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetTemplatesUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\GetTemplates200Response;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -72,6 +76,8 @@ class GetTemplates extends BaseEndpoint implements Endpoint
      * @throws GetTemplatesBadRequestException
      * @throws GetTemplatesUnauthorizedException
      * @throws GetTemplatesForbiddenException
+     * @throws GetTemplatesTooManyRequestsException
+     * @throws GetTemplatesInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -88,6 +94,12 @@ class GetTemplates extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetTemplatesForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetTemplatesTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetTemplatesInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

@@ -5,10 +5,14 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequests200Response;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -80,6 +84,8 @@ class GetSignatureRequests extends BaseEndpoint implements Endpoint
      * @throws GetSignatureRequestsBadRequestException
      * @throws GetSignatureRequestsUnauthorizedException
      * @throws GetSignatureRequestsForbiddenException
+     * @throws GetSignatureRequestsTooManyRequestsException
+     * @throws GetSignatureRequestsInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -96,6 +102,12 @@ class GetSignatureRequests extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignatureRequestsForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetSignatureRequestsTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetSignatureRequestsInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

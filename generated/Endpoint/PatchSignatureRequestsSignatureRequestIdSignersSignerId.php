@@ -5,13 +5,17 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\Signer;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Model\UpdateSigner;
@@ -68,6 +72,8 @@ class PatchSignatureRequestsSignatureRequestIdSignersSignerId extends BaseEndpoi
      * @throws PatchSignatureRequestsSignatureRequestIdSignersSignerIdForbiddenException
      * @throws PatchSignatureRequestsSignatureRequestIdSignersSignerIdNotFoundException
      * @throws PatchSignatureRequestsSignatureRequestIdSignersSignerIdUnsupportedMediaTypeException
+     * @throws PatchSignatureRequestsSignatureRequestIdSignersSignerIdTooManyRequestsException
+     * @throws PatchSignatureRequestsSignatureRequestIdSignersSignerIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -90,6 +96,12 @@ class PatchSignatureRequestsSignatureRequestIdSignersSignerId extends BaseEndpoi
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdSignersSignerIdUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchSignatureRequestsSignatureRequestIdSignersSignerIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchSignatureRequestsSignatureRequestIdSignersSignerIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

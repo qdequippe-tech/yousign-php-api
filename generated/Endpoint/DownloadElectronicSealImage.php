@@ -3,9 +3,13 @@
 namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
+use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealImageInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealImageNotFoundException;
+use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealImageTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealImageUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -17,7 +21,10 @@ class DownloadElectronicSealImage extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * @param array $accept Accept content header image/png|image/jpg|image/gif|application/json
+     * Download a given Electronic Seal Image.
+     *
+     * @param string $electronicSealImageId Electronic Seal Image Id
+     * @param array  $accept                Accept content header image/png|image/jpg|image/gif|application/json
      */
     public function __construct(protected string $electronicSealImageId, protected array $accept = [])
     {
@@ -50,6 +57,8 @@ class DownloadElectronicSealImage extends BaseEndpoint implements Endpoint
     /**
      * @throws DownloadElectronicSealImageUnauthorizedException
      * @throws DownloadElectronicSealImageNotFoundException
+     * @throws DownloadElectronicSealImageTooManyRequestsException
+     * @throws DownloadElectronicSealImageInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -60,6 +69,12 @@ class DownloadElectronicSealImage extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DownloadElectronicSealImageNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DownloadElectronicSealImageTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DownloadElectronicSealImageInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
     }
 

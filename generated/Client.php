@@ -109,6 +109,7 @@ use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdDocumen
 use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdMetadata;
 use Qdequippe\Yousign\Api\Endpoint\PutWorkspacesWorkspaceIdUsers;
 use Qdequippe\Yousign\Api\Endpoint\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId;
+use Qdequippe\Yousign\Api\Endpoint\UploadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Model\CreateContact;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
@@ -142,7 +143,6 @@ use Qdequippe\Yousign\Api\Model\UpdateUser;
 use Qdequippe\Yousign\Api\Model\UpdateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
 use Qdequippe\Yousign\Api\Model\UploadArchivedFile;
-use Qdequippe\Yousign\Api\Model\UploadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealImage;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
 use Qdequippe\Yousign\Api\Normalizer\JaneObjectNormalizer;
@@ -166,6 +166,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostArchivesForbiddenException
      * @throws Exception\PostArchivesNotFoundException
      * @throws Exception\PostArchivesUnsupportedMediaTypeException
+     * @throws Exception\PostArchivesTooManyRequestsException
+     * @throws Exception\PostArchivesInternalServerErrorException
      */
     public function postArchives(?UploadArchivedFile $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -185,6 +187,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetArchivesArchivedFileIdDownloadUnauthorizedException
      * @throws Exception\GetArchivesArchivedFileIdDownloadForbiddenException
      * @throws Exception\GetArchivesArchivedFileIdDownloadNotFoundException
+     * @throws Exception\GetArchivesArchivedFileIdDownloadTooManyRequestsException
+     * @throws Exception\GetArchivesArchivedFileIdDownloadInternalServerErrorException
      */
     public function getArchivesArchivedFileIdDownload(string $archivedFileId, string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
@@ -198,7 +202,7 @@ class Client extends Runtime\Client\Client
      *
      * @var string $from The "from" date must not be more than 1 year in the past
      * @var string $to The "to" date must be more recent than the "from" date
-     * @var string $authentication_key
+     * @var string $authentication_key The API authentication key to use to retrieve the data
      *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -209,6 +213,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetConsumptionsUnauthorizedException
      * @throws Exception\GetConsumptionsForbiddenException
      * @throws Exception\GetConsumptionsNotFoundException
+     * @throws Exception\GetConsumptionsTooManyRequestsException
+     * @throws Exception\GetConsumptionsInternalServerErrorException
      */
     public function getConsumptions(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -220,7 +226,7 @@ class Client extends Runtime\Client\Client
      *
      * @param array $queryParameters {
      *
-     * @var array $addons
+     * @var array $addons The addons to filter on.
      *            }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -231,6 +237,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetConsumptionAddonUnauthorizedException
      * @throws Exception\GetConsumptionAddonForbiddenException
      * @throws Exception\GetConsumptionAddonNotFoundException
+     * @throws Exception\GetConsumptionAddonTooManyRequestsException
+     * @throws Exception\GetConsumptionAddonInternalServerErrorException
      */
     public function getConsumptionAddon(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -257,6 +265,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetConsumptionDetailBadRequestException
      * @throws Exception\GetConsumptionDetailUnauthorizedException
      * @throws Exception\GetConsumptionDetailForbiddenException
+     * @throws Exception\GetConsumptionDetailTooManyRequestsException
+     * @throws Exception\GetConsumptionDetailInternalServerErrorException
      */
     public function getConsumptionDetail(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -270,7 +280,7 @@ class Client extends Runtime\Client\Client
      *
      * @var string $from The "from" date must not be more than 1 year in the past
      * @var string $to The "to" date must be more recent than the "from" date
-     * @var string $authentication_key
+     * @var string $authentication_key The API authentication key to use to retrieve the data
      *             }
      *
      * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
@@ -282,6 +292,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetConsumptionsExportUnauthorizedException
      * @throws Exception\GetConsumptionsExportForbiddenException
      * @throws Exception\GetConsumptionsExportNotFoundException
+     * @throws Exception\GetConsumptionsExportTooManyRequestsException
+     * @throws Exception\GetConsumptionsExportInternalServerErrorException
      */
     public function getConsumptionsExport(array $queryParameters = [], string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
@@ -304,6 +316,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetContactsBadRequestException
      * @throws Exception\GetContactsUnauthorizedException
      * @throws Exception\GetContactsForbiddenException
+     * @throws Exception\GetContactsTooManyRequestsException
+     * @throws Exception\GetContactsInternalServerErrorException
      */
     public function getContacts(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -321,6 +335,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostContactUnauthorizedException
      * @throws Exception\PostContactForbiddenException
      * @throws Exception\PostContactNotFoundException
+     * @throws Exception\PostContactTooManyRequestsException
+     * @throws Exception\PostContactInternalServerErrorException
      */
     public function postContact(?CreateContact $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -338,6 +354,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteContactsContactIdUnauthorizedException
      * @throws Exception\DeleteContactsContactIdForbiddenException
      * @throws Exception\DeleteContactsContactIdNotFoundException
+     * @throws Exception\DeleteContactsContactIdTooManyRequestsException
+     * @throws Exception\DeleteContactsContactIdInternalServerErrorException
      */
     public function deleteContactsContactId(string $contactId, string $fetch = self::FETCH_OBJECT)
     {
@@ -352,7 +370,10 @@ class Client extends Runtime\Client\Client
      *
      * @return Model\Contact|ResponseInterface|null
      *
+     * @throws Exception\GetContactsContactIdUnauthorizedException
      * @throws Exception\GetContactsContactIdNotFoundException
+     * @throws Exception\GetContactsContactIdTooManyRequestsException
+     * @throws Exception\GetContactsContactIdInternalServerErrorException
      */
     public function getContactsContactId(string $contactId, string $fetch = self::FETCH_OBJECT)
     {
@@ -373,6 +394,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchContactsContactIdForbiddenException
      * @throws Exception\PatchContactsContactIdNotFoundException
      * @throws Exception\PatchContactsContactIdUnsupportedMediaTypeException
+     * @throws Exception\PatchContactsContactIdTooManyRequestsException
+     * @throws Exception\PatchContactsContactIdInternalServerErrorException
      */
     public function patchContactsContactId(string $contactId, ?UpdateContact $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -396,6 +419,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetCustomExperiencesBadRequestException
      * @throws Exception\GetCustomExperiencesUnauthorizedException
      * @throws Exception\GetCustomExperiencesForbiddenException
+     * @throws Exception\GetCustomExperiencesTooManyRequestsException
+     * @throws Exception\GetCustomExperiencesInternalServerErrorException
      */
     public function getCustomExperiences(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -413,6 +438,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostCustomExperienceUnauthorizedException
      * @throws Exception\PostCustomExperienceForbiddenException
      * @throws Exception\PostCustomExperienceUnsupportedMediaTypeException
+     * @throws Exception\PostCustomExperienceTooManyRequestsException
+     * @throws Exception\PostCustomExperienceInternalServerErrorException
      */
     public function postCustomExperience(?CreateCustomExperience $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -431,6 +458,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteCustomExperienceUnauthorizedException
      * @throws Exception\DeleteCustomExperienceForbiddenException
      * @throws Exception\DeleteCustomExperienceNotFoundException
+     * @throws Exception\DeleteCustomExperienceTooManyRequestsException
+     * @throws Exception\DeleteCustomExperienceInternalServerErrorException
      */
     public function deleteCustomExperience(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
     {
@@ -449,6 +478,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetCustomExperiencesCustomExperienceIdUnauthorizedException
      * @throws Exception\GetCustomExperiencesCustomExperienceIdForbiddenException
      * @throws Exception\GetCustomExperiencesCustomExperienceIdNotFoundException
+     * @throws Exception\GetCustomExperiencesCustomExperienceIdTooManyRequestsException
+     * @throws Exception\GetCustomExperiencesCustomExperienceIdInternalServerErrorException
      */
     public function getCustomExperiencesCustomExperienceId(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
     {
@@ -469,6 +500,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchCustomExperiencesCustomExperienceIdForbiddenException
      * @throws Exception\PatchCustomExperiencesCustomExperienceIdNotFoundException
      * @throws Exception\PatchCustomExperiencesCustomExperienceIdUnsupportedMediaTypeException
+     * @throws Exception\PatchCustomExperiencesCustomExperienceIdTooManyRequestsException
+     * @throws Exception\PatchCustomExperiencesCustomExperienceIdInternalServerErrorException
      */
     public function patchCustomExperiencesCustomExperienceId(string $customExperienceId, ?UpdateCustomExperience $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -487,6 +520,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteCustomExperienceLogoUnauthorizedException
      * @throws Exception\DeleteCustomExperienceLogoForbiddenException
      * @throws Exception\DeleteCustomExperienceLogoNotFoundException
+     * @throws Exception\DeleteCustomExperienceLogoTooManyRequestsException
+     * @throws Exception\DeleteCustomExperienceLogoInternalServerErrorException
      */
     public function deleteCustomExperienceLogo(string $customExperienceId, string $fetch = self::FETCH_OBJECT)
     {
@@ -505,6 +540,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchCustomExperienceLogoUnauthorizedException
      * @throws Exception\PatchCustomExperienceLogoForbiddenException
      * @throws Exception\PatchCustomExperienceLogoUnsupportedMediaTypeException
+     * @throws Exception\PatchCustomExperienceLogoTooManyRequestsException
+     * @throws Exception\PatchCustomExperienceLogoInternalServerErrorException
      */
     public function patchCustomExperienceLogo(string $customExperienceId, ?PatchCustomExperienceLogoRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -522,6 +559,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostDocumentsUnauthorizedException
      * @throws Exception\PostDocumentsForbiddenException
      * @throws Exception\PostDocumentsUnsupportedMediaTypeException
+     * @throws Exception\PostDocumentsTooManyRequestsException
+     * @throws Exception\PostDocumentsInternalServerErrorException
      */
     public function postDocuments(?CreateDocumentFromMultipart $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -531,28 +570,37 @@ class Client extends Runtime\Client\Client
     /**
      * Upload an Electronic Seal Document to use for creating an Electronic Seal (can be used for only one Electronic Seal).
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param Model\CreateElectronicSealDocument|Model\CreateElectronicSealDocumentFromJson|null $requestBody
+     * @param string                                                                             $fetch       Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return Model\ElectronicSealDocument|ResponseInterface|null
      *
      * @throws Exception\UploadElectronicSealDocumentBadRequestException
      * @throws Exception\UploadElectronicSealDocumentUnauthorizedException
      * @throws Exception\UploadElectronicSealDocumentForbiddenException
+     * @throws Exception\UploadElectronicSealDocumentNotFoundException
      * @throws Exception\UploadElectronicSealDocumentUnsupportedMediaTypeException
+     * @throws Exception\UploadElectronicSealDocumentTooManyRequestsException
+     * @throws Exception\UploadElectronicSealDocumentInternalServerErrorException
      */
-    public function uploadElectronicSealDocument(?UploadElectronicSealDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    public function uploadElectronicSealDocument($requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
-        return $this->executeEndpoint(new Endpoint\UploadElectronicSealDocument($requestBody), $fetch);
+        return $this->executeEndpoint(new UploadElectronicSealDocument($requestBody), $fetch);
     }
 
     /**
-     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept Accept content header application/pdf|application/json
+     * Download a given Electronic Seal Document.
+     *
+     * @param string $electronicSealDocumentId Electronic Seal Id
+     * @param string $fetch                    Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept                   Accept content header application/pdf|application/json
      *
      * @return ResponseInterface|null
      *
      * @throws Exception\DownloadElectronicSealDocumentUnauthorizedException
      * @throws Exception\DownloadElectronicSealDocumentNotFoundException
+     * @throws Exception\DownloadElectronicSealDocumentTooManyRequestsException
+     * @throws Exception\DownloadElectronicSealDocumentInternalServerErrorException
      */
     public function downloadElectronicSealDocument(string $electronicSealDocumentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
@@ -560,6 +608,9 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Lists Electronic Seal Images.
+     * The list is paginated and can be filtered by the `after` cursor.
+     *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
@@ -573,6 +624,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\ListElectronicSealImagesBadRequestException
      * @throws Exception\ListElectronicSealImagesUnauthorizedException
      * @throws Exception\ListElectronicSealImagesForbiddenException
+     * @throws Exception\ListElectronicSealImagesTooManyRequestsException
+     * @throws Exception\ListElectronicSealImagesInternalServerErrorException
      */
     public function listElectronicSealImages(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -590,6 +643,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\UploadElectronicSealImageUnauthorizedException
      * @throws Exception\UploadElectronicSealImageForbiddenException
      * @throws Exception\UploadElectronicSealImageUnsupportedMediaTypeException
+     * @throws Exception\UploadElectronicSealImageTooManyRequestsException
+     * @throws Exception\UploadElectronicSealImageInternalServerErrorException
      */
     public function uploadElectronicSealImage(?UploadElectronicSealImage $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -597,13 +652,18 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * Deletes a given Electronic Seal Image.
+     *
+     * @param string $electronicSealImageId Electronic Seal Image Id
+     * @param string $fetch                 Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return ResponseInterface|null
      *
      * @throws Exception\DeleteElectronicSealImageUnauthorizedException
      * @throws Exception\DeleteElectronicSealImageForbiddenException
      * @throws Exception\DeleteElectronicSealImageNotFoundException
+     * @throws Exception\DeleteElectronicSealImageTooManyRequestsException
+     * @throws Exception\DeleteElectronicSealImageInternalServerErrorException
      */
     public function deleteElectronicSealImage(string $electronicSealImageId, string $fetch = self::FETCH_OBJECT)
     {
@@ -611,13 +671,18 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept Accept content header image/png|image/jpg|image/gif|application/json
+     * Download a given Electronic Seal Image.
+     *
+     * @param string $electronicSealImageId Electronic Seal Image Id
+     * @param string $fetch                 Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept                Accept content header image/png|image/jpg|image/gif|application/json
      *
      * @return ResponseInterface|null
      *
      * @throws Exception\DownloadElectronicSealImageUnauthorizedException
      * @throws Exception\DownloadElectronicSealImageNotFoundException
+     * @throws Exception\DownloadElectronicSealImageTooManyRequestsException
+     * @throws Exception\DownloadElectronicSealImageInternalServerErrorException
      */
     public function downloadElectronicSealImage(string $electronicSealImageId, string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
@@ -625,6 +690,8 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Create a new Electronic Seal.
+     *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return Model\ElectronicSeal|ResponseInterface|null
@@ -633,6 +700,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostElectronicSealsUnauthorizedException
      * @throws Exception\PostElectronicSealsForbiddenException
      * @throws Exception\PostElectronicSealsUnsupportedMediaTypeException
+     * @throws Exception\PostElectronicSealsTooManyRequestsException
+     * @throws Exception\PostElectronicSealsInternalServerErrorException
      */
     public function postElectronicSeals(?CreateElectronicSealPayload $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -640,12 +709,17 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * Retrieves a given Electronic Seal.
+     *
+     * @param string $electronicSealId Electronic Seal Id
+     * @param string $fetch            Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return Model\ElectronicSeal|ResponseInterface|null
      *
      * @throws Exception\GetElectronicSealUnauthorizedException
      * @throws Exception\GetElectronicSealNotFoundException
+     * @throws Exception\GetElectronicSealTooManyRequestsException
+     * @throws Exception\GetElectronicSealInternalServerErrorException
      */
     public function getElectronicSeal(string $electronicSealId, string $fetch = self::FETCH_OBJECT)
     {
@@ -655,7 +729,8 @@ class Client extends Runtime\Client\Client
     /**
      * Electronic Seal Audit Trail is only available when the Electronic Seal is "done".
      *
-     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param string $electronicSealId Electronic Seal Id
+     * @param string $fetch            Fetch mode to use (can be OBJECT or RESPONSE)
      *
      * @return Model\ElectronicSealAuditTrail|ResponseInterface|null
      *
@@ -663,6 +738,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetElectronicSealAuditTrailUnauthorizedException
      * @throws Exception\GetElectronicSealAuditTrailForbiddenException
      * @throws Exception\GetElectronicSealAuditTrailNotFoundException
+     * @throws Exception\GetElectronicSealAuditTrailTooManyRequestsException
+     * @throws Exception\GetElectronicSealAuditTrailInternalServerErrorException
      */
     public function getElectronicSealAuditTrail(string $electronicSealId, string $fetch = self::FETCH_OBJECT)
     {
@@ -672,8 +749,9 @@ class Client extends Runtime\Client\Client
     /**
      * Electronic Seal Audit Trail is only available when the Electronic Seal is "done".
      *
-     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @param array  $accept Accept content header application/pdf|application/json
+     * @param string $electronicSealId Electronic Seal Id
+     * @param string $fetch            Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param array  $accept           Accept content header application/pdf|application/json
      *
      * @return ResponseInterface|null
      *
@@ -681,6 +759,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DownloadElectronicSealAuditTrailUnauthorizedException
      * @throws Exception\DownloadElectronicSealAuditTrailForbiddenException
      * @throws Exception\DownloadElectronicSealAuditTrailNotFoundException
+     * @throws Exception\DownloadElectronicSealAuditTrailTooManyRequestsException
+     * @throws Exception\DownloadElectronicSealAuditTrailInternalServerErrorException
      */
     public function downloadElectronicSealAuditTrail(string $electronicSealId, string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
@@ -707,6 +787,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsBadRequestException
      * @throws Exception\GetSignatureRequestsUnauthorizedException
      * @throws Exception\GetSignatureRequestsForbiddenException
+     * @throws Exception\GetSignatureRequestsTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsInternalServerErrorException
      */
     public function getSignatureRequests(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -725,6 +807,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsForbiddenException
      * @throws Exception\PostSignatureRequestsNotFoundException
      * @throws Exception\PostSignatureRequestsUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsInternalServerErrorException
      */
     public function postSignatureRequests(?CreateSignatureRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -748,6 +832,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdUnauthorizedException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdForbiddenException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdTooManyRequestsException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdInternalServerErrorException
      */
     public function deleteSignatureRequestsSignatureRequestId(string $signatureRequestId, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -766,6 +852,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestId(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
     {
@@ -785,6 +873,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdForbiddenException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdNotFoundException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdUnsupportedMediaTypeException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdTooManyRequestsException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdInternalServerErrorException
      */
     public function patchSignatureRequestsSignatureRequestId(string $signatureRequestId, ?UpdateSignatureRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -804,6 +894,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdActivateUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdActivateForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdActivateNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdActivateTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdActivateInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdActivate(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
     {
@@ -823,6 +915,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdApprovers(string $signatureRequestId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -842,6 +936,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdTooManyRequestsException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdApproversApproverIdInternalServerErrorException
      */
     public function deleteSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, string $fetch = self::FETCH_OBJECT)
     {
@@ -860,6 +956,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, string $fetch = self::FETCH_OBJECT)
     {
@@ -880,6 +978,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdUnsupportedMediaTypeException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdTooManyRequestsException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdApproversApproverIdInternalServerErrorException
      */
     public function patchSignatureRequestsSignatureRequestIdApproversApproverId(string $signatureRequestId, string $approverId, ?PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
@@ -901,6 +1000,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdApproversApproverIdSendReminder(string $signatureRequestId, string $approverId, string $fetch = self::FETCH_OBJECT)
     {
@@ -924,6 +1025,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadBadRequestException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdAuditTrailsDownload(string $signatureRequestId, array $queryParameters = [], string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
@@ -943,6 +1046,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdCancelInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdCancel(string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdCancelRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -960,6 +1065,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerConsentRequestsUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerConsentRequestsForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerConsentRequestsNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerConsentRequestsTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerConsentRequestsInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdSignerConsentRequests(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
     {
@@ -979,6 +1086,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdConsentRequestsForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdConsentRequestsNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdConsentRequestsUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdConsentRequestsTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdConsentRequestsInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdConsentRequests(string $signatureRequestId, ?CreateSignerConsentRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -998,6 +1107,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdUnauthorizedException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdForbiddenException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdTooManyRequestsException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdInternalServerErrorException
      */
     public function deleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestId(string $signatureRequestId, string $consentRequestId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1019,6 +1130,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdUnauthorizedException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdForbiddenException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdNotFoundException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdTooManyRequestsException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdInternalServerErrorException
      */
     public function patchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestId(string $signatureRequestId, string $consentRequestId, ?UpdateSignerConsentRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1039,6 +1152,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdUnauthorizedException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdForbiddenException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdTooManyRequestsException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdInternalServerErrorException
      */
     public function deleteSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerId(string $signatureRequestId, string $consentRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1059,6 +1174,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdUnauthorizedException
      * @throws Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdForbiddenException
      * @throws Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdNotFoundException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdTooManyRequestsException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdInternalServerErrorException
      */
     public function putSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerId(string $signatureRequestId, string $consentRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1076,6 +1193,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdSignerDocumentRequests(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1095,6 +1214,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdDocumentRequests(string $signatureRequestId, ?CreateSignerDocumentRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1114,6 +1235,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdUnauthorizedException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdForbiddenException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdTooManyRequestsException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdInternalServerErrorException
      */
     public function deleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestId(string $signatureRequestId, string $documentRequestId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1134,6 +1257,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdUnauthorizedException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdForbiddenException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdTooManyRequestsException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdInternalServerErrorException
      */
     public function deleteSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerId(string $signatureRequestId, string $documentRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1154,6 +1279,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdUnauthorizedException
      * @throws Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdForbiddenException
      * @throws Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdNotFoundException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdTooManyRequestsException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdInternalServerErrorException
      */
     public function putSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerId(string $signatureRequestId, string $documentRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1177,6 +1304,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdDocuments(string $signatureRequestId, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -1197,6 +1326,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdDocuments(string $signatureRequestId, $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1221,6 +1352,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadBadRequestException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdDocumentsDownload(string $signatureRequestId, array $queryParameters = [], string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
@@ -1240,6 +1373,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdTooManyRequestsException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdInternalServerErrorException
      */
     public function deleteSignatureRequestsSignatureRequestIdDocumentsDocumentId(string $signatureRequestId, string $documentId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1258,6 +1393,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdDocumentsDocumentId(string $signatureRequestId, string $documentId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1278,6 +1415,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnsupportedMediaTypeException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdTooManyRequestsException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdInternalServerErrorException
      */
     public function patchSignatureRequestsSignatureRequestIdDocumentsDocumentId(string $signatureRequestId, string $documentId, ?UpdateDocument $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1298,6 +1437,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownload(string $signatureRequestId, string $documentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
@@ -1323,6 +1464,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields(string $signatureRequestId, string $documentId, array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -1343,6 +1486,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields(string $signatureRequestId, string $documentId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1363,6 +1508,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdUnauthorizedException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdForbiddenException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdTooManyRequestsException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdInternalServerErrorException
      */
     public function deleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId(string $signatureRequestId, string $documentId, string $fieldId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1384,6 +1531,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdForbiddenException
      * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdNotFoundException
      * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdUnsupportedMediaTypeException
+     * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdTooManyRequestsException
+     * @throws Exception\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldIdInternalServerErrorException
      */
     public function updateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId(string $signatureRequestId, string $documentId, string $fieldId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1404,6 +1553,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplace(string $signatureRequestId, string $documentId, ?PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1421,6 +1572,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdFollowersUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdFollowersForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdFollowersNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdFollowersTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdFollowersInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdFollowers(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1441,6 +1594,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdFollowers(string $signatureRequestId, ?array $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1458,6 +1613,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdMetadataForbiddenException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdMetadataNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdMetadataTooManyRequestsException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdMetadataInternalServerErrorException
      */
     public function deleteSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1475,6 +1632,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdMetadataForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdMetadataNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdMetadataTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdMetadataInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1494,6 +1653,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, ?CreateSignatureRequestMetadata $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1512,6 +1673,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
      * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataForbiddenException
      * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataNotFoundException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataTooManyRequestsException
+     * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataInternalServerErrorException
      */
     public function putSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, ?UpdateSignatureRequestMetadata $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1531,6 +1694,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdReactivateInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdReactivate(string $signatureRequestId, ?PostSignatureRequestsSignatureRequestIdReactivateRequest $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1548,6 +1713,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdSigners(string $signatureRequestId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1567,6 +1734,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdSigners(string $signatureRequestId, ?\stdClass $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1586,6 +1755,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdUnauthorizedException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdForbiddenException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdTooManyRequestsException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdInternalServerErrorException
      */
     public function deleteSignatureRequestsSignatureRequestIdSignersSignerId(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1604,6 +1775,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignersSignersIdUnauthorizedException
      * @throws Exception\GetSignersSignersIdForbiddenException
      * @throws Exception\GetSignersSignersIdNotFoundException
+     * @throws Exception\GetSignersSignersIdTooManyRequestsException
+     * @throws Exception\GetSignersSignersIdInternalServerErrorException
      */
     public function getSignersSignersId(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1625,6 +1798,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdForbiddenException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdNotFoundException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdUnsupportedMediaTypeException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdTooManyRequestsException
+     * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdInternalServerErrorException
      */
     public function patchSignatureRequestsSignatureRequestIdSignersSignerId(string $signatureRequestId, string $signerId, ?UpdateSigner $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1644,6 +1819,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrailsInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdSignersSignerIdAuditTrails(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1664,6 +1841,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignersSignerIdAuditTrailsDownloadUnauthorizedException
      * @throws Exception\GetSignersSignerIdAuditTrailsDownloadForbiddenException
      * @throws Exception\GetSignersSignerIdAuditTrailsDownloadNotFoundException
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadTooManyRequestsException
+     * @throws Exception\GetSignersSignerIdAuditTrailsDownloadInternalServerErrorException
      */
     public function getSignersSignerIdAuditTrailsDownload(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
@@ -1684,6 +1863,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
      * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsTooManyRequestsException
+     * @throws Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsInternalServerErrorException
      */
     public function deleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1704,6 +1885,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocuments(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1726,6 +1909,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdForbiddenException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdNotFoundException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdTooManyRequestsException
+     * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentIdInternalServerErrorException
      */
     public function getSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsSignerDocumentId(string $signatureRequestId, string $signerId, string $signerDocumentId, string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
@@ -1745,6 +1930,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1765,6 +1952,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderUnauthorizedException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderNotFoundException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminderInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder(string $signatureRequestId, string $signerId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1786,6 +1975,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignForbiddenException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignNotFoundException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignUnsupportedMediaTypeException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignTooManyRequestsException
+     * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSignInternalServerErrorException
      */
     public function postSignatureRequestsSignatureRequestIdSignersSignerIdSign(string $signatureRequestId, string $signerId, $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1808,6 +1999,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetTemplatesBadRequestException
      * @throws Exception\GetTemplatesUnauthorizedException
      * @throws Exception\GetTemplatesForbiddenException
+     * @throws Exception\GetTemplatesTooManyRequestsException
+     * @throws Exception\GetTemplatesInternalServerErrorException
      */
     public function getTemplates(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -1830,6 +2023,7 @@ class Client extends Runtime\Client\Client
      *
      * @throws Exception\GetUsersBadRequestException
      * @throws Exception\GetUsersUnauthorizedException
+     * @throws Exception\GetUsersTooManyRequestsException
      * @throws Exception\GetUsersInternalServerErrorException
      */
     public function getUsers(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
@@ -1849,6 +2043,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetUsersUserIdUnauthorizedException
      * @throws Exception\GetUsersUserIdForbiddenException
      * @throws Exception\GetUsersUserIdNotFoundException
+     * @throws Exception\GetUsersUserIdTooManyRequestsException
      * @throws Exception\GetUsersUserIdInternalServerErrorException
      */
     public function getUsersUserId(string $userId, string $fetch = self::FETCH_OBJECT)
@@ -1870,6 +2065,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchUsersUserIdForbiddenException
      * @throws Exception\PatchUsersUserIdNotFoundException
      * @throws Exception\PatchUsersUserIdUnsupportedMediaTypeException
+     * @throws Exception\PatchUsersUserIdTooManyRequestsException
      * @throws Exception\PatchUsersUserIdInternalServerErrorException
      */
     public function patchUsersUserId(string $userId, ?UpdateUser $requestBody = null, string $fetch = self::FETCH_OBJECT)
@@ -1885,8 +2081,11 @@ class Client extends Runtime\Client\Client
      * @return Model\VideoIdentityVerificationCreated|ResponseInterface|null
      *
      * @throws Exception\PostIdentityVerificationsBadRequestException
+     * @throws Exception\PostIdentityVerificationsUnauthorizedException
      * @throws Exception\PostIdentityVerificationsForbiddenException
      * @throws Exception\PostIdentityVerificationsNotFoundException
+     * @throws Exception\PostIdentityVerificationsTooManyRequestsException
+     * @throws Exception\PostIdentityVerificationsInternalServerErrorException
      */
     public function postIdentityVerifications(?CreateVideoIdentityVerification $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1902,8 +2101,11 @@ class Client extends Runtime\Client\Client
      * @return Model\VideoIdentityVerification|ResponseInterface|null
      *
      * @throws Exception\GetIdentityVerificationsIdentityVerificationIdBadRequestException
+     * @throws Exception\GetIdentityVerificationsIdentityVerificationIdUnauthorizedException
      * @throws Exception\GetIdentityVerificationsIdentityVerificationIdForbiddenException
      * @throws Exception\GetIdentityVerificationsIdentityVerificationIdNotFoundException
+     * @throws Exception\GetIdentityVerificationsIdentityVerificationIdTooManyRequestsException
+     * @throws Exception\GetIdentityVerificationsIdentityVerificationIdInternalServerErrorException
      */
     public function getIdentityVerificationsIdentityVerificationId(string $identityVerificationId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1918,6 +2120,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetWebhooksBadRequestException
      * @throws Exception\GetWebhooksUnauthorizedException
      * @throws Exception\GetWebhooksForbiddenException
+     * @throws Exception\GetWebhooksTooManyRequestsException
+     * @throws Exception\GetWebhooksInternalServerErrorException
      */
     public function getWebhooks(string $fetch = self::FETCH_OBJECT)
     {
@@ -1936,6 +2140,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostWebhooksSubscriptionsForbiddenException
      * @throws Exception\PostWebhooksSubscriptionsNotFoundException
      * @throws Exception\PostWebhooksSubscriptionsUnsupportedMediaTypeException
+     * @throws Exception\PostWebhooksSubscriptionsTooManyRequestsException
+     * @throws Exception\PostWebhooksSubscriptionsInternalServerErrorException
      */
     public function postWebhooksSubscriptions(?CreateWebhookSubscription $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -1954,6 +2160,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteWebhooksWebhookIdUnauthorizedException
      * @throws Exception\DeleteWebhooksWebhookIdForbiddenException
      * @throws Exception\DeleteWebhooksWebhookIdNotFoundException
+     * @throws Exception\DeleteWebhooksWebhookIdTooManyRequestsException
+     * @throws Exception\DeleteWebhooksWebhookIdInternalServerErrorException
      */
     public function deleteWebhooksWebhookId(string $webhookId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1973,6 +2181,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetWebhooksWebhookIdForbiddenException
      * @throws Exception\GetWebhooksWebhookIdNotFoundException
      * @throws Exception\GetWebhooksWebhookIdUnsupportedMediaTypeException
+     * @throws Exception\GetWebhooksWebhookIdTooManyRequestsException
+     * @throws Exception\GetWebhooksWebhookIdInternalServerErrorException
      */
     public function getWebhooksWebhookId(string $webhookId, string $fetch = self::FETCH_OBJECT)
     {
@@ -1992,6 +2202,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchWebhooksWebhookIdUnauthorizedException
      * @throws Exception\PatchWebhooksWebhookIdForbiddenException
      * @throws Exception\PatchWebhooksWebhookIdNotFoundException
+     * @throws Exception\PatchWebhooksWebhookIdTooManyRequestsException
+     * @throws Exception\PatchWebhooksWebhookIdInternalServerErrorException
      */
     public function patchWebhooksWebhookId(string $webhookId, ?UpdateWebhookSubscription $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -2014,6 +2226,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetWorkspacesBadRequestException
      * @throws Exception\GetWorkspacesUnauthorizedException
      * @throws Exception\GetWorkspacesForbiddenException
+     * @throws Exception\GetWorkspacesTooManyRequestsException
+     * @throws Exception\GetWorkspacesInternalServerErrorException
      */
     public function getWorkspaces(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
     {
@@ -2032,6 +2246,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostWorkspaceForbiddenException
      * @throws Exception\PostWorkspaceNotFoundException
      * @throws Exception\PostWorkspaceUnsupportedMediaTypeException
+     * @throws Exception\PostWorkspaceTooManyRequestsException
+     * @throws Exception\PostWorkspaceInternalServerErrorException
      */
     public function postWorkspace(?CreateWorkspace $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -2047,6 +2263,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetWorkspacesDefaultUnauthorizedException
      * @throws Exception\GetWorkspacesDefaultForbiddenException
      * @throws Exception\GetWorkspacesDefaultNotFoundException
+     * @throws Exception\GetWorkspacesDefaultTooManyRequestsException
+     * @throws Exception\GetWorkspacesDefaultInternalServerErrorException
      */
     public function getWorkspacesDefault(string $fetch = self::FETCH_OBJECT)
     {
@@ -2064,6 +2282,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\MarkWorkspaceAsDefaultUnauthorizedException
      * @throws Exception\MarkWorkspaceAsDefaultForbiddenException
      * @throws Exception\MarkWorkspaceAsDefaultUnsupportedMediaTypeException
+     * @throws Exception\MarkWorkspaceAsDefaultTooManyRequestsException
+     * @throws Exception\MarkWorkspaceAsDefaultInternalServerErrorException
      */
     public function markWorkspaceAsDefault(?MarkWorkspaceAsDefault $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -2083,6 +2303,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteWorkspaceForbiddenException
      * @throws Exception\DeleteWorkspaceNotFoundException
      * @throws Exception\DeleteWorkspaceUnsupportedMediaTypeException
+     * @throws Exception\DeleteWorkspaceTooManyRequestsException
+     * @throws Exception\DeleteWorkspaceInternalServerErrorException
      */
     public function deleteWorkspace(string $workspaceId, ?DeleteWorkspace $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -2101,6 +2323,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\GetWorkspacesWorkspaceIdUnauthorizedException
      * @throws Exception\GetWorkspacesWorkspaceIdForbiddenException
      * @throws Exception\GetWorkspacesWorkspaceIdNotFoundException
+     * @throws Exception\GetWorkspacesWorkspaceIdTooManyRequestsException
+     * @throws Exception\GetWorkspacesWorkspaceIdInternalServerErrorException
      */
     public function getWorkspacesWorkspaceId(string $workspaceId, string $fetch = self::FETCH_OBJECT)
     {
@@ -2121,6 +2345,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PatchWorkspacesWorkspaceIdForbiddenException
      * @throws Exception\PatchWorkspacesWorkspaceIdNotFoundException
      * @throws Exception\PatchWorkspacesWorkspaceIdUnsupportedMediaTypeException
+     * @throws Exception\PatchWorkspacesWorkspaceIdTooManyRequestsException
+     * @throws Exception\PatchWorkspacesWorkspaceIdInternalServerErrorException
      */
     public function patchWorkspacesWorkspaceId(string $workspaceId, ?UpdateWorkspace $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
@@ -2140,6 +2366,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\DeleteWorkspaceWorkspaceIdUsersUserIdUnauthorizedException
      * @throws Exception\DeleteWorkspaceWorkspaceIdUsersUserIdForbiddenException
      * @throws Exception\DeleteWorkspaceWorkspaceIdUsersUserIdNotFoundException
+     * @throws Exception\DeleteWorkspaceWorkspaceIdUsersUserIdTooManyRequestsException
+     * @throws Exception\DeleteWorkspaceWorkspaceIdUsersUserIdInternalServerErrorException
      */
     public function deleteWorkspaceWorkspaceIdUsersUserId(string $workspaceId, string $userId, string $fetch = self::FETCH_OBJECT)
     {
@@ -2159,6 +2387,8 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PutWorkspacesWorkspaceIdUsersUnauthorizedException
      * @throws Exception\PutWorkspacesWorkspaceIdUsersForbiddenException
      * @throws Exception\PutWorkspacesWorkspaceIdUsersNotFoundException
+     * @throws Exception\PutWorkspacesWorkspaceIdUsersTooManyRequestsException
+     * @throws Exception\PutWorkspacesWorkspaceIdUsersInternalServerErrorException
      */
     public function putWorkspacesWorkspaceIdUsers(string $workspaceId, string $userId, string $fetch = self::FETCH_OBJECT)
     {

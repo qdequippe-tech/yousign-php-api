@@ -5,12 +5,16 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostElectronicSealsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostElectronicSealsForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PostElectronicSealsInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PostElectronicSealsTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostElectronicSealsUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostElectronicSealsUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
 use Qdequippe\Yousign\Api\Model\ElectronicSeal;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -22,6 +26,9 @@ class PostElectronicSeals extends BaseEndpoint implements Endpoint
 {
     use EndpointTrait;
 
+    /**
+     * Create a new Electronic Seal.
+     */
     public function __construct(?CreateElectronicSealPayload $requestBody = null)
     {
         $this->body = $requestBody;
@@ -58,6 +65,8 @@ class PostElectronicSeals extends BaseEndpoint implements Endpoint
      * @throws PostElectronicSealsUnauthorizedException
      * @throws PostElectronicSealsForbiddenException
      * @throws PostElectronicSealsUnsupportedMediaTypeException
+     * @throws PostElectronicSealsTooManyRequestsException
+     * @throws PostElectronicSealsInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -77,6 +86,12 @@ class PostElectronicSeals extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostElectronicSealsUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostElectronicSealsTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostElectronicSealsInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

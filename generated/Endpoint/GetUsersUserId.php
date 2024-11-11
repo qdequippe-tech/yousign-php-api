@@ -7,11 +7,13 @@ use Qdequippe\Yousign\Api\Exception\GetUsersUserIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetUsersUserIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetUsersUserIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetUsersUserIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetUsersUserIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetUsersUserIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\User;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -59,6 +61,7 @@ class GetUsersUserId extends BaseEndpoint implements Endpoint
      * @throws GetUsersUserIdUnauthorizedException
      * @throws GetUsersUserIdForbiddenException
      * @throws GetUsersUserIdNotFoundException
+     * @throws GetUsersUserIdTooManyRequestsException
      * @throws GetUsersUserIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
@@ -79,6 +82,9 @@ class GetUsersUserId extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetUsersUserIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetUsersUserIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetUsersUserIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);

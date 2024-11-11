@@ -3,10 +3,14 @@
 namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
+use Qdequippe\Yousign\Api\Exception\GetElectronicSealInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetElectronicSealTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\ElectronicSeal;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -17,6 +21,11 @@ class GetElectronicSeal extends BaseEndpoint implements Endpoint
 {
     use EndpointTrait;
 
+    /**
+     * Retrieves a given Electronic Seal.
+     *
+     * @param string $electronicSealId Electronic Seal Id
+     */
     public function __construct(protected string $electronicSealId)
     {
     }
@@ -46,6 +55,8 @@ class GetElectronicSeal extends BaseEndpoint implements Endpoint
      *
      * @throws GetElectronicSealUnauthorizedException
      * @throws GetElectronicSealNotFoundException
+     * @throws GetElectronicSealTooManyRequestsException
+     * @throws GetElectronicSealInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -59,6 +70,12 @@ class GetElectronicSeal extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetElectronicSealNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetElectronicSealTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetElectronicSealInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

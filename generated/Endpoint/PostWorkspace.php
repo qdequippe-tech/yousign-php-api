@@ -5,13 +5,17 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostWorkspaceBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostWorkspaceForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PostWorkspaceInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PostWorkspaceNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PostWorkspaceTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostWorkspaceUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostWorkspaceUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CreateWorkspace;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Model\Workspace;
@@ -64,6 +68,8 @@ class PostWorkspace extends BaseEndpoint implements Endpoint
      * @throws PostWorkspaceForbiddenException
      * @throws PostWorkspaceNotFoundException
      * @throws PostWorkspaceUnsupportedMediaTypeException
+     * @throws PostWorkspaceTooManyRequestsException
+     * @throws PostWorkspaceInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -86,6 +92,12 @@ class PostWorkspace extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostWorkspaceUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostWorkspaceTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostWorkspaceInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

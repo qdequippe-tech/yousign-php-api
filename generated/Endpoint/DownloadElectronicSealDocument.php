@@ -3,9 +3,13 @@
 namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
+use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealDocumentInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealDocumentNotFoundException;
+use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealDocumentTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealDocumentUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -17,7 +21,10 @@ class DownloadElectronicSealDocument extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * @param array $accept Accept content header application/pdf|application/json
+     * Download a given Electronic Seal Document.
+     *
+     * @param string $electronicSealDocumentId Electronic Seal Id
+     * @param array  $accept                   Accept content header application/pdf|application/json
      */
     public function __construct(protected string $electronicSealDocumentId, protected array $accept = [])
     {
@@ -50,6 +57,8 @@ class DownloadElectronicSealDocument extends BaseEndpoint implements Endpoint
     /**
      * @throws DownloadElectronicSealDocumentUnauthorizedException
      * @throws DownloadElectronicSealDocumentNotFoundException
+     * @throws DownloadElectronicSealDocumentTooManyRequestsException
+     * @throws DownloadElectronicSealDocumentInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -60,6 +69,12 @@ class DownloadElectronicSealDocument extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DownloadElectronicSealDocumentNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DownloadElectronicSealDocumentTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DownloadElectronicSealDocumentInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
     }
 

@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UploadElectronicSealDocument extends \ArrayObject
+class CreateElectronicSealDocument extends \ArrayObject
 {
     /**
      * @var array

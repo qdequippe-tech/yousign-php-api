@@ -5,9 +5,13 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetWebhooksInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\GetWebhooksTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetWebhooksUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\WebhookSubscription;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -45,6 +49,8 @@ class GetWebhooks extends BaseEndpoint implements Endpoint
      * @throws GetWebhooksBadRequestException
      * @throws GetWebhooksUnauthorizedException
      * @throws GetWebhooksForbiddenException
+     * @throws GetWebhooksTooManyRequestsException
+     * @throws GetWebhooksInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -61,6 +67,12 @@ class GetWebhooks extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetWebhooksForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetWebhooksTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetWebhooksInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

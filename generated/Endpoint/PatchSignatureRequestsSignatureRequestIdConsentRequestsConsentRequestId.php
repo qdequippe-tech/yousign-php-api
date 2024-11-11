@@ -5,12 +5,16 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\SignerConsentRequest;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UpdateSignerConsentRequest;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -66,6 +70,8 @@ class PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestId ex
      * @throws PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdUnauthorizedException
      * @throws PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdForbiddenException
      * @throws PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdNotFoundException
+     * @throws PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdTooManyRequestsException
+     * @throws PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -85,6 +91,12 @@ class PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestId ex
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;
