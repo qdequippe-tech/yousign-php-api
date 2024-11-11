@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException;
+use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException;
+use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -56,6 +60,8 @@ class DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments extends 
      * @throws DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsUnauthorizedException
      * @throws DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsForbiddenException
      * @throws DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException
+     * @throws DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsTooManyRequestsException
+     * @throws DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -75,6 +81,12 @@ class DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments extends 
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocumentsInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

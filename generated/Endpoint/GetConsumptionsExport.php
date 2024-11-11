@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -28,7 +32,7 @@ class GetConsumptionsExport extends BaseEndpoint implements Endpoint
      *
      * @var string $from The "from" date must not be more than 1 year in the past
      * @var string $to The "to" date must be more recent than the "from" date
-     * @var string $authentication_key
+     * @var string $authentication_key The API authentication key to use to retrieve the data
      *             }
      *
      * @param array $accept Accept content header text/csv|application/json
@@ -80,6 +84,8 @@ class GetConsumptionsExport extends BaseEndpoint implements Endpoint
      * @throws GetConsumptionsExportUnauthorizedException
      * @throws GetConsumptionsExportForbiddenException
      * @throws GetConsumptionsExportNotFoundException
+     * @throws GetConsumptionsExportTooManyRequestsException
+     * @throws GetConsumptionsExportInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -96,6 +102,12 @@ class GetConsumptionsExport extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetConsumptionsExportNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetConsumptionsExportTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetConsumptionsExportInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
     }
 

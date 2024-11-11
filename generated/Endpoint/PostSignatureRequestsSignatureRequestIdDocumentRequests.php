@@ -5,14 +5,18 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdDocumentRequestsUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\SignerDocumentRequest;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -66,6 +70,8 @@ class PostSignatureRequestsSignatureRequestIdDocumentRequests extends BaseEndpoi
      * @throws PostSignatureRequestsSignatureRequestIdDocumentRequestsForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdDocumentRequestsNotFoundException
      * @throws PostSignatureRequestsSignatureRequestIdDocumentRequestsUnsupportedMediaTypeException
+     * @throws PostSignatureRequestsSignatureRequestIdDocumentRequestsTooManyRequestsException
+     * @throws PostSignatureRequestsSignatureRequestIdDocumentRequestsInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -88,6 +94,12 @@ class PostSignatureRequestsSignatureRequestIdDocumentRequests extends BaseEndpoi
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdDocumentRequestsUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdDocumentRequestsTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdDocumentRequestsInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

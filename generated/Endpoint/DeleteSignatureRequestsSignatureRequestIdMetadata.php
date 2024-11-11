@@ -4,10 +4,14 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdMetadataForbiddenException;
+use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdMetadataInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdMetadataNotFoundException;
+use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdMetadataTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdMetadataUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -51,6 +55,8 @@ class DeleteSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint imp
      * @throws DeleteSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
      * @throws DeleteSignatureRequestsSignatureRequestIdMetadataForbiddenException
      * @throws DeleteSignatureRequestsSignatureRequestIdMetadataNotFoundException
+     * @throws DeleteSignatureRequestsSignatureRequestIdMetadataTooManyRequestsException
+     * @throws DeleteSignatureRequestsSignatureRequestIdMetadataInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -67,6 +73,12 @@ class DeleteSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint imp
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DeleteSignatureRequestsSignatureRequestIdMetadataNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteSignatureRequestsSignatureRequestIdMetadataTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteSignatureRequestsSignatureRequestIdMetadataInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

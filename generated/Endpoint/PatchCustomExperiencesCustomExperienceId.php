@@ -5,13 +5,17 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Model\UpdateCustomExperience;
@@ -67,6 +71,8 @@ class PatchCustomExperiencesCustomExperienceId extends BaseEndpoint implements E
      * @throws PatchCustomExperiencesCustomExperienceIdForbiddenException
      * @throws PatchCustomExperiencesCustomExperienceIdNotFoundException
      * @throws PatchCustomExperiencesCustomExperienceIdUnsupportedMediaTypeException
+     * @throws PatchCustomExperiencesCustomExperienceIdTooManyRequestsException
+     * @throws PatchCustomExperiencesCustomExperienceIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -89,6 +95,12 @@ class PatchCustomExperiencesCustomExperienceId extends BaseEndpoint implements E
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchCustomExperiencesCustomExperienceIdUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchCustomExperiencesCustomExperienceIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchCustomExperiencesCustomExperienceIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

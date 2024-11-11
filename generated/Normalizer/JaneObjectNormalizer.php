@@ -23,6 +23,8 @@ use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperienceRedirectUrls;
 use Qdequippe\Yousign\Api\Model\CreateDocumentFromJson;
 use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
+use Qdequippe\Yousign\Api\Model\CreateElectronicSealDocument;
+use Qdequippe\Yousign\Api\Model\CreateElectronicSealDocumentFromJson;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealFieldReadOnlyTextPayload;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealFieldSealPayload;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
@@ -152,6 +154,7 @@ use Qdequippe\Yousign\Api\Model\Template;
 use Qdequippe\Yousign\Api\Model\Text;
 use Qdequippe\Yousign\Api\Model\Text1;
 use Qdequippe\Yousign\Api\Model\Text2;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Model\UpdateContact;
@@ -169,7 +172,6 @@ use Qdequippe\Yousign\Api\Model\UpdateUser;
 use Qdequippe\Yousign\Api\Model\UpdateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
 use Qdequippe\Yousign\Api\Model\UploadArchivedFile;
-use Qdequippe\Yousign\Api\Model\UploadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealImage;
 use Qdequippe\Yousign\Api\Model\User;
 use Qdequippe\Yousign\Api\Model\UserWorkspacesInner;
@@ -230,7 +232,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             Document::class => DocumentNormalizer::class,
 
-            UploadElectronicSealDocument::class => UploadElectronicSealDocumentNormalizer::class,
+            CreateElectronicSealDocument::class => CreateElectronicSealDocumentNormalizer::class,
+
+            CreateElectronicSealDocumentFromJson::class => CreateElectronicSealDocumentFromJsonNormalizer::class,
 
             ElectronicSealDocument::class => ElectronicSealDocumentNormalizer::class,
 
@@ -388,6 +392,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             UnsupportedMediaTypeResponse::class => UnsupportedMediaTypeResponseNormalizer::class,
 
+            TooManyRequestsResponse::class => TooManyRequestsResponseNormalizer::class,
+
+            InternalServerError::class => InternalServerErrorNormalizer::class,
+
             GetConsumptionAddon200Response::class => GetConsumptionAddon200ResponseNormalizer::class,
 
             GetConsumptionDetail200Response::class => GetConsumptionDetail200ResponseNormalizer::class,
@@ -415,8 +423,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfoNormalizer::class,
 
             PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestNormalizer::class,
-
-            InternalServerError::class => InternalServerErrorNormalizer::class,
 
             PostSignatureRequestsSignatureRequestIdCancelRequest::class => PostSignatureRequestsSignatureRequestIdCancelRequestNormalizer::class,
 
@@ -621,7 +627,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 UpdateCustomExperience::class => false,
                 CreateDocumentFromMultipart::class => false,
                 Document::class => false,
-                UploadElectronicSealDocument::class => false,
+                CreateElectronicSealDocument::class => false,
+                CreateElectronicSealDocumentFromJson::class => false,
                 ElectronicSealDocument::class => false,
                 ElectronicSealImage::class => false,
                 UploadElectronicSealImage::class => false,
@@ -700,6 +707,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 ForbiddenResponse::class => false,
                 NotFoundResponse::class => false,
                 UnsupportedMediaTypeResponse::class => false,
+                TooManyRequestsResponse::class => false,
+                InternalServerError::class => false,
                 GetConsumptionAddon200Response::class => false,
                 GetConsumptionDetail200Response::class => false,
                 GetContacts200Response::class => false,
@@ -714,7 +723,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 FromExistingSigner::class => false,
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => false,
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => false,
-                InternalServerError::class => false,
                 PostSignatureRequestsSignatureRequestIdCancelRequest::class => false,
                 GetSignatureRequestsSignatureRequestIdSignerConsentRequests200Response::class => false,
                 GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response::class => false,
@@ -827,7 +835,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             Document::class => DocumentNormalizer::class,
 
-            UploadElectronicSealDocument::class => UploadElectronicSealDocumentNormalizer::class,
+            CreateElectronicSealDocument::class => CreateElectronicSealDocumentNormalizer::class,
+
+            CreateElectronicSealDocumentFromJson::class => CreateElectronicSealDocumentFromJsonNormalizer::class,
 
             ElectronicSealDocument::class => ElectronicSealDocumentNormalizer::class,
 
@@ -985,6 +995,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             UnsupportedMediaTypeResponse::class => UnsupportedMediaTypeResponseNormalizer::class,
 
+            TooManyRequestsResponse::class => TooManyRequestsResponseNormalizer::class,
+
+            InternalServerError::class => InternalServerErrorNormalizer::class,
+
             GetConsumptionAddon200Response::class => GetConsumptionAddon200ResponseNormalizer::class,
 
             GetConsumptionDetail200Response::class => GetConsumptionDetail200ResponseNormalizer::class,
@@ -1012,8 +1026,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfoNormalizer::class,
 
             PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestNormalizer::class,
-
-            InternalServerError::class => InternalServerErrorNormalizer::class,
 
             PostSignatureRequestsSignatureRequestIdCancelRequest::class => PostSignatureRequestsSignatureRequestIdCancelRequestNormalizer::class,
 
@@ -1226,7 +1238,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 UpdateCustomExperience::class => false,
                 CreateDocumentFromMultipart::class => false,
                 Document::class => false,
-                UploadElectronicSealDocument::class => false,
+                CreateElectronicSealDocument::class => false,
+                CreateElectronicSealDocumentFromJson::class => false,
                 ElectronicSealDocument::class => false,
                 ElectronicSealImage::class => false,
                 UploadElectronicSealImage::class => false,
@@ -1305,6 +1318,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 ForbiddenResponse::class => false,
                 NotFoundResponse::class => false,
                 UnsupportedMediaTypeResponse::class => false,
+                TooManyRequestsResponse::class => false,
+                InternalServerError::class => false,
                 GetConsumptionAddon200Response::class => false,
                 GetConsumptionDetail200Response::class => false,
                 GetContacts200Response::class => false,
@@ -1319,7 +1334,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 FromExistingSigner::class => false,
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequestInfo::class => false,
                 PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest::class => false,
-                InternalServerError::class => false,
                 PostSignatureRequestsSignatureRequestIdCancelRequest::class => false,
                 GetSignatureRequestsSignatureRequestIdSignerConsentRequests200Response::class => false,
                 GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response::class => false,

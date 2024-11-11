@@ -4,11 +4,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\Approver;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -55,6 +59,8 @@ class GetSignatureRequestsSignatureRequestIdApproversApproverId extends BaseEndp
      * @throws GetSignatureRequestsSignatureRequestIdApproversApproverIdUnauthorizedException
      * @throws GetSignatureRequestsSignatureRequestIdApproversApproverIdForbiddenException
      * @throws GetSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException
+     * @throws GetSignatureRequestsSignatureRequestIdApproversApproverIdTooManyRequestsException
+     * @throws GetSignatureRequestsSignatureRequestIdApproversApproverIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -71,6 +77,12 @@ class GetSignatureRequestsSignatureRequestIdApproversApproverId extends BaseEndp
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdApproversApproverIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetSignatureRequestsSignatureRequestIdApproversApproverIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetSignatureRequestsSignatureRequestIdApproversApproverIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -54,6 +58,8 @@ class DeleteWebhooksWebhookId extends BaseEndpoint implements Endpoint
      * @throws DeleteWebhooksWebhookIdUnauthorizedException
      * @throws DeleteWebhooksWebhookIdForbiddenException
      * @throws DeleteWebhooksWebhookIdNotFoundException
+     * @throws DeleteWebhooksWebhookIdTooManyRequestsException
+     * @throws DeleteWebhooksWebhookIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -73,6 +79,12 @@ class DeleteWebhooksWebhookId extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DeleteWebhooksWebhookIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteWebhooksWebhookIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteWebhooksWebhookIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

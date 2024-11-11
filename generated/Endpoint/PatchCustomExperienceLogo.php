@@ -6,12 +6,16 @@ use Http\Message\MultipartStream\MultipartStreamBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperienceLogoBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperienceLogoForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PatchCustomExperienceLogoInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PatchCustomExperienceLogoTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperienceLogoUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperienceLogoUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\PatchCustomExperienceLogoRequest;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -71,6 +75,8 @@ class PatchCustomExperienceLogo extends BaseEndpoint implements Endpoint
      * @throws PatchCustomExperienceLogoUnauthorizedException
      * @throws PatchCustomExperienceLogoForbiddenException
      * @throws PatchCustomExperienceLogoUnsupportedMediaTypeException
+     * @throws PatchCustomExperienceLogoTooManyRequestsException
+     * @throws PatchCustomExperienceLogoInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -90,6 +96,12 @@ class PatchCustomExperienceLogo extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchCustomExperienceLogoUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchCustomExperienceLogoTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchCustomExperienceLogoInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

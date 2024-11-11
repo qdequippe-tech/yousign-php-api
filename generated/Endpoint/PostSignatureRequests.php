@@ -5,14 +5,18 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\SignatureRequest;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -64,6 +68,8 @@ class PostSignatureRequests extends BaseEndpoint implements Endpoint
      * @throws PostSignatureRequestsForbiddenException
      * @throws PostSignatureRequestsNotFoundException
      * @throws PostSignatureRequestsUnsupportedMediaTypeException
+     * @throws PostSignatureRequestsTooManyRequestsException
+     * @throws PostSignatureRequestsInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -86,6 +92,12 @@ class PostSignatureRequests extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

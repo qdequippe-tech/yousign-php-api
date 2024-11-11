@@ -5,13 +5,17 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\Signer;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -65,6 +69,8 @@ class PostSignatureRequestsSignatureRequestIdSigners extends BaseEndpoint implem
      * @throws PostSignatureRequestsSignatureRequestIdSignersForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdSignersNotFoundException
      * @throws PostSignatureRequestsSignatureRequestIdSignersUnsupportedMediaTypeException
+     * @throws PostSignatureRequestsSignatureRequestIdSignersTooManyRequestsException
+     * @throws PostSignatureRequestsSignatureRequestIdSignersInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -87,6 +93,12 @@ class PostSignatureRequestsSignatureRequestIdSigners extends BaseEndpoint implem
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdSignersUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdSignersTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdSignersInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

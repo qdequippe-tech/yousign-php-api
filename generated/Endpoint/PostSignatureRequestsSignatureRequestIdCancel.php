@@ -5,14 +5,18 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCancelBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCancelForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCancelInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCancelNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCancelTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCancelUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdCancelUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdCancelRequest;
 use Qdequippe\Yousign\Api\Model\SignatureRequest;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -66,6 +70,8 @@ class PostSignatureRequestsSignatureRequestIdCancel extends BaseEndpoint impleme
      * @throws PostSignatureRequestsSignatureRequestIdCancelForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdCancelNotFoundException
      * @throws PostSignatureRequestsSignatureRequestIdCancelUnsupportedMediaTypeException
+     * @throws PostSignatureRequestsSignatureRequestIdCancelTooManyRequestsException
+     * @throws PostSignatureRequestsSignatureRequestIdCancelInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -88,6 +94,12 @@ class PostSignatureRequestsSignatureRequestIdCancel extends BaseEndpoint impleme
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdCancelUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdCancelTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdCancelInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

@@ -4,10 +4,14 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadBadRequestException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -76,6 +80,8 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDownload extends BaseEndpoi
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDownloadBadRequestException
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDownloadUnauthorizedException
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDownloadNotFoundException
+     * @throws GetSignatureRequestsSignatureRequestIdDocumentsDownloadTooManyRequestsException
+     * @throws GetSignatureRequestsSignatureRequestIdDocumentsDownloadInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -89,6 +95,12 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDownload extends BaseEndpoi
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDownloadNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetSignatureRequestsSignatureRequestIdDocumentsDownloadTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetSignatureRequestsSignatureRequestIdDocumentsDownloadInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
     }
 

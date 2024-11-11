@@ -14,7 +14,7 @@ class CreateDocumentFromJson extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Id of the Electronic Seal Document. The Electronic Seal must be done to use its Document.
+     * Id of the Electronic Seal Document. The Electronic Seal must be done to use its Electronic Seal Document.
      *
      * @var string|null
      */
@@ -35,7 +35,7 @@ class CreateDocumentFromJson extends \ArrayObject
     protected $insertAfterId;
 
     /**
-     * Id of the Electronic Seal Document. The Electronic Seal must be done to use its Document.
+     * Id of the Electronic Seal Document. The Electronic Seal must be done to use its Electronic Seal Document.
      */
     public function getElectronicSealDocumentId(): ?string
     {
@@ -43,7 +43,7 @@ class CreateDocumentFromJson extends \ArrayObject
     }
 
     /**
-     * Id of the Electronic Seal Document. The Electronic Seal must be done to use its Document.
+     * Id of the Electronic Seal Document. The Electronic Seal must be done to use its Electronic Seal Document.
      */
     public function setElectronicSealDocumentId(?string $electronicSealDocumentId): self
     {

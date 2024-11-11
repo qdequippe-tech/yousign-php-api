@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceForbiddenException;
+use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceNotFoundException;
+use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -54,6 +58,8 @@ class DeleteCustomExperience extends BaseEndpoint implements Endpoint
      * @throws DeleteCustomExperienceUnauthorizedException
      * @throws DeleteCustomExperienceForbiddenException
      * @throws DeleteCustomExperienceNotFoundException
+     * @throws DeleteCustomExperienceTooManyRequestsException
+     * @throws DeleteCustomExperienceInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -73,6 +79,12 @@ class DeleteCustomExperience extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DeleteCustomExperienceNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteCustomExperienceTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteCustomExperienceInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

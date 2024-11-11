@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -56,6 +60,8 @@ class PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSigne
      * @throws PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdUnauthorizedException
      * @throws PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdForbiddenException
      * @throws PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdNotFoundException
+     * @throws PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdTooManyRequestsException
+     * @throws PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -75,6 +81,12 @@ class PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSigne
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

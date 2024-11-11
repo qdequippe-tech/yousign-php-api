@@ -5,12 +5,16 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\GetConsumptionAddon200Response;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -27,7 +31,7 @@ class GetConsumptionAddon extends BaseEndpoint implements Endpoint
      *
      * @param array $queryParameters {
      *
-     * @var array $addons
+     * @var array $addons The addons to filter on.
      *            }
      */
     public function __construct(array $queryParameters = [])
@@ -73,6 +77,8 @@ class GetConsumptionAddon extends BaseEndpoint implements Endpoint
      * @throws GetConsumptionAddonUnauthorizedException
      * @throws GetConsumptionAddonForbiddenException
      * @throws GetConsumptionAddonNotFoundException
+     * @throws GetConsumptionAddonTooManyRequestsException
+     * @throws GetConsumptionAddonInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -92,6 +98,12 @@ class GetConsumptionAddon extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetConsumptionAddonNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetConsumptionAddonTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetConsumptionAddonInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

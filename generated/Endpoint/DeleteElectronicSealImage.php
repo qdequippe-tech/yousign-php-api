@@ -4,10 +4,14 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DeleteElectronicSealImageForbiddenException;
+use Qdequippe\Yousign\Api\Exception\DeleteElectronicSealImageInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\DeleteElectronicSealImageNotFoundException;
+use Qdequippe\Yousign\Api\Exception\DeleteElectronicSealImageTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DeleteElectronicSealImageUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -18,6 +22,11 @@ class DeleteElectronicSealImage extends BaseEndpoint implements Endpoint
 {
     use EndpointTrait;
 
+    /**
+     * Deletes a given Electronic Seal Image.
+     *
+     * @param string $electronicSealImageId Electronic Seal Image Id
+     */
     public function __construct(protected string $electronicSealImageId)
     {
     }
@@ -46,6 +55,8 @@ class DeleteElectronicSealImage extends BaseEndpoint implements Endpoint
      * @throws DeleteElectronicSealImageUnauthorizedException
      * @throws DeleteElectronicSealImageForbiddenException
      * @throws DeleteElectronicSealImageNotFoundException
+     * @throws DeleteElectronicSealImageTooManyRequestsException
+     * @throws DeleteElectronicSealImageInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -62,6 +73,12 @@ class DeleteElectronicSealImage extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DeleteElectronicSealImageNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteElectronicSealImageTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteElectronicSealImageInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

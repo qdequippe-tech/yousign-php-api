@@ -5,10 +5,14 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\ListElectronicSealImagesBadRequestException;
 use Qdequippe\Yousign\Api\Exception\ListElectronicSealImagesForbiddenException;
+use Qdequippe\Yousign\Api\Exception\ListElectronicSealImagesInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\ListElectronicSealImagesTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\ListElectronicSealImagesUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\ListElectronicSealImages200Response;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -21,6 +25,9 @@ class ListElectronicSealImages extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
+     * Lists Electronic Seal Images.
+     * The list is paginated and can be filtered by the `after` cursor.
+     *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
@@ -70,6 +77,8 @@ class ListElectronicSealImages extends BaseEndpoint implements Endpoint
      * @throws ListElectronicSealImagesBadRequestException
      * @throws ListElectronicSealImagesUnauthorizedException
      * @throws ListElectronicSealImagesForbiddenException
+     * @throws ListElectronicSealImagesTooManyRequestsException
+     * @throws ListElectronicSealImagesInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -86,6 +95,12 @@ class ListElectronicSealImages extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new ListElectronicSealImagesForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new ListElectronicSealImagesTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new ListElectronicSealImagesInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

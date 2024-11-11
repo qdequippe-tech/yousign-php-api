@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -55,6 +59,8 @@ class PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp extends Base
      * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException
      * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpTooManyRequestsException
+     * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -74,6 +80,12 @@ class PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp extends Base
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceLogoBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceLogoForbiddenException;
+use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceLogoInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceLogoNotFoundException;
+use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceLogoTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DeleteCustomExperienceLogoUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -54,6 +58,8 @@ class DeleteCustomExperienceLogo extends BaseEndpoint implements Endpoint
      * @throws DeleteCustomExperienceLogoUnauthorizedException
      * @throws DeleteCustomExperienceLogoForbiddenException
      * @throws DeleteCustomExperienceLogoNotFoundException
+     * @throws DeleteCustomExperienceLogoTooManyRequestsException
+     * @throws DeleteCustomExperienceLogoInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -73,6 +79,12 @@ class DeleteCustomExperienceLogo extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new DeleteCustomExperienceLogoNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteCustomExperienceLogoTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new DeleteCustomExperienceLogoInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

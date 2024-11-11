@@ -6,11 +6,15 @@ use Http\Message\MultipartStream\MultipartStreamBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageBadRequestException;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageForbiddenException;
+use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ElectronicSealImage;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -68,6 +72,8 @@ class UploadElectronicSealImage extends BaseEndpoint implements Endpoint
      * @throws UploadElectronicSealImageUnauthorizedException
      * @throws UploadElectronicSealImageForbiddenException
      * @throws UploadElectronicSealImageUnsupportedMediaTypeException
+     * @throws UploadElectronicSealImageTooManyRequestsException
+     * @throws UploadElectronicSealImageInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -87,6 +93,12 @@ class UploadElectronicSealImage extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new UploadElectronicSealImageUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new UploadElectronicSealImageTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new UploadElectronicSealImageInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

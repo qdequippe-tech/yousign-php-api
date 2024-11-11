@@ -7,12 +7,14 @@ use Qdequippe\Yousign\Api\Exception\PatchUsersUserIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchUsersUserIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchUsersUserIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PatchUsersUserIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PatchUsersUserIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PatchUsersUserIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PatchUsersUserIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Model\UpdateUser;
@@ -69,6 +71,7 @@ class PatchUsersUserId extends BaseEndpoint implements Endpoint
      * @throws PatchUsersUserIdForbiddenException
      * @throws PatchUsersUserIdNotFoundException
      * @throws PatchUsersUserIdUnsupportedMediaTypeException
+     * @throws PatchUsersUserIdTooManyRequestsException
      * @throws PatchUsersUserIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
@@ -92,6 +95,9 @@ class PatchUsersUserId extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchUsersUserIdUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchUsersUserIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchUsersUserIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);

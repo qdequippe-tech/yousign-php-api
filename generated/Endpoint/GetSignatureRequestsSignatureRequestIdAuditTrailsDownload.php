@@ -4,10 +4,14 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadBadRequestException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -74,6 +78,8 @@ class GetSignatureRequestsSignatureRequestIdAuditTrailsDownload extends BaseEndp
      * @throws GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadBadRequestException
      * @throws GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadUnauthorizedException
      * @throws GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadNotFoundException
+     * @throws GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadTooManyRequestsException
+     * @throws GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -87,6 +93,12 @@ class GetSignatureRequestsSignatureRequestIdAuditTrailsDownload extends BaseEndp
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetSignatureRequestsSignatureRequestIdAuditTrailsDownloadInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
     }
 

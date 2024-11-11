@@ -4,11 +4,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
@@ -54,6 +58,8 @@ class GetSignatureRequestsSignatureRequestIdSignerDocumentRequests extends BaseE
      * @throws GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsUnauthorizedException
      * @throws GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsForbiddenException
      * @throws GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsNotFoundException
+     * @throws GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsTooManyRequestsException
+     * @throws GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -70,6 +76,12 @@ class GetSignatureRequestsSignatureRequestIdSignerDocumentRequests extends BaseE
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetSignatureRequestsSignatureRequestIdSignerDocumentRequestsInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

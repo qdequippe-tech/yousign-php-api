@@ -5,11 +5,15 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesDefaultBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesDefaultForbiddenException;
+use Qdequippe\Yousign\Api\Exception\GetWorkspacesDefaultInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesDefaultNotFoundException;
+use Qdequippe\Yousign\Api\Exception\GetWorkspacesDefaultTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetWorkspacesDefaultUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\Workspace;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -48,6 +52,8 @@ class GetWorkspacesDefault extends BaseEndpoint implements Endpoint
      * @throws GetWorkspacesDefaultUnauthorizedException
      * @throws GetWorkspacesDefaultForbiddenException
      * @throws GetWorkspacesDefaultNotFoundException
+     * @throws GetWorkspacesDefaultTooManyRequestsException
+     * @throws GetWorkspacesDefaultInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -67,6 +73,12 @@ class GetWorkspacesDefault extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new GetWorkspacesDefaultNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetWorkspacesDefaultTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new GetWorkspacesDefaultInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

@@ -5,13 +5,17 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdInternalServerErrorException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\Document;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Model\UpdateDocument;
@@ -67,6 +71,8 @@ class PatchSignatureRequestsSignatureRequestIdDocumentsDocumentId extends BaseEn
      * @throws PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException
      * @throws PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException
      * @throws PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnsupportedMediaTypeException
+     * @throws PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdTooManyRequestsException
+     * @throws PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -89,6 +95,12 @@ class PatchSignatureRequestsSignatureRequestIdDocumentsDocumentId extends BaseEn
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

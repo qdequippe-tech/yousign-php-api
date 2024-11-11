@@ -5,12 +5,16 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostCustomExperienceBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostCustomExperienceForbiddenException;
+use Qdequippe\Yousign\Api\Exception\PostCustomExperienceInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PostCustomExperienceTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostCustomExperienceUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostCustomExperienceUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -61,6 +65,8 @@ class PostCustomExperience extends BaseEndpoint implements Endpoint
      * @throws PostCustomExperienceUnauthorizedException
      * @throws PostCustomExperienceForbiddenException
      * @throws PostCustomExperienceUnsupportedMediaTypeException
+     * @throws PostCustomExperienceTooManyRequestsException
+     * @throws PostCustomExperienceInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
@@ -80,6 +86,12 @@ class PostCustomExperience extends BaseEndpoint implements Endpoint
         }
         if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
             throw new PostCustomExperienceUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostCustomExperienceTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+            throw new PostCustomExperienceInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;
