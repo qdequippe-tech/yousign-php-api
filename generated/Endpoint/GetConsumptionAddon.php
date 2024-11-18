@@ -27,11 +27,11 @@ class GetConsumptionAddon extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * Get detailed addon consumption for the current subscription period.
+     * Retrieves detailed addon consumption for the current subscription period.
      *
      * @param array $queryParameters {
      *
-     * @var array $addons The addons to filter on.
+     * @var array $addons A list of add-ons to filter the results on.
      *            }
      */
     public function __construct(array $queryParameters = [])

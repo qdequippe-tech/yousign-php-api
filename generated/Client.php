@@ -29,6 +29,7 @@ use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealAuditTrail;
 use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealDocument;
 use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealImage;
 use Qdequippe\Yousign\Api\Endpoint\GetArchivesArchivedFileIdDownload;
+use Qdequippe\Yousign\Api\Endpoint\GetBankAccountVerificationsBankAccountVerificationId;
 use Qdequippe\Yousign\Api\Endpoint\GetConsumptionAddon;
 use Qdequippe\Yousign\Api\Endpoint\GetConsumptionDetail;
 use Qdequippe\Yousign\Api\Endpoint\GetConsumptions;
@@ -80,6 +81,7 @@ use Qdequippe\Yousign\Api\Endpoint\PatchUsersUserId;
 use Qdequippe\Yousign\Api\Endpoint\PatchWebhooksWebhookId;
 use Qdequippe\Yousign\Api\Endpoint\PatchWorkspacesWorkspaceId;
 use Qdequippe\Yousign\Api\Endpoint\PostArchives;
+use Qdequippe\Yousign\Api\Endpoint\PostBankAccountVerifications;
 use Qdequippe\Yousign\Api\Endpoint\PostContact;
 use Qdequippe\Yousign\Api\Endpoint\PostCustomExperience;
 use Qdequippe\Yousign\Api\Endpoint\PostDocuments;
@@ -110,6 +112,7 @@ use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdMetadat
 use Qdequippe\Yousign\Api\Endpoint\PutWorkspacesWorkspaceIdUsers;
 use Qdequippe\Yousign\Api\Endpoint\UpdateSignatureRequestsSignatureRequestIdDocumentsDocumentIdFieldsFieldId;
 use Qdequippe\Yousign\Api\Endpoint\UploadElectronicSealDocument;
+use Qdequippe\Yousign\Api\Model\CreateBankAccountVerification;
 use Qdequippe\Yousign\Api\Model\CreateContact;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
@@ -196,6 +199,45 @@ class Client extends Runtime\Client\Client
     }
 
     /**
+     * Creates a new Bank Account Verification resource.
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\BankAccountVerificationCreated|ResponseInterface|null
+     *
+     * @throws Exception\PostBankAccountVerificationsBadRequestException
+     * @throws Exception\PostBankAccountVerificationsUnauthorizedException
+     * @throws Exception\PostBankAccountVerificationsForbiddenException
+     * @throws Exception\PostBankAccountVerificationsUnsupportedMediaTypeException
+     * @throws Exception\PostBankAccountVerificationsTooManyRequestsException
+     * @throws Exception\PostBankAccountVerificationsInternalServerErrorException
+     */
+    public function postBankAccountVerifications(?CreateBankAccountVerification $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostBankAccountVerifications($requestBody), $fetch);
+    }
+
+    /**
+     * Get the detailed results of a bank account verification.
+     *
+     * @param string $bankAccountVerificationId The bank account verification ID
+     * @param string $fetch                     Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\BankAccountVerification|ResponseInterface|null
+     *
+     * @throws Exception\GetBankAccountVerificationsBankAccountVerificationIdBadRequestException
+     * @throws Exception\GetBankAccountVerificationsBankAccountVerificationIdUnauthorizedException
+     * @throws Exception\GetBankAccountVerificationsBankAccountVerificationIdForbiddenException
+     * @throws Exception\GetBankAccountVerificationsBankAccountVerificationIdNotFoundException
+     * @throws Exception\GetBankAccountVerificationsBankAccountVerificationIdTooManyRequestsException
+     * @throws Exception\GetBankAccountVerificationsBankAccountVerificationIdInternalServerErrorException
+     */
+    public function getBankAccountVerificationsBankAccountVerificationId(string $bankAccountVerificationId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetBankAccountVerificationsBankAccountVerificationId($bankAccountVerificationId), $fetch);
+    }
+
+    /**
      * Get signatures Consumption by source.
      *
      * @param array $queryParameters {
@@ -222,11 +264,11 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Get detailed addon consumption for the current subscription period.
+     * Retrieves detailed addon consumption for the current subscription period.
      *
      * @param array $queryParameters {
      *
-     * @var array $addons The addons to filter on.
+     * @var array $addons A list of add-ons to filter the results on.
      *            }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
@@ -246,16 +288,16 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Get detailed Consumption data aggregated on workspace or organization.
+     * Returns the consumption of your organization over a specified period.
      *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
      * @var int    $limit the limit of items count to retrieve
-     * @var string $from from when to start data retrieval
-     * @var string $to Until when data will be retrieved. The "to" date must be more recent than the "from" date and should not exceed one year after the "from".
-     * @var string $breakdown_type either if the breakdown is made at the workspace level or at the organization level
-     * @var array  $workspace_ids Workspaces IDs to filter on.
+     * @var string $from the starting date for data retrieval
+     * @var string $to The end date for data retrieval. The `to` date must be later than the `from` date and within one year of the `from` date.
+     * @var string $breakdown_type Specifies how data is grouped. By default, it returns the total consumption for the entire organization. If set to `workspace`, the data will be grouped by Workspace.
+     * @var array  $workspace_ids A list of Workspace IDs to filter the results.
      *             }
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
