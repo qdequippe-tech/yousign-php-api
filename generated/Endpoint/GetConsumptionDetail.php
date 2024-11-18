@@ -25,16 +25,16 @@ class GetConsumptionDetail extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * Get detailed Consumption data aggregated on workspace or organization.
+     * Returns the consumption of your organization over a specified period.
      *
      * @param array $queryParameters {
      *
      * @var string $after After cursor (pagination)
      * @var int    $limit the limit of items count to retrieve
-     * @var string $from from when to start data retrieval
-     * @var string $to Until when data will be retrieved. The "to" date must be more recent than the "from" date and should not exceed one year after the "from".
-     * @var string $breakdown_type either if the breakdown is made at the workspace level or at the organization level
-     * @var array  $workspace_ids Workspaces IDs to filter on.
+     * @var string $from the starting date for data retrieval
+     * @var string $to The end date for data retrieval. The `to` date must be later than the `from` date and within one year of the `from` date.
+     * @var string $breakdown_type Specifies how data is grouped. By default, it returns the total consumption for the entire organization. If set to `workspace`, the data will be grouped by Workspace.
+     * @var array  $workspace_ids A list of Workspace IDs to filter the results.
      *             }
      */
     public function __construct(array $queryParameters = [])

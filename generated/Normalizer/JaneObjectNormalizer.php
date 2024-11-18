@@ -9,6 +9,9 @@ use Qdequippe\Yousign\Api\Model\ApproverInfo;
 use Qdequippe\Yousign\Api\Model\ApproverToNotify;
 use Qdequippe\Yousign\Api\Model\ArchivedFile;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\BankAccountVerification;
+use Qdequippe\Yousign\Api\Model\BankAccountVerificationCreated;
+use Qdequippe\Yousign\Api\Model\BankAccountVerificationExtractedFromDocument;
 use Qdequippe\Yousign\Api\Model\Checkbox;
 use Qdequippe\Yousign\Api\Model\Checkbox1;
 use Qdequippe\Yousign\Api\Model\Checkbox2;
@@ -18,6 +21,7 @@ use Qdequippe\Yousign\Api\Model\ConsumptionApp;
 use Qdequippe\Yousign\Api\Model\ConsumptionAppQualifiedElectronicSignatureIdentificationMode;
 use Qdequippe\Yousign\Api\Model\ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification;
 use Qdequippe\Yousign\Api\Model\Contact;
+use Qdequippe\Yousign\Api\Model\CreateBankAccountVerification;
 use Qdequippe\Yousign\Api\Model\CreateContact;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperienceRedirectUrls;
@@ -206,6 +210,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             ArchivedFile::class => ArchivedFileNormalizer::class,
 
+            CreateBankAccountVerification::class => CreateBankAccountVerificationNormalizer::class,
+
+            BankAccountVerificationCreated::class => BankAccountVerificationCreatedNormalizer::class,
+
+            BankAccountVerification::class => BankAccountVerificationNormalizer::class,
+
             Consumption::class => ConsumptionNormalizer::class,
 
             AddonConsumption::class => AddonConsumptionNormalizer::class,
@@ -445,6 +455,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             GetUsers200Response::class => GetUsers200ResponseNormalizer::class,
 
             GetWorkspaces200Response::class => GetWorkspaces200ResponseNormalizer::class,
+
+            BankAccountVerificationExtractedFromDocument::class => BankAccountVerificationExtractedFromDocumentNormalizer::class,
 
             ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerificationNormalizer::class,
 
@@ -614,6 +626,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             return [
                 UploadArchivedFile::class => false,
                 ArchivedFile::class => false,
+                CreateBankAccountVerification::class => false,
+                BankAccountVerificationCreated::class => false,
+                BankAccountVerification::class => false,
                 Consumption::class => false,
                 AddonConsumption::class => false,
                 PaginationWithUpdatedAt::class => false,
@@ -734,6 +749,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 GetTemplates200Response::class => false,
                 GetUsers200Response::class => false,
                 GetWorkspaces200Response::class => false,
+                BankAccountVerificationExtractedFromDocument::class => false,
                 ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => false,
                 ConsumptionAppQualifiedElectronicSignatureIdentificationMode::class => false,
                 ConsumptionApp::class => false,
@@ -808,6 +824,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             UploadArchivedFile::class => UploadArchivedFileNormalizer::class,
 
             ArchivedFile::class => ArchivedFileNormalizer::class,
+
+            CreateBankAccountVerification::class => CreateBankAccountVerificationNormalizer::class,
+
+            BankAccountVerificationCreated::class => BankAccountVerificationCreatedNormalizer::class,
+
+            BankAccountVerification::class => BankAccountVerificationNormalizer::class,
 
             Consumption::class => ConsumptionNormalizer::class,
 
@@ -1048,6 +1070,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             GetUsers200Response::class => GetUsers200ResponseNormalizer::class,
 
             GetWorkspaces200Response::class => GetWorkspaces200ResponseNormalizer::class,
+
+            BankAccountVerificationExtractedFromDocument::class => BankAccountVerificationExtractedFromDocumentNormalizer::class,
 
             ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerificationNormalizer::class,
 
@@ -1225,6 +1249,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             return [
                 UploadArchivedFile::class => false,
                 ArchivedFile::class => false,
+                CreateBankAccountVerification::class => false,
+                BankAccountVerificationCreated::class => false,
+                BankAccountVerification::class => false,
                 Consumption::class => false,
                 AddonConsumption::class => false,
                 PaginationWithUpdatedAt::class => false,
@@ -1345,6 +1372,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 GetTemplates200Response::class => false,
                 GetUsers200Response::class => false,
                 GetWorkspaces200Response::class => false,
+                BankAccountVerificationExtractedFromDocument::class => false,
                 ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => false,
                 ConsumptionAppQualifiedElectronicSignatureIdentificationMode::class => false,
                 ConsumptionApp::class => false,
