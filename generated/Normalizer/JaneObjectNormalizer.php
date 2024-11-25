@@ -35,12 +35,12 @@ use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
 use Qdequippe\Yousign\Api\Model\CreateFieldFont;
 use Qdequippe\Yousign\Api\Model\CreateFollowersInner;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
-use Qdequippe\Yousign\Api\Model\CreateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestReminderSettings;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestTemplatePlaceholders;
 use Qdequippe\Yousign\Api\Model\CreateSignerConsentRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignerConsentRequestSettings;
 use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
+use Qdequippe\Yousign\Api\Model\CreateUser;
 use Qdequippe\Yousign\Api\Model\CreateVideoIdentityVerification;
 use Qdequippe\Yousign\Api\Model\CreateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\CreateWorkspace;
@@ -81,6 +81,7 @@ use Qdequippe\Yousign\Api\Model\GetConsumptionAddon200Response;
 use Qdequippe\Yousign\Api\Model\GetConsumptionDetail200Response;
 use Qdequippe\Yousign\Api\Model\GetContacts200Response;
 use Qdequippe\Yousign\Api\Model\GetCustomExperiences200Response;
+use Qdequippe\Yousign\Api\Model\GetInvitations200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequests200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response;
 use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdFollowers200Response;
@@ -167,7 +168,6 @@ use Qdequippe\Yousign\Api\Model\UpdateCustomExperienceRedirectUrls;
 use Qdequippe\Yousign\Api\Model\UpdateDocument;
 use Qdequippe\Yousign\Api\Model\UpdateFieldFont;
 use Qdequippe\Yousign\Api\Model\UpdateSignatureRequest;
-use Qdequippe\Yousign\Api\Model\UpdateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\UpdateSignatureRequestReminderSettings;
 use Qdequippe\Yousign\Api\Model\UpdateSigner;
 use Qdequippe\Yousign\Api\Model\UpdateSignerConsentRequest;
@@ -178,6 +178,7 @@ use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
 use Qdequippe\Yousign\Api\Model\UploadArchivedFile;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealImage;
 use Qdequippe\Yousign\Api\Model\User;
+use Qdequippe\Yousign\Api\Model\UserInvitation;
 use Qdequippe\Yousign\Api\Model\UserWorkspacesInner;
 use Qdequippe\Yousign\Api\Model\VideoIdentityVerification;
 use Qdequippe\Yousign\Api\Model\VideoIdentityVerificationCreated;
@@ -300,10 +301,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             Metadata::class => MetadataNormalizer::class,
 
-            UpdateSignatureRequestMetadata::class => UpdateSignatureRequestMetadataNormalizer::class,
-
-            CreateSignatureRequestMetadata::class => CreateSignatureRequestMetadataNormalizer::class,
-
             Signer::class => SignerNormalizer::class,
 
             UpdateSigner::class => UpdateSignerNormalizer::class,
@@ -319,6 +316,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             Template::class => TemplateNormalizer::class,
 
             User::class => UserNormalizer::class,
+
+            CreateUser::class => CreateUserNormalizer::class,
+
+            UserInvitation::class => UserInvitationNormalizer::class,
 
             UpdateUser::class => UpdateUserNormalizer::class,
 
@@ -453,6 +454,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             GetTemplates200Response::class => GetTemplates200ResponseNormalizer::class,
 
             GetUsers200Response::class => GetUsers200ResponseNormalizer::class,
+
+            GetInvitations200Response::class => GetInvitations200ResponseNormalizer::class,
 
             GetWorkspaces200Response::class => GetWorkspaces200ResponseNormalizer::class,
 
@@ -671,8 +674,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 FieldReadOnlyText::class => false,
                 Follower::class => false,
                 Metadata::class => false,
-                UpdateSignatureRequestMetadata::class => false,
-                CreateSignatureRequestMetadata::class => false,
                 Signer::class => false,
                 UpdateSigner::class => false,
                 SignerAuditTrail::class => false,
@@ -681,6 +682,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 SignerSignWithUploadedSignatureImage::class => false,
                 Template::class => false,
                 User::class => false,
+                CreateUser::class => false,
+                UserInvitation::class => false,
                 UpdateUser::class => false,
                 CreateVideoIdentityVerification::class => false,
                 VideoIdentityVerificationCreated::class => false,
@@ -748,6 +751,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response::class => false,
                 GetTemplates200Response::class => false,
                 GetUsers200Response::class => false,
+                GetInvitations200Response::class => false,
                 GetWorkspaces200Response::class => false,
                 BankAccountVerificationExtractedFromDocument::class => false,
                 ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => false,
@@ -915,10 +919,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             Metadata::class => MetadataNormalizer::class,
 
-            UpdateSignatureRequestMetadata::class => UpdateSignatureRequestMetadataNormalizer::class,
-
-            CreateSignatureRequestMetadata::class => CreateSignatureRequestMetadataNormalizer::class,
-
             Signer::class => SignerNormalizer::class,
 
             UpdateSigner::class => UpdateSignerNormalizer::class,
@@ -934,6 +934,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             Template::class => TemplateNormalizer::class,
 
             User::class => UserNormalizer::class,
+
+            CreateUser::class => CreateUserNormalizer::class,
+
+            UserInvitation::class => UserInvitationNormalizer::class,
 
             UpdateUser::class => UpdateUserNormalizer::class,
 
@@ -1068,6 +1072,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             GetTemplates200Response::class => GetTemplates200ResponseNormalizer::class,
 
             GetUsers200Response::class => GetUsers200ResponseNormalizer::class,
+
+            GetInvitations200Response::class => GetInvitations200ResponseNormalizer::class,
 
             GetWorkspaces200Response::class => GetWorkspaces200ResponseNormalizer::class,
 
@@ -1294,8 +1300,6 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 FieldReadOnlyText::class => false,
                 Follower::class => false,
                 Metadata::class => false,
-                UpdateSignatureRequestMetadata::class => false,
-                CreateSignatureRequestMetadata::class => false,
                 Signer::class => false,
                 UpdateSigner::class => false,
                 SignerAuditTrail::class => false,
@@ -1304,6 +1308,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 SignerSignWithUploadedSignatureImage::class => false,
                 Template::class => false,
                 User::class => false,
+                CreateUser::class => false,
+                UserInvitation::class => false,
                 UpdateUser::class => false,
                 CreateVideoIdentityVerification::class => false,
                 VideoIdentityVerificationCreated::class => false,
@@ -1371,6 +1377,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response::class => false,
                 GetTemplates200Response::class => false,
                 GetUsers200Response::class => false,
+                GetInvitations200Response::class => false,
                 GetWorkspaces200Response::class => false,
                 BankAccountVerificationExtractedFromDocument::class => false,
                 ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification::class => false,

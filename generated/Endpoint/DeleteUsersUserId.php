@@ -3,30 +3,29 @@
 namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
-use Qdequippe\Yousign\Api\Exception\GetUsersUserIdBadRequestException;
-use Qdequippe\Yousign\Api\Exception\GetUsersUserIdForbiddenException;
-use Qdequippe\Yousign\Api\Exception\GetUsersUserIdInternalServerErrorException;
-use Qdequippe\Yousign\Api\Exception\GetUsersUserIdNotFoundException;
-use Qdequippe\Yousign\Api\Exception\GetUsersUserIdTooManyRequestsException;
-use Qdequippe\Yousign\Api\Exception\GetUsersUserIdUnauthorizedException;
+use Qdequippe\Yousign\Api\Exception\DeleteUsersUserIdBadRequestException;
+use Qdequippe\Yousign\Api\Exception\DeleteUsersUserIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\DeleteUsersUserIdInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\DeleteUsersUserIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\DeleteUsersUserIdTooManyRequestsException;
+use Qdequippe\Yousign\Api\Exception\DeleteUsersUserIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
-use Qdequippe\Yousign\Api\Model\User;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class GetUsersUserId extends BaseEndpoint implements Endpoint
+class DeleteUsersUserId extends BaseEndpoint implements Endpoint
 {
     use EndpointTrait;
 
     /**
-     * Retrieves a given User within your Organization.
+     * Deletes a given User and its Invitation, only possible when the User is in `invited` status.
      *
      * @param string $userId User Id
      */
@@ -36,7 +35,7 @@ class GetUsersUserId extends BaseEndpoint implements Endpoint
 
     public function getMethod(): string
     {
-        return 'GET';
+        return 'DELETE';
     }
 
     public function getUri(): string
@@ -55,39 +54,37 @@ class GetUsersUserId extends BaseEndpoint implements Endpoint
     }
 
     /**
-     * @return User|null
-     *
-     * @throws GetUsersUserIdBadRequestException
-     * @throws GetUsersUserIdUnauthorizedException
-     * @throws GetUsersUserIdForbiddenException
-     * @throws GetUsersUserIdNotFoundException
-     * @throws GetUsersUserIdTooManyRequestsException
-     * @throws GetUsersUserIdInternalServerErrorException
+     * @throws DeleteUsersUserIdBadRequestException
+     * @throws DeleteUsersUserIdUnauthorizedException
+     * @throws DeleteUsersUserIdForbiddenException
+     * @throws DeleteUsersUserIdNotFoundException
+     * @throws DeleteUsersUserIdTooManyRequestsException
+     * @throws DeleteUsersUserIdInternalServerErrorException
      */
     protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            return $serializer->deserialize($body, User::class, 'json');
+        if (204 === $status) {
+            return null;
         }
         if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetUsersUserIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
+            throw new DeleteUsersUserIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetUsersUserIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
+            throw new DeleteUsersUserIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetUsersUserIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
+            throw new DeleteUsersUserIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetUsersUserIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+            throw new DeleteUsersUserIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetUsersUserIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+            throw new DeleteUsersUserIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
         if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
-            throw new GetUsersUserIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
+            throw new DeleteUsersUserIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 
         return null;

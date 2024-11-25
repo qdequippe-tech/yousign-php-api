@@ -11,7 +11,6 @@ use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdMetad
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdMetadataUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdMetadataUnsupportedMediaTypeException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
-use Qdequippe\Yousign\Api\Model\CreateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\Metadata;
@@ -33,7 +32,7 @@ class PostSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint imple
      *
      * @param string $signatureRequestId Signature Request Id
      */
-    public function __construct(protected string $signatureRequestId, ?CreateSignatureRequestMetadata $requestBody = null)
+    public function __construct(protected string $signatureRequestId, ?Metadata $requestBody = null)
     {
         $this->body = $requestBody;
     }
@@ -50,7 +49,7 @@ class PostSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint imple
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
-        if ($this->body instanceof CreateSignatureRequestMetadata) {
+        if ($this->body instanceof Metadata) {
             return [['Content-Type' => ['application/json']], $serializer->serialize($this->body, 'json')];
         }
 

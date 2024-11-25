@@ -16,7 +16,6 @@ use Qdequippe\Yousign\Api\Model\Metadata;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
-use Qdequippe\Yousign\Api\Model\UpdateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
@@ -31,7 +30,7 @@ class PutSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint implem
      *
      * @param string $signatureRequestId Signature Request Id
      */
-    public function __construct(protected string $signatureRequestId, ?UpdateSignatureRequestMetadata $requestBody = null)
+    public function __construct(protected string $signatureRequestId, ?Metadata $requestBody = null)
     {
         $this->body = $requestBody;
     }
@@ -48,7 +47,7 @@ class PutSignatureRequestsSignatureRequestIdMetadata extends BaseEndpoint implem
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
-        if ($this->body instanceof UpdateSignatureRequestMetadata) {
+        if ($this->body instanceof Metadata) {
             return [['Content-Type' => ['application/json']], $serializer->serialize($this->body, 'json')];
         }
 
