@@ -3,7 +3,9 @@
 namespace Qdequippe\Yousign\Api\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Qdequippe\Yousign\Api\Model\CreateSignatureRequestMetadata;
+use Qdequippe\Yousign\Api\Model\GetInvitations200Response;
+use Qdequippe\Yousign\Api\Model\Pagination;
+use Qdequippe\Yousign\Api\Model\UserInvitation;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\HttpKernel\Kernel;
@@ -15,7 +17,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR_VERSION === 6 && Kernel::MINOR_VERSION === 4)) {
-    class CreateSignatureRequestMetadataNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+    class GetInvitations200ResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
         use CheckArray;
         use DenormalizerAwareTrait;
@@ -24,12 +26,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
         {
-            return CreateSignatureRequestMetadata::class === $type;
+            return GetInvitations200Response::class === $type;
         }
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && CreateSignatureRequestMetadata::class === $data::class;
+            return \is_object($data) && GetInvitations200Response::class === $data::class;
         }
 
         public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
@@ -40,23 +42,29 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if (isset($data['$recursiveRef'])) {
                 return new Reference($data['$recursiveRef'], $context['document-origin']);
             }
-            $object = new CreateSignatureRequestMetadata();
+            $object = new GetInvitations200Response();
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
+            if (\array_key_exists('meta', $data) && null !== $data['meta']) {
+                $object->setMeta($this->denormalizer->denormalize($data['meta'], Pagination::class, 'json', $context));
+                unset($data['meta']);
+            } elseif (\array_key_exists('meta', $data) && null === $data['meta']) {
+                $object->setMeta(null);
+            }
             if (\array_key_exists('data', $data) && null !== $data['data']) {
-                $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['data'] as $key => $value) {
-                    $values[$key] = $value;
+                $values = [];
+                foreach ($data['data'] as $value) {
+                    $values[] = $this->denormalizer->denormalize($value, UserInvitation::class, 'json', $context);
                 }
                 $object->setData($values);
                 unset($data['data']);
             } elseif (\array_key_exists('data', $data) && null === $data['data']) {
                 $object->setData(null);
             }
-            foreach ($data as $key_1 => $value_1) {
-                if (preg_match('/.*/', (string) $key_1)) {
-                    $object[$key_1] = $value_1;
+            foreach ($data as $key => $value_1) {
+                if (preg_match('/.*/', (string) $key)) {
+                    $object[$key] = $value_1;
                 }
             }
 
@@ -66,16 +74,19 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
         {
             $data = [];
+            if ($object->isInitialized('meta') && null !== $object->getMeta()) {
+                $data['meta'] = $this->normalizer->normalize($object->getMeta(), 'json', $context);
+            }
             if ($object->isInitialized('data') && null !== $object->getData()) {
                 $values = [];
-                foreach ($object->getData() as $key => $value) {
-                    $values[$key] = $value;
+                foreach ($object->getData() as $value) {
+                    $values[] = $this->normalizer->normalize($value, 'json', $context);
                 }
                 $data['data'] = $values;
             }
-            foreach ($object as $key_1 => $value_1) {
-                if (preg_match('/.*/', (string) $key_1)) {
-                    $data[$key_1] = $value_1;
+            foreach ($object as $key => $value_1) {
+                if (preg_match('/.*/', (string) $key)) {
+                    $data[$key] = $value_1;
                 }
             }
 
@@ -84,11 +95,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function getSupportedTypes(?string $format = null): array
         {
-            return [CreateSignatureRequestMetadata::class => false];
+            return [GetInvitations200Response::class => false];
         }
     }
 } else {
-    class CreateSignatureRequestMetadataNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+    class GetInvitations200ResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
     {
         use CheckArray;
         use DenormalizerAwareTrait;
@@ -97,12 +108,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function supportsDenormalization($data, $type, ?string $format = null, array $context = []): bool
         {
-            return CreateSignatureRequestMetadata::class === $type;
+            return GetInvitations200Response::class === $type;
         }
 
         public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
         {
-            return \is_object($data) && CreateSignatureRequestMetadata::class === $data::class;
+            return \is_object($data) && GetInvitations200Response::class === $data::class;
         }
 
         /**
@@ -116,23 +127,29 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             if (isset($data['$recursiveRef'])) {
                 return new Reference($data['$recursiveRef'], $context['document-origin']);
             }
-            $object = new CreateSignatureRequestMetadata();
+            $object = new GetInvitations200Response();
             if (null === $data || false === \is_array($data)) {
                 return $object;
             }
+            if (\array_key_exists('meta', $data) && null !== $data['meta']) {
+                $object->setMeta($this->denormalizer->denormalize($data['meta'], Pagination::class, 'json', $context));
+                unset($data['meta']);
+            } elseif (\array_key_exists('meta', $data) && null === $data['meta']) {
+                $object->setMeta(null);
+            }
             if (\array_key_exists('data', $data) && null !== $data['data']) {
-                $values = new \ArrayObject([], \ArrayObject::ARRAY_AS_PROPS);
-                foreach ($data['data'] as $key => $value) {
-                    $values[$key] = $value;
+                $values = [];
+                foreach ($data['data'] as $value) {
+                    $values[] = $this->denormalizer->denormalize($value, UserInvitation::class, 'json', $context);
                 }
                 $object->setData($values);
                 unset($data['data']);
             } elseif (\array_key_exists('data', $data) && null === $data['data']) {
                 $object->setData(null);
             }
-            foreach ($data as $key_1 => $value_1) {
-                if (preg_match('/.*/', (string) $key_1)) {
-                    $object[$key_1] = $value_1;
+            foreach ($data as $key => $value_1) {
+                if (preg_match('/.*/', (string) $key)) {
+                    $object[$key] = $value_1;
                 }
             }
 
@@ -147,16 +164,19 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         public function normalize($object, $format = null, array $context = [])
         {
             $data = [];
+            if ($object->isInitialized('meta') && null !== $object->getMeta()) {
+                $data['meta'] = $this->normalizer->normalize($object->getMeta(), 'json', $context);
+            }
             if ($object->isInitialized('data') && null !== $object->getData()) {
                 $values = [];
-                foreach ($object->getData() as $key => $value) {
-                    $values[$key] = $value;
+                foreach ($object->getData() as $value) {
+                    $values[] = $this->normalizer->normalize($value, 'json', $context);
                 }
                 $data['data'] = $values;
             }
-            foreach ($object as $key_1 => $value_1) {
-                if (preg_match('/.*/', (string) $key_1)) {
-                    $data[$key_1] = $value_1;
+            foreach ($object as $key => $value_1) {
+                if (preg_match('/.*/', (string) $key)) {
+                    $data[$key] = $value_1;
                 }
             }
 
@@ -165,7 +185,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         public function getSupportedTypes(?string $format = null): array
         {
-            return [CreateSignatureRequestMetadata::class => false];
+            return [GetInvitations200Response::class => false];
         }
     }
 }

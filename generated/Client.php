@@ -23,6 +23,7 @@ use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdDocu
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdMetadata;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdSignersSignerId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteSignatureRequestsSignatureRequestIdSignersSignerIdDocuments;
+use Qdequippe\Yousign\Api\Endpoint\DeleteUsersUserId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteWebhooksWebhookId;
 use Qdequippe\Yousign\Api\Endpoint\DeleteWorkspaceWorkspaceIdUsersUserId;
 use Qdequippe\Yousign\Api\Endpoint\DownloadElectronicSealAuditTrail;
@@ -41,6 +42,7 @@ use Qdequippe\Yousign\Api\Endpoint\GetCustomExperiencesCustomExperienceId;
 use Qdequippe\Yousign\Api\Endpoint\GetElectronicSeal;
 use Qdequippe\Yousign\Api\Endpoint\GetElectronicSealAuditTrail;
 use Qdequippe\Yousign\Api\Endpoint\GetIdentityVerificationsIdentityVerificationId;
+use Qdequippe\Yousign\Api\Endpoint\GetInvitations;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequests;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestId;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequestsSignatureRequestIdApproversApproverId;
@@ -62,7 +64,9 @@ use Qdequippe\Yousign\Api\Endpoint\GetSignersSignerIdAuditTrailsDownload;
 use Qdequippe\Yousign\Api\Endpoint\GetSignersSignersId;
 use Qdequippe\Yousign\Api\Endpoint\GetTemplates;
 use Qdequippe\Yousign\Api\Endpoint\GetUsers;
+use Qdequippe\Yousign\Api\Endpoint\GetUsersInvitationInvitationId;
 use Qdequippe\Yousign\Api\Endpoint\GetUsersUserId;
+use Qdequippe\Yousign\Api\Endpoint\GetUsersUserIdInvitation;
 use Qdequippe\Yousign\Api\Endpoint\GetWebhooks;
 use Qdequippe\Yousign\Api\Endpoint\GetWebhooksWebhookId;
 use Qdequippe\Yousign\Api\Endpoint\GetWorkspaces;
@@ -104,6 +108,7 @@ use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSigner
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendReminder;
 use Qdequippe\Yousign\Api\Endpoint\PostSignatureRequestsSignatureRequestIdSignersSignerIdSign;
+use Qdequippe\Yousign\Api\Endpoint\PostUsers;
 use Qdequippe\Yousign\Api\Endpoint\PostWebhooksSubscriptions;
 use Qdequippe\Yousign\Api\Endpoint\PostWorkspace;
 use Qdequippe\Yousign\Api\Endpoint\PutSignatureRequestsSignatureRequestIdConsentRequestsConsentRequestIdSignersSignerId;
@@ -119,9 +124,9 @@ use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
 use Qdequippe\Yousign\Api\Model\CreateFollowersInner;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
-use Qdequippe\Yousign\Api\Model\CreateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\CreateSignerConsentRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
+use Qdequippe\Yousign\Api\Model\CreateUser;
 use Qdequippe\Yousign\Api\Model\CreateVideoIdentityVerification;
 use Qdequippe\Yousign\Api\Model\CreateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\CreateWorkspace;
@@ -129,6 +134,7 @@ use Qdequippe\Yousign\Api\Model\DeleteWorkspace;
 use Qdequippe\Yousign\Api\Model\Document;
 use Qdequippe\Yousign\Api\Model\Follower;
 use Qdequippe\Yousign\Api\Model\MarkWorkspaceAsDefault;
+use Qdequippe\Yousign\Api\Model\Metadata;
 use Qdequippe\Yousign\Api\Model\PatchCustomExperienceLogoRequest;
 use Qdequippe\Yousign\Api\Model\PatchSignatureRequestsSignatureRequestIdApproversApproverIdRequest;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdCancelRequest;
@@ -139,7 +145,6 @@ use Qdequippe\Yousign\Api\Model\UpdateContact;
 use Qdequippe\Yousign\Api\Model\UpdateCustomExperience;
 use Qdequippe\Yousign\Api\Model\UpdateDocument;
 use Qdequippe\Yousign\Api\Model\UpdateSignatureRequest;
-use Qdequippe\Yousign\Api\Model\UpdateSignatureRequestMetadata;
 use Qdequippe\Yousign\Api\Model\UpdateSigner;
 use Qdequippe\Yousign\Api\Model\UpdateSignerConsentRequest;
 use Qdequippe\Yousign\Api\Model\UpdateUser;
@@ -1669,7 +1674,7 @@ class Client extends Runtime\Client\Client
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Model\Metadata|ResponseInterface|null
+     * @return Metadata|ResponseInterface|null
      *
      * @throws Exception\GetSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdMetadataForbiddenException
@@ -1688,7 +1693,7 @@ class Client extends Runtime\Client\Client
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Model\Metadata|ResponseInterface|null
+     * @return Metadata|ResponseInterface|null
      *
      * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataBadRequestException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
@@ -1698,7 +1703,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataTooManyRequestsException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdMetadataInternalServerErrorException
      */
-    public function postSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, ?CreateSignatureRequestMetadata $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    public function postSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, ?Metadata $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PostSignatureRequestsSignatureRequestIdMetadata($signatureRequestId, $requestBody), $fetch);
     }
@@ -1709,7 +1714,7 @@ class Client extends Runtime\Client\Client
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Model\Metadata|ResponseInterface|null
+     * @return Metadata|ResponseInterface|null
      *
      * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataBadRequestException
      * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataUnauthorizedException
@@ -1718,7 +1723,7 @@ class Client extends Runtime\Client\Client
      * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataTooManyRequestsException
      * @throws Exception\PutSignatureRequestsSignatureRequestIdMetadataInternalServerErrorException
      */
-    public function putSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, ?UpdateSignatureRequestMetadata $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    public function putSignatureRequestsSignatureRequestIdMetadata(string $signatureRequestId, ?Metadata $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PutSignatureRequestsSignatureRequestIdMetadata($signatureRequestId, $requestBody), $fetch);
     }
@@ -2074,7 +2079,91 @@ class Client extends Runtime\Client\Client
     }
 
     /**
-     * Retrieves a given User within your organization.
+     * Creates a new application User and sends them an invitation email.
+     * `email`: The email address must not match any existing User’s email.
+     * `workspaces`: The new User must be associated with at least one Workspace in the Organization.
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\User|ResponseInterface|null
+     *
+     * @throws Exception\PostUsersBadRequestException
+     * @throws Exception\PostUsersUnauthorizedException
+     * @throws Exception\PostUsersForbiddenException
+     * @throws Exception\PostUsersTooManyRequestsException
+     * @throws Exception\PostUsersInternalServerErrorException
+     */
+    public function postUsers(?CreateUser $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new PostUsers($requestBody), $fetch);
+    }
+
+    /**
+     * Returns the list of all the Users Invitations within your Organization.
+     *
+     * @param array $queryParameters {
+     *
+     * @var string $after After cursor (pagination)
+     * @var int    $limit the limit of items count to retrieve
+     * @var string $email A given e-mail address to filter on.
+     *             }
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\GetInvitations200Response|ResponseInterface|null
+     *
+     * @throws Exception\GetInvitationsBadRequestException
+     * @throws Exception\GetInvitationsUnauthorizedException
+     * @throws Exception\GetInvitationsForbiddenException
+     * @throws Exception\GetInvitationsTooManyRequestsException
+     * @throws Exception\GetInvitationsInternalServerErrorException
+     */
+    public function getInvitations(array $queryParameters = [], string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetInvitations($queryParameters), $fetch);
+    }
+
+    /**
+     * Retrieves a given User Invitation.
+     *
+     * @param string $invitationId Invitation Id
+     * @param string $fetch        Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\UserInvitation|ResponseInterface|null
+     *
+     * @throws Exception\GetUsersInvitationInvitationIdUnauthorizedException
+     * @throws Exception\GetUsersInvitationInvitationIdForbiddenException
+     * @throws Exception\GetUsersInvitationInvitationIdNotFoundException
+     * @throws Exception\GetUsersInvitationInvitationIdTooManyRequestsException
+     * @throws Exception\GetUsersInvitationInvitationIdInternalServerErrorException
+     */
+    public function getUsersInvitationInvitationId(string $invitationId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetUsersInvitationInvitationId($invitationId), $fetch);
+    }
+
+    /**
+     * Deletes a given User and its Invitation, only possible when the User is in `invited` status.
+     *
+     * @param string $userId User Id
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return ResponseInterface|null
+     *
+     * @throws Exception\DeleteUsersUserIdBadRequestException
+     * @throws Exception\DeleteUsersUserIdUnauthorizedException
+     * @throws Exception\DeleteUsersUserIdForbiddenException
+     * @throws Exception\DeleteUsersUserIdNotFoundException
+     * @throws Exception\DeleteUsersUserIdTooManyRequestsException
+     * @throws Exception\DeleteUsersUserIdInternalServerErrorException
+     */
+    public function deleteUsersUserId(string $userId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new DeleteUsersUserId($userId), $fetch);
+    }
+
+    /**
+     * Retrieves a given User within your Organization.
      *
      * @param string $userId User Id
      * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
@@ -2113,6 +2202,25 @@ class Client extends Runtime\Client\Client
     public function patchUsersUserId(string $userId, ?UpdateUser $requestBody = null, string $fetch = self::FETCH_OBJECT)
     {
         return $this->executeEndpoint(new PatchUsersUserId($userId, $requestBody), $fetch);
+    }
+
+    /**
+     * Retrieves the Invitation of a given User. The Invitation only exists when the User is in `invited` status.
+     *
+     * @param string $userId User Id
+     * @param string $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\UserInvitation|ResponseInterface|null
+     *
+     * @throws Exception\GetUsersUserIdInvitationUnauthorizedException
+     * @throws Exception\GetUsersUserIdInvitationForbiddenException
+     * @throws Exception\GetUsersUserIdInvitationNotFoundException
+     * @throws Exception\GetUsersUserIdInvitationTooManyRequestsException
+     * @throws Exception\GetUsersUserIdInvitationInternalServerErrorException
+     */
+    public function getUsersUserIdInvitation(string $userId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetUsersUserIdInvitation($userId), $fetch);
     }
 
     /**
