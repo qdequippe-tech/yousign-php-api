@@ -122,7 +122,6 @@ use Qdequippe\Yousign\Api\Model\CreateContact;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
-use Qdequippe\Yousign\Api\Model\CreateFollowersInner;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignerConsentRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
@@ -131,8 +130,6 @@ use Qdequippe\Yousign\Api\Model\CreateVideoIdentityVerification;
 use Qdequippe\Yousign\Api\Model\CreateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\CreateWorkspace;
 use Qdequippe\Yousign\Api\Model\DeleteWorkspace;
-use Qdequippe\Yousign\Api\Model\Document;
-use Qdequippe\Yousign\Api\Model\Follower;
 use Qdequippe\Yousign\Api\Model\MarkWorkspaceAsDefault;
 use Qdequippe\Yousign\Api\Model\Metadata;
 use Qdequippe\Yousign\Api\Model\PatchCustomExperienceLogoRequest;
@@ -140,7 +137,6 @@ use Qdequippe\Yousign\Api\Model\PatchSignatureRequestsSignatureRequestIdApprover
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdCancelRequest;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceRequest;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdReactivateRequest;
-use Qdequippe\Yousign\Api\Model\Signer;
 use Qdequippe\Yousign\Api\Model\UpdateContact;
 use Qdequippe\Yousign\Api\Model\UpdateCustomExperience;
 use Qdequippe\Yousign\Api\Model\UpdateDocument;
@@ -152,7 +148,6 @@ use Qdequippe\Yousign\Api\Model\UpdateWebhookSubscription;
 use Qdequippe\Yousign\Api\Model\UpdateWorkspace;
 use Qdequippe\Yousign\Api\Model\UploadArchivedFile;
 use Qdequippe\Yousign\Api\Model\UploadElectronicSealImage;
-use Qdequippe\Yousign\Api\Model\WebhookSubscription;
 use Qdequippe\Yousign\Api\Normalizer\JaneObjectNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
@@ -600,7 +595,7 @@ class Client extends Runtime\Client\Client
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Document|ResponseInterface|null
+     * @return Model\Document|ResponseInterface|null
      *
      * @throws Exception\PostDocumentsBadRequestException
      * @throws Exception\PostDocumentsUnauthorizedException
@@ -1345,7 +1340,7 @@ class Client extends Runtime\Client\Client
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Document[]|ResponseInterface|null
+     * @return Model\Document[]|ResponseInterface|null
      *
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsBadRequestException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsUnauthorizedException
@@ -1366,7 +1361,7 @@ class Client extends Runtime\Client\Client
      * @param CreateDocumentFromMultipart|Model\CreateDocumentFromJson|null $requestBody
      * @param string                                                        $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Document|ResponseInterface|null
+     * @return Model\Document|ResponseInterface|null
      *
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsBadRequestException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsUnauthorizedException
@@ -1435,7 +1430,7 @@ class Client extends Runtime\Client\Client
      * @param string $documentId         Document Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Document|ResponseInterface|null
+     * @return Model\Document|ResponseInterface|null
      *
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException
@@ -1455,7 +1450,7 @@ class Client extends Runtime\Client\Client
      * @param string $documentId         Document Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Document|ResponseInterface|null
+     * @return Model\Document|ResponseInterface|null
      *
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdBadRequestException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException
@@ -1593,7 +1588,7 @@ class Client extends Runtime\Client\Client
      * @param string $documentId         Document Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Document|ResponseInterface|null
+     * @return Model\Document|ResponseInterface|null
      *
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceBadRequestException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdDocumentsDocumentIdReplaceUnauthorizedException
@@ -1630,11 +1625,11 @@ class Client extends Runtime\Client\Client
     /**
      * Adds a Follower to a given Signature Request.
      *
-     * @param string                      $signatureRequestId Signature Request Id
-     * @param CreateFollowersInner[]|null $requestBody
-     * @param string                      $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
+     * @param string                            $signatureRequestId Signature Request Id
+     * @param Model\CreateFollowersInner[]|null $requestBody
+     * @param string                            $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Follower[]|ResponseInterface|null
+     * @return Model\Follower[]|ResponseInterface|null
      *
      * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersBadRequestException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdFollowersUnauthorizedException
@@ -1755,7 +1750,7 @@ class Client extends Runtime\Client\Client
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Signer[]|ResponseInterface|null
+     * @return Model\Signer[]|ResponseInterface|null
      *
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersUnauthorizedException
      * @throws Exception\GetSignatureRequestsSignatureRequestIdSignersForbiddenException
@@ -1774,7 +1769,7 @@ class Client extends Runtime\Client\Client
      * @param string $signatureRequestId Signature Request Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Signer|ResponseInterface|null
+     * @return Model\Signer|ResponseInterface|null
      *
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersBadRequestException
      * @throws Exception\PostSignatureRequestsSignatureRequestIdSignersUnauthorizedException
@@ -1817,7 +1812,7 @@ class Client extends Runtime\Client\Client
      * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Signer|ResponseInterface|null
+     * @return Model\Signer|ResponseInterface|null
      *
      * @throws Exception\GetSignersSignersIdUnauthorizedException
      * @throws Exception\GetSignersSignersIdForbiddenException
@@ -1838,7 +1833,7 @@ class Client extends Runtime\Client\Client
      * @param string $signerId           Signer Id
      * @param string $fetch              Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return Signer|ResponseInterface|null
+     * @return Model\Signer|ResponseInterface|null
      *
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdBadRequestException
      * @throws Exception\PatchSignatureRequestsSignatureRequestIdSignersSignerIdUnauthorizedException
@@ -2265,7 +2260,7 @@ class Client extends Runtime\Client\Client
     /**
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return WebhookSubscription[]|ResponseInterface|null
+     * @return Model\WebhookSubscription[]|ResponseInterface|null
      *
      * @throws Exception\GetWebhooksBadRequestException
      * @throws Exception\GetWebhooksUnauthorizedException
@@ -2283,7 +2278,7 @@ class Client extends Runtime\Client\Client
      *
      * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return WebhookSubscription|ResponseInterface|null
+     * @return Model\WebhookSubscription|ResponseInterface|null
      *
      * @throws Exception\PostWebhooksSubscriptionsBadRequestException
      * @throws Exception\PostWebhooksSubscriptionsUnauthorizedException
@@ -2324,7 +2319,7 @@ class Client extends Runtime\Client\Client
      * @param string $webhookId Webhook Id
      * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return WebhookSubscription|ResponseInterface|null
+     * @return Model\WebhookSubscription|ResponseInterface|null
      *
      * @throws Exception\GetWebhooksWebhookIdBadRequestException
      * @throws Exception\GetWebhooksWebhookIdUnauthorizedException
@@ -2346,7 +2341,7 @@ class Client extends Runtime\Client\Client
      * @param string $webhookId Webhook Id
      * @param string $fetch     Fetch mode to use (can be OBJECT or RESPONSE)
      *
-     * @return WebhookSubscription|ResponseInterface|null
+     * @return Model\WebhookSubscription|ResponseInterface|null
      *
      * @throws Exception\PatchWebhooksWebhookIdBadRequestException
      * @throws Exception\PatchWebhooksWebhookIdUnauthorizedException

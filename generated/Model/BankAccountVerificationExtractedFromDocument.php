@@ -14,26 +14,30 @@ class BankAccountVerificationExtractedFromDocument extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * @var string|string|null
+     * International Bank Account Number (IBAN).
+     *
+     * @var string|null
      */
     protected $iban;
     /**
-     * @var string|string|null
+     * Business Identifier Codes (BIC).
+     *
+     * @var string|null
      */
     protected $bic;
 
     /**
-     * @return string|string|null
+     * International Bank Account Number (IBAN).
      */
-    public function getIban()
+    public function getIban(): ?string
     {
         return $this->iban;
     }
 
     /**
-     * @param string|string|null $iban
+     * International Bank Account Number (IBAN).
      */
-    public function setIban($iban): self
+    public function setIban(?string $iban): self
     {
         $this->initialized['iban'] = true;
         $this->iban = $iban;
@@ -42,17 +46,17 @@ class BankAccountVerificationExtractedFromDocument extends \ArrayObject
     }
 
     /**
-     * @return string|string|null
+     * Business Identifier Codes (BIC).
      */
-    public function getBic()
+    public function getBic(): ?string
     {
         return $this->bic;
     }
 
     /**
-     * @param string|string|null $bic
+     * Business Identifier Codes (BIC).
      */
-    public function setBic($bic): self
+    public function setBic(?string $bic): self
     {
         $this->initialized['bic'] = true;
         $this->bic = $bic;
