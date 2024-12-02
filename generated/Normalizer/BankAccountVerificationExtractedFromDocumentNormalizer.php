@@ -45,32 +45,20 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 return $object;
             }
             if (\array_key_exists('iban', $data) && null !== $data['iban']) {
-                $value = $data['iban'];
-                if (\is_string($data['iban'])) {
-                    $value = $data['iban'];
-                } elseif (\is_string($data['iban'])) {
-                    $value = $data['iban'];
-                }
-                $object->setIban($value);
+                $object->setIban($data['iban']);
                 unset($data['iban']);
             } elseif (\array_key_exists('iban', $data) && null === $data['iban']) {
                 $object->setIban(null);
             }
             if (\array_key_exists('bic', $data) && null !== $data['bic']) {
-                $value_1 = $data['bic'];
-                if (\is_string($data['bic'])) {
-                    $value_1 = $data['bic'];
-                } elseif (\is_string($data['bic'])) {
-                    $value_1 = $data['bic'];
-                }
-                $object->setBic($value_1);
+                $object->setBic($data['bic']);
                 unset($data['bic']);
             } elseif (\array_key_exists('bic', $data) && null === $data['bic']) {
                 $object->setBic(null);
             }
-            foreach ($data as $key => $value_2) {
+            foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $object[$key] = $value_2;
+                    $object[$key] = $value;
                 }
             }
 
@@ -81,26 +69,14 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         {
             $data = [];
             if ($object->isInitialized('iban') && null !== $object->getIban()) {
-                $value = $object->getIban();
-                if (\is_string($object->getIban())) {
-                    $value = $object->getIban();
-                } elseif (\is_string($object->getIban())) {
-                    $value = $object->getIban();
-                }
-                $data['iban'] = $value;
+                $data['iban'] = $object->getIban();
             }
             if ($object->isInitialized('bic') && null !== $object->getBic()) {
-                $value_1 = $object->getBic();
-                if (\is_string($object->getBic())) {
-                    $value_1 = $object->getBic();
-                } elseif (\is_string($object->getBic())) {
-                    $value_1 = $object->getBic();
-                }
-                $data['bic'] = $value_1;
+                $data['bic'] = $object->getBic();
             }
-            foreach ($object as $key => $value_2) {
+            foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $data[$key] = $value_2;
+                    $data[$key] = $value;
                 }
             }
 
@@ -146,32 +122,20 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 return $object;
             }
             if (\array_key_exists('iban', $data) && null !== $data['iban']) {
-                $value = $data['iban'];
-                if (\is_string($data['iban'])) {
-                    $value = $data['iban'];
-                } elseif (\is_string($data['iban'])) {
-                    $value = $data['iban'];
-                }
-                $object->setIban($value);
+                $object->setIban($data['iban']);
                 unset($data['iban']);
             } elseif (\array_key_exists('iban', $data) && null === $data['iban']) {
                 $object->setIban(null);
             }
             if (\array_key_exists('bic', $data) && null !== $data['bic']) {
-                $value_1 = $data['bic'];
-                if (\is_string($data['bic'])) {
-                    $value_1 = $data['bic'];
-                } elseif (\is_string($data['bic'])) {
-                    $value_1 = $data['bic'];
-                }
-                $object->setBic($value_1);
+                $object->setBic($data['bic']);
                 unset($data['bic']);
             } elseif (\array_key_exists('bic', $data) && null === $data['bic']) {
                 $object->setBic(null);
             }
-            foreach ($data as $key => $value_2) {
+            foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $object[$key] = $value_2;
+                    $object[$key] = $value;
                 }
             }
 
@@ -187,26 +151,14 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         {
             $data = [];
             if ($object->isInitialized('iban') && null !== $object->getIban()) {
-                $value = $object->getIban();
-                if (\is_string($object->getIban())) {
-                    $value = $object->getIban();
-                } elseif (\is_string($object->getIban())) {
-                    $value = $object->getIban();
-                }
-                $data['iban'] = $value;
+                $data['iban'] = $object->getIban();
             }
             if ($object->isInitialized('bic') && null !== $object->getBic()) {
-                $value_1 = $object->getBic();
-                if (\is_string($object->getBic())) {
-                    $value_1 = $object->getBic();
-                } elseif (\is_string($object->getBic())) {
-                    $value_1 = $object->getBic();
-                }
-                $data['bic'] = $value_1;
+                $data['bic'] = $object->getBic();
             }
-            foreach ($object as $key => $value_2) {
+            foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
-                    $data[$key] = $value_2;
+                    $data[$key] = $value;
                 }
             }
 
