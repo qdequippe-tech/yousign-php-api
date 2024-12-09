@@ -49,6 +49,10 @@ class FieldSignature extends \ArrayObject
      * @var int|null
      */
     protected $y;
+    /**
+     * @var string|null
+     */
+    protected $reason;
 
     public function getId(): ?string
     {
@@ -163,6 +167,19 @@ class FieldSignature extends \ArrayObject
     {
         $this->initialized['y'] = true;
         $this->y = $y;
+
+        return $this;
+    }
+
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+    public function setReason(?string $reason): self
+    {
+        $this->initialized['reason'] = true;
+        $this->reason = $reason;
 
         return $this;
     }

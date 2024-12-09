@@ -80,6 +80,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('width', $data) && null === $data['width']) {
                 $object->setWidth(null);
             }
+            if (\array_key_exists('reason', $data) && null !== $data['reason']) {
+                $object->setReason($data['reason']);
+                unset($data['reason']);
+            } elseif (\array_key_exists('reason', $data) && null === $data['reason']) {
+                $object->setReason(null);
+            }
             foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value;
@@ -109,6 +115,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             if ($object->isInitialized('width') && null !== $object->getWidth()) {
                 $data['width'] = $object->getWidth();
+            }
+            if ($object->isInitialized('reason') && null !== $object->getReason()) {
+                $data['reason'] = $object->getReason();
             }
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
@@ -193,6 +202,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('width', $data) && null === $data['width']) {
                 $object->setWidth(null);
             }
+            if (\array_key_exists('reason', $data) && null !== $data['reason']) {
+                $object->setReason($data['reason']);
+                unset($data['reason']);
+            } elseif (\array_key_exists('reason', $data) && null === $data['reason']) {
+                $object->setReason(null);
+            }
             foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value;
@@ -227,6 +242,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             }
             if ($object->isInitialized('width') && null !== $object->getWidth()) {
                 $data['width'] = $object->getWidth();
+            }
+            if ($object->isInitialized('reason') && null !== $object->getReason()) {
+                $data['reason'] = $object->getReason();
             }
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {

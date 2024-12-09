@@ -45,6 +45,10 @@ class Signature extends \ArrayObject
      * @var int|null
      */
     protected $width;
+    /**
+     * @var string|null
+     */
+    protected $reason;
 
     public function getSignerId(): ?string
     {
@@ -145,6 +149,19 @@ class Signature extends \ArrayObject
     {
         $this->initialized['width'] = true;
         $this->width = $width;
+
+        return $this;
+    }
+
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+    public function setReason(?string $reason): self
+    {
+        $this->initialized['reason'] = true;
+        $this->reason = $reason;
 
         return $this;
     }
