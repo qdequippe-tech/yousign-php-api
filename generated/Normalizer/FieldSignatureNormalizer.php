@@ -98,6 +98,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('y', $data) && null === $data['y']) {
                 $object->setY(null);
             }
+            if (\array_key_exists('reason', $data) && null !== $data['reason']) {
+                $object->setReason($data['reason']);
+                unset($data['reason']);
+            } elseif (\array_key_exists('reason', $data) && null === $data['reason']) {
+                $object->setReason(null);
+            }
             foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value;
@@ -119,6 +125,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['page'] = $object->getPage();
             $data['x'] = $object->getX();
             $data['y'] = $object->getY();
+            $data['reason'] = $object->getReason();
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
@@ -220,6 +227,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('y', $data) && null === $data['y']) {
                 $object->setY(null);
             }
+            if (\array_key_exists('reason', $data) && null !== $data['reason']) {
+                $object->setReason($data['reason']);
+                unset($data['reason']);
+            } elseif (\array_key_exists('reason', $data) && null === $data['reason']) {
+                $object->setReason(null);
+            }
             foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value;
@@ -246,6 +259,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['page'] = $object->getPage();
             $data['x'] = $object->getX();
             $data['y'] = $object->getY();
+            $data['reason'] = $object->getReason();
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;

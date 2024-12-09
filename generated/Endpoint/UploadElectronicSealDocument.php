@@ -31,7 +31,7 @@ class UploadElectronicSealDocument extends BaseEndpoint implements Endpoint
     use EndpointTrait;
 
     /**
-     * Upload an Electronic Seal Document to use for creating an Electronic Seal (can be used for only one Electronic Seal).
+     * Create an Electronic Seal Document from an other one.
      *
      * @param CreateElectronicSealDocument|CreateElectronicSealDocumentFromJson|null $requestBody
      */
