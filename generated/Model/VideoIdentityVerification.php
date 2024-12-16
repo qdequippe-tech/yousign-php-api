@@ -24,7 +24,7 @@ class VideoIdentityVerification extends \ArrayObject
      */
     protected $status;
     /**
-     * List of status codes. Indicates the cause when the status is refused, declined, or retry_required. More details on codes can be found here https://docs.ubble.ai/#section/Handle-verification-results/Response-codes.
+     * List of status codes. Indicates the cause when the status is pending, approved, declined or inconclusive. More details on codes can be found here https://developers.yousign.com/docs/follow-identity-verification-status#status-codes.
      *
      * @var list<int>|null
      */
@@ -87,7 +87,7 @@ class VideoIdentityVerification extends \ArrayObject
     }
 
     /**
-     * List of status codes. Indicates the cause when the status is refused, declined, or retry_required. More details on codes can be found here https://docs.ubble.ai/#section/Handle-verification-results/Response-codes.
+     * List of status codes. Indicates the cause when the status is pending, approved, declined or inconclusive. More details on codes can be found here https://developers.yousign.com/docs/follow-identity-verification-status#status-codes.
      *
      * @return list<int>|null
      */
@@ -97,7 +97,7 @@ class VideoIdentityVerification extends \ArrayObject
     }
 
     /**
-     * List of status codes. Indicates the cause when the status is refused, declined, or retry_required. More details on codes can be found here https://docs.ubble.ai/#section/Handle-verification-results/Response-codes.
+     * List of status codes. Indicates the cause when the status is pending, approved, declined or inconclusive. More details on codes can be found here https://developers.yousign.com/docs/follow-identity-verification-status#status-codes.
      *
      * @param list<int>|null $statusCodes
      */

@@ -41,6 +41,7 @@ use Qdequippe\Yousign\Api\Endpoint\GetCustomExperiences;
 use Qdequippe\Yousign\Api\Endpoint\GetCustomExperiencesCustomExperienceId;
 use Qdequippe\Yousign\Api\Endpoint\GetElectronicSeal;
 use Qdequippe\Yousign\Api\Endpoint\GetElectronicSealAuditTrail;
+use Qdequippe\Yousign\Api\Endpoint\GetIdDocumentVerification;
 use Qdequippe\Yousign\Api\Endpoint\GetIdentityVerificationsIdentityVerificationId;
 use Qdequippe\Yousign\Api\Endpoint\GetInvitations;
 use Qdequippe\Yousign\Api\Endpoint\GetSignatureRequests;
@@ -122,6 +123,7 @@ use Qdequippe\Yousign\Api\Model\CreateContact;
 use Qdequippe\Yousign\Api\Model\CreateCustomExperience;
 use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
+use Qdequippe\Yousign\Api\Model\CreateIdDocumentVerification;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignerConsentRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignerDocumentRequest;
@@ -807,6 +809,45 @@ class Client extends Runtime\Client\Client
     public function downloadElectronicSealAuditTrail(string $electronicSealId, string $fetch = self::FETCH_OBJECT, array $accept = [])
     {
         return $this->executeEndpoint(new DownloadElectronicSealAuditTrail($electronicSealId, $accept), $fetch);
+    }
+
+    /**
+     * Verify a person’s identity by sending the file containing their ID document (ID card, passport, residence permit or driving license).
+     *
+     * @param string $fetch Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\IdDocumentVerificationCreated|ResponseInterface|null
+     *
+     * @throws Exception\CreateIdDocumentVerificationBadRequestException
+     * @throws Exception\CreateIdDocumentVerificationUnauthorizedException
+     * @throws Exception\CreateIdDocumentVerificationForbiddenException
+     * @throws Exception\CreateIdDocumentVerificationUnsupportedMediaTypeException
+     * @throws Exception\CreateIdDocumentVerificationTooManyRequestsException
+     * @throws Exception\CreateIdDocumentVerificationInternalServerErrorException
+     */
+    public function createIdDocumentVerification(?CreateIdDocumentVerification $requestBody = null, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new Endpoint\CreateIdDocumentVerification($requestBody), $fetch);
+    }
+
+    /**
+     * Get the detailed results of an ID document verification, including the status of the verification, the reasons in case of rejection and the data extracted from the ID document.
+     *
+     * @param string $idDocumentVerificationId The ID document verification ID
+     * @param string $fetch                    Fetch mode to use (can be OBJECT or RESPONSE)
+     *
+     * @return Model\IdDocumentVerification|ResponseInterface|null
+     *
+     * @throws Exception\GetIdDocumentVerificationBadRequestException
+     * @throws Exception\GetIdDocumentVerificationUnauthorizedException
+     * @throws Exception\GetIdDocumentVerificationForbiddenException
+     * @throws Exception\GetIdDocumentVerificationNotFoundException
+     * @throws Exception\GetIdDocumentVerificationTooManyRequestsException
+     * @throws Exception\GetIdDocumentVerificationInternalServerErrorException
+     */
+    public function getIdDocumentVerification(string $idDocumentVerificationId, string $fetch = self::FETCH_OBJECT)
+    {
+        return $this->executeEndpoint(new GetIdDocumentVerification($idDocumentVerificationId), $fetch);
     }
 
     /**
