@@ -14,7 +14,7 @@ if (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR_VERSION === 6 && Kernel::MINOR_V
             return ['$ref' => (string) $object->getReferenceUri()];
         }
 
-        public function supportsNormalization($data, $format = null): bool
+        public function supportsNormalization($data, $format = null, array $context = []): bool
         {
             return $data instanceof Reference;
         }
@@ -22,12 +22,12 @@ if (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR_VERSION === 6 && Kernel::MINOR_V
 } else {
     class ReferenceNormalizer implements NormalizerInterface
     {
-        public function normalize($object, $format = null, array $context = [])
+        public function normalize($object, $format = null, array $context = []): string|int|float|bool|\ArrayObject|array|null
         {
             return ['$ref' => (string) $object->getReferenceUri()];
         }
 
-        public function supportsNormalization($data, $format = null): bool
+        public function supportsNormalization($data, $format = null, array $context = []): bool
         {
             return $data instanceof Reference;
         }

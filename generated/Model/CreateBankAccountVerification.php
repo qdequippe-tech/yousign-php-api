@@ -14,13 +14,13 @@ class CreateBankAccountVerification extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Please provide the holder first name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name.
+     * Please provide the holder first name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name. Ignored if field "legal_entity_name" is provided.
      *
      * @var string|null
      */
     protected $firstName;
     /**
-     * Please provide the holder last name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name.
+     * Please provide the holder last name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name. Ignored if field "legal_entity_name" is provided.
      *
      * @var string|null
      */
@@ -43,9 +43,15 @@ class CreateBankAccountVerification extends \ArrayObject
      * @var string|null
      */
     protected $bic;
+    /**
+     * Please provide the legal entity name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. If provided, fields "first_name" and "last_name" are ignored.
+     *
+     * @var string|null
+     */
+    protected $legalEntityName;
 
     /**
-     * Please provide the holder first name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name.
+     * Please provide the holder first name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name. Ignored if field "legal_entity_name" is provided.
      */
     public function getFirstName(): ?string
     {
@@ -53,7 +59,7 @@ class CreateBankAccountVerification extends \ArrayObject
     }
 
     /**
-     * Please provide the holder first name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name.
+     * Please provide the holder first name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name. Ignored if field "legal_entity_name" is provided.
      */
     public function setFirstName(?string $firstName): self
     {
@@ -64,7 +70,7 @@ class CreateBankAccountVerification extends \ArrayObject
     }
 
     /**
-     * Please provide the holder last name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name.
+     * Please provide the holder last name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name. Ignored if field "legal_entity_name" is provided.
      */
     public function getLastName(): ?string
     {
@@ -72,7 +78,7 @@ class CreateBankAccountVerification extends \ArrayObject
     }
 
     /**
-     * Please provide the holder last name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name.
+     * Please provide the holder last name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. One exception: if the document mentions an honorary title, please don't provide it as part of the name. Ignored if field "legal_entity_name" is provided.
      */
     public function setLastName(?string $lastName): self
     {
@@ -135,6 +141,25 @@ class CreateBankAccountVerification extends \ArrayObject
     {
         $this->initialized['bic'] = true;
         $this->bic = $bic;
+
+        return $this;
+    }
+
+    /**
+     * Please provide the legal entity name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. If provided, fields "first_name" and "last_name" are ignored.
+     */
+    public function getLegalEntityName(): ?string
+    {
+        return $this->legalEntityName;
+    }
+
+    /**
+     * Please provide the legal entity name, exactly as it appears on the bank account document. Please match it exactly, with the same characters, same case. If provided, fields "first_name" and "last_name" are ignored.
+     */
+    public function setLegalEntityName(?string $legalEntityName): self
+    {
+        $this->initialized['legalEntityName'] = true;
+        $this->legalEntityName = $legalEntityName;
 
         return $this;
     }

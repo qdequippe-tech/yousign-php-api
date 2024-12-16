@@ -38,11 +38,11 @@ class CreateSignatureRequest extends \ArrayObject
      */
     protected $reminderSettings;
     /**
-     * tz database format.
+     * Time zone of the dates and times displayed in emails, the Signature Request expiration date, and the PDF Audit Trail. Format: tz database. Default is set to Europe/Paris.
      *
      * @var string|null
      */
-    protected $timezone;
+    protected $timezone = 'Europe/Paris';
     /**
      * A custom note added to emails sent to signers.
      *
@@ -213,7 +213,7 @@ class CreateSignatureRequest extends \ArrayObject
     }
 
     /**
-     * tz database format.
+     * Time zone of the dates and times displayed in emails, the Signature Request expiration date, and the PDF Audit Trail. Format: tz database. Default is set to Europe/Paris.
      */
     public function getTimezone(): ?string
     {
@@ -221,7 +221,7 @@ class CreateSignatureRequest extends \ArrayObject
     }
 
     /**
-     * tz database format.
+     * Time zone of the dates and times displayed in emails, the Signature Request expiration date, and the PDF Audit Trail. Format: tz database. Default is set to Europe/Paris.
      */
     public function setTimezone(?string $timezone): self
     {

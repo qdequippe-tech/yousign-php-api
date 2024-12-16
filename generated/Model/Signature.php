@@ -46,6 +46,9 @@ class Signature extends \ArrayObject
      */
     protected $width;
     /**
+     * Provide extra context to explain why the Document is being signed. Once the Document is signed, the custom reason is stored in the Audit Trail and is included in the signature certificate.
+     * The default value is: "Signed by [Signer first name] [Signer last name]".
+     *
      * @var string|null
      */
     protected $reason;
@@ -153,11 +156,19 @@ class Signature extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Provide extra context to explain why the Document is being signed. Once the Document is signed, the custom reason is stored in the Audit Trail and is included in the signature certificate.
+     * The default value is: "Signed by [Signer first name] [Signer last name]".
+     */
     public function getReason(): ?string
     {
         return $this->reason;
     }
 
+    /**
+     * Provide extra context to explain why the Document is being signed. Once the Document is signed, the custom reason is stored in the Audit Trail and is included in the signature certificate.
+     * The default value is: "Signed by [Signer first name] [Signer last name]".
+     */
     public function setReason(?string $reason): self
     {
         $this->initialized['reason'] = true;

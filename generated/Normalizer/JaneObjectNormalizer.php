@@ -34,6 +34,7 @@ use Qdequippe\Yousign\Api\Model\CreateElectronicSealFieldSealPayload;
 use Qdequippe\Yousign\Api\Model\CreateElectronicSealPayload;
 use Qdequippe\Yousign\Api\Model\CreateFieldFont;
 use Qdequippe\Yousign\Api\Model\CreateFollowersInner;
+use Qdequippe\Yousign\Api\Model\CreateIdDocumentVerification;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequest;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestReminderSettings;
 use Qdequippe\Yousign\Api\Model\CreateSignatureRequestTemplatePlaceholders;
@@ -91,6 +92,10 @@ use Qdequippe\Yousign\Api\Model\GetSignatureRequestsSignatureRequestIdSignersSig
 use Qdequippe\Yousign\Api\Model\GetTemplates200Response;
 use Qdequippe\Yousign\Api\Model\GetUsers200Response;
 use Qdequippe\Yousign\Api\Model\GetWorkspaces200Response;
+use Qdequippe\Yousign\Api\Model\IdDocumentVerification;
+use Qdequippe\Yousign\Api\Model\IdDocumentVerificationCreated;
+use Qdequippe\Yousign\Api\Model\IdDocumentVerificationExtractedFromDocument;
+use Qdequippe\Yousign\Api\Model\IdDocumentVerificationExtractedFromDocumentMrz;
 use Qdequippe\Yousign\Api\Model\InitialsArea;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
 use Qdequippe\Yousign\Api\Model\ListElectronicSealImages200Response;
@@ -258,6 +263,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             ElectronicSeal::class => ElectronicSealNormalizer::class,
 
             ElectronicSealAuditTrail::class => ElectronicSealAuditTrailNormalizer::class,
+
+            CreateIdDocumentVerification::class => CreateIdDocumentVerificationNormalizer::class,
+
+            IdDocumentVerificationCreated::class => IdDocumentVerificationCreatedNormalizer::class,
+
+            IdDocumentVerification::class => IdDocumentVerificationNormalizer::class,
 
             SignatureRequestInList::class => SignatureRequestInListNormalizer::class,
 
@@ -476,6 +487,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             UpdateCustomExperienceRedirectUrls::class => UpdateCustomExperienceRedirectUrlsNormalizer::class,
 
             DocumentInitials::class => DocumentInitialsNormalizer::class,
+
+            IdDocumentVerificationExtractedFromDocumentMrz::class => IdDocumentVerificationExtractedFromDocumentMrzNormalizer::class,
+
+            IdDocumentVerificationExtractedFromDocument::class => IdDocumentVerificationExtractedFromDocumentNormalizer::class,
 
             SignatureRequestInListReminderSettings::class => SignatureRequestInListReminderSettingsNormalizer::class,
 
@@ -653,6 +668,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 CreateElectronicSealPayload::class => false,
                 ElectronicSeal::class => false,
                 ElectronicSealAuditTrail::class => false,
+                CreateIdDocumentVerification::class => false,
+                IdDocumentVerificationCreated::class => false,
+                IdDocumentVerification::class => false,
                 SignatureRequestInList::class => false,
                 CreateSignatureRequest::class => false,
                 SignatureRequest::class => false,
@@ -762,6 +780,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 CreateCustomExperienceRedirectUrls::class => false,
                 UpdateCustomExperienceRedirectUrls::class => false,
                 DocumentInitials::class => false,
+                IdDocumentVerificationExtractedFromDocumentMrz::class => false,
+                IdDocumentVerificationExtractedFromDocument::class => false,
                 SignatureRequestInListReminderSettings::class => false,
                 SignatureRequestInListSignersInner::class => false,
                 SignatureRequestInListApproversInner::class => false,
@@ -876,6 +896,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             ElectronicSeal::class => ElectronicSealNormalizer::class,
 
             ElectronicSealAuditTrail::class => ElectronicSealAuditTrailNormalizer::class,
+
+            CreateIdDocumentVerification::class => CreateIdDocumentVerificationNormalizer::class,
+
+            IdDocumentVerificationCreated::class => IdDocumentVerificationCreatedNormalizer::class,
+
+            IdDocumentVerification::class => IdDocumentVerificationNormalizer::class,
 
             SignatureRequestInList::class => SignatureRequestInListNormalizer::class,
 
@@ -1095,6 +1121,10 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             DocumentInitials::class => DocumentInitialsNormalizer::class,
 
+            IdDocumentVerificationExtractedFromDocumentMrz::class => IdDocumentVerificationExtractedFromDocumentMrzNormalizer::class,
+
+            IdDocumentVerificationExtractedFromDocument::class => IdDocumentVerificationExtractedFromDocumentNormalizer::class,
+
             SignatureRequestInListReminderSettings::class => SignatureRequestInListReminderSettingsNormalizer::class,
 
             SignatureRequestInListSignersInner::class => SignatureRequestInListSignersInnerNormalizer::class,
@@ -1213,10 +1243,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
         /**
          * @param mixed|null $format
-         *
-         * @return array|string|int|float|bool|\ArrayObject|null
          */
-        public function normalize($object, $format = null, array $context = [])
+        public function normalize($object, $format = null, array $context = []): string|int|float|bool|\ArrayObject|array|null
         {
             $normalizerClass = $this->normalizers[$object::class];
             $normalizer = $this->getNormalizer($normalizerClass);
@@ -1227,7 +1255,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
         /**
          * @param mixed|null $format
          */
-        public function denormalize($data, $type, $format = null, array $context = [])
+        public function denormalize($data, $type, $format = null, array $context = []): mixed
         {
             $denormalizerClass = $this->normalizers[$type];
             $denormalizer = $this->getNormalizer($denormalizerClass);
@@ -1279,6 +1307,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 CreateElectronicSealPayload::class => false,
                 ElectronicSeal::class => false,
                 ElectronicSealAuditTrail::class => false,
+                CreateIdDocumentVerification::class => false,
+                IdDocumentVerificationCreated::class => false,
+                IdDocumentVerification::class => false,
                 SignatureRequestInList::class => false,
                 CreateSignatureRequest::class => false,
                 SignatureRequest::class => false,
@@ -1388,6 +1419,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 CreateCustomExperienceRedirectUrls::class => false,
                 UpdateCustomExperienceRedirectUrls::class => false,
                 DocumentInitials::class => false,
+                IdDocumentVerificationExtractedFromDocumentMrz::class => false,
+                IdDocumentVerificationExtractedFromDocument::class => false,
                 SignatureRequestInListReminderSettings::class => false,
                 SignatureRequestInListSignersInner::class => false,
                 SignatureRequestInListApproversInner::class => false,
