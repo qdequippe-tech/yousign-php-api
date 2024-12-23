@@ -62,6 +62,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('redirection_url', $data) && null === $data['redirection_url']) {
                 $object->setRedirectionUrl(null);
             }
+            if (\array_key_exists('face_recognition', $data) && null !== $data['face_recognition']) {
+                $object->setFaceRecognition($data['face_recognition']);
+                unset($data['face_recognition']);
+            } elseif (\array_key_exists('face_recognition', $data) && null === $data['face_recognition']) {
+                $object->setFaceRecognition(null);
+            }
             foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value;
@@ -77,6 +83,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['first_name'] = $object->getFirstName();
             $data['last_name'] = $object->getLastName();
             $data['redirection_url'] = $object->getRedirectionUrl();
+            if ($object->isInitialized('faceRecognition') && null !== $object->getFaceRecognition()) {
+                $data['face_recognition'] = $object->getFaceRecognition();
+            }
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;
@@ -142,6 +151,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('redirection_url', $data) && null === $data['redirection_url']) {
                 $object->setRedirectionUrl(null);
             }
+            if (\array_key_exists('face_recognition', $data) && null !== $data['face_recognition']) {
+                $object->setFaceRecognition($data['face_recognition']);
+                unset($data['face_recognition']);
+            } elseif (\array_key_exists('face_recognition', $data) && null === $data['face_recognition']) {
+                $object->setFaceRecognition(null);
+            }
             foreach ($data as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value;
@@ -160,6 +175,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['first_name'] = $object->getFirstName();
             $data['last_name'] = $object->getLastName();
             $data['redirection_url'] = $object->getRedirectionUrl();
+            if ($object->isInitialized('faceRecognition') && null !== $object->getFaceRecognition()) {
+                $data['face_recognition'] = $object->getFaceRecognition();
+            }
             foreach ($object as $key => $value) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value;

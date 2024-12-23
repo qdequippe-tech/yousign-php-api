@@ -59,6 +59,10 @@ class FromExistingUser1 extends \ArrayObject
      * @var SmsNotification1|null
      */
     protected $smsNotification;
+    /**
+     * @var EmailNotification1|null
+     */
+    protected $emailNotification;
 
     /**
      * Create signer from an existing user.
@@ -210,6 +214,19 @@ class FromExistingUser1 extends \ArrayObject
     {
         $this->initialized['smsNotification'] = true;
         $this->smsNotification = $smsNotification;
+
+        return $this;
+    }
+
+    public function getEmailNotification(): ?EmailNotification1
+    {
+        return $this->emailNotification;
+    }
+
+    public function setEmailNotification(?EmailNotification1 $emailNotification): self
+    {
+        $this->initialized['emailNotification'] = true;
+        $this->emailNotification = $emailNotification;
 
         return $this;
     }

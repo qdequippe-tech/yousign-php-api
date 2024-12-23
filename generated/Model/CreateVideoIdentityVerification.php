@@ -31,6 +31,12 @@ class CreateVideoIdentityVerification extends \ArrayObject
      * @var string|null
      */
     protected $redirectionUrl;
+    /**
+     * Enable face recognition step in the Identity verification flow.
+     *
+     * @var bool|null
+     */
+    protected $faceRecognition = false;
 
     /**
      * The first name provided must match exactly as it appears on the ID document, as a consistency check will be performed. If multiple given names are listed on the document, you must provide only one of them.
@@ -85,6 +91,25 @@ class CreateVideoIdentityVerification extends \ArrayObject
     {
         $this->initialized['redirectionUrl'] = true;
         $this->redirectionUrl = $redirectionUrl;
+
+        return $this;
+    }
+
+    /**
+     * Enable face recognition step in the Identity verification flow.
+     */
+    public function getFaceRecognition(): ?bool
+    {
+        return $this->faceRecognition;
+    }
+
+    /**
+     * Enable face recognition step in the Identity verification flow.
+     */
+    public function setFaceRecognition(?bool $faceRecognition): self
+    {
+        $this->initialized['faceRecognition'] = true;
+        $this->faceRecognition = $faceRecognition;
 
         return $this;
     }

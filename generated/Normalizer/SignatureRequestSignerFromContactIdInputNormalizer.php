@@ -3,8 +3,8 @@
 namespace Qdequippe\Yousign\Api\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Qdequippe\Yousign\Api\Model\FromScratch1CustomText;
 use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromContactIdInput;
+use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromInfoInputCustomText;
 use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromInfoInputRedirectUrls;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
@@ -85,7 +85,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setRedirectUrls(null);
             }
             if (\array_key_exists('custom_text', $data) && null !== $data['custom_text']) {
-                $object->setCustomText($this->denormalizer->denormalize($data['custom_text'], FromScratch1CustomText::class, 'json', $context));
+                $object->setCustomText($this->denormalizer->denormalize($data['custom_text'], SignatureRequestSignerFromInfoInputCustomText::class, 'json', $context));
                 unset($data['custom_text']);
             } elseif (\array_key_exists('custom_text', $data) && null === $data['custom_text']) {
                 $object->setCustomText(null);
@@ -210,7 +210,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 $object->setRedirectUrls(null);
             }
             if (\array_key_exists('custom_text', $data) && null !== $data['custom_text']) {
-                $object->setCustomText($this->denormalizer->denormalize($data['custom_text'], FromScratch1CustomText::class, 'json', $context));
+                $object->setCustomText($this->denormalizer->denormalize($data['custom_text'], SignatureRequestSignerFromInfoInputCustomText::class, 'json', $context));
                 unset($data['custom_text']);
             } elseif (\array_key_exists('custom_text', $data) && null === $data['custom_text']) {
                 $object->setCustomText(null);

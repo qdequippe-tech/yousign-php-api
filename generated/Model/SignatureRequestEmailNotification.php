@@ -17,6 +17,10 @@ class SignatureRequestEmailNotification extends \ArrayObject
      * @var SignatureRequestEmailNotificationSender|null
      */
     protected $sender;
+    /**
+     * @var string|null
+     */
+    protected $customNote;
 
     public function getSender(): ?SignatureRequestEmailNotificationSender
     {
@@ -27,6 +31,19 @@ class SignatureRequestEmailNotification extends \ArrayObject
     {
         $this->initialized['sender'] = true;
         $this->sender = $sender;
+
+        return $this;
+    }
+
+    public function getCustomNote(): ?string
+    {
+        return $this->customNote;
+    }
+
+    public function setCustomNote(?string $customNote): self
+    {
+        $this->initialized['customNote'] = true;
+        $this->customNote = $customNote;
 
         return $this;
     }
