@@ -53,6 +53,12 @@ class VideoIdentityVerification extends \ArrayObject
      * @var string|null
      */
     protected $verificationUrl;
+    /**
+     * Temporary public link to the face image. Available for 10 minutes.
+     *
+     * @var string|null
+     */
+    protected $faceImageUrl;
 
     public function getId(): ?string
     {
@@ -181,6 +187,25 @@ class VideoIdentityVerification extends \ArrayObject
     {
         $this->initialized['verificationUrl'] = true;
         $this->verificationUrl = $verificationUrl;
+
+        return $this;
+    }
+
+    /**
+     * Temporary public link to the face image. Available for 10 minutes.
+     */
+    public function getFaceImageUrl(): ?string
+    {
+        return $this->faceImageUrl;
+    }
+
+    /**
+     * Temporary public link to the face image. Available for 10 minutes.
+     */
+    public function setFaceImageUrl(?string $faceImageUrl): self
+    {
+        $this->initialized['faceImageUrl'] = true;
+        $this->faceImageUrl = $faceImageUrl;
 
         return $this;
     }

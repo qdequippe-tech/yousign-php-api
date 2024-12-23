@@ -36,7 +36,7 @@ class SignatureRequestPlaceholderSignerSubstituteFromContactIdInput extends \Arr
      */
     protected $redirectUrls;
     /**
-     * @var FromScratch1CustomText|null
+     * @var SignatureRequestSignerFromInfoInputCustomText|null
      */
     protected $customText;
     /**
@@ -117,12 +117,12 @@ class SignatureRequestPlaceholderSignerSubstituteFromContactIdInput extends \Arr
         return $this;
     }
 
-    public function getCustomText(): ?FromScratch1CustomText
+    public function getCustomText(): ?SignatureRequestSignerFromInfoInputCustomText
     {
         return $this->customText;
     }
 
-    public function setCustomText(?FromScratch1CustomText $customText): self
+    public function setCustomText(?SignatureRequestSignerFromInfoInputCustomText $customText): self
     {
         $this->initialized['customText'] = true;
         $this->customText = $customText;

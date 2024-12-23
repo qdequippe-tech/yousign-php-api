@@ -93,6 +93,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('verification_url', $data) && null === $data['verification_url']) {
                 $object->setVerificationUrl(null);
             }
+            if (\array_key_exists('face_image_url', $data) && null !== $data['face_image_url']) {
+                $object->setFaceImageUrl($data['face_image_url']);
+                unset($data['face_image_url']);
+            } elseif (\array_key_exists('face_image_url', $data) && null === $data['face_image_url']) {
+                $object->setFaceImageUrl(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -116,6 +122,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['declared'] = $this->normalizer->normalize($object->getDeclared(), 'json', $context);
             $data['extracted_from_document'] = $this->normalizer->normalize($object->getExtractedFromDocument(), 'json', $context);
             $data['verification_url'] = $object->getVerificationUrl();
+            $data['face_image_url'] = $object->getFaceImageUrl();
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;
@@ -209,6 +216,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('verification_url', $data) && null === $data['verification_url']) {
                 $object->setVerificationUrl(null);
             }
+            if (\array_key_exists('face_image_url', $data) && null !== $data['face_image_url']) {
+                $object->setFaceImageUrl($data['face_image_url']);
+                unset($data['face_image_url']);
+            } elseif (\array_key_exists('face_image_url', $data) && null === $data['face_image_url']) {
+                $object->setFaceImageUrl(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -235,6 +248,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['declared'] = $this->normalizer->normalize($object->getDeclared(), 'json', $context);
             $data['extracted_from_document'] = $this->normalizer->normalize($object->getExtractedFromDocument(), 'json', $context);
             $data['verification_url'] = $object->getVerificationUrl();
+            $data['face_image_url'] = $object->getFaceImageUrl();
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;

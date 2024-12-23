@@ -55,6 +55,8 @@ use Qdequippe\Yousign\Api\Model\ElectronicSeal;
 use Qdequippe\Yousign\Api\Model\ElectronicSealAuditTrail;
 use Qdequippe\Yousign\Api\Model\ElectronicSealDocument;
 use Qdequippe\Yousign\Api\Model\ElectronicSealImage;
+use Qdequippe\Yousign\Api\Model\EmailNotification;
+use Qdequippe\Yousign\Api\Model\EmailNotification1;
 use Qdequippe\Yousign\Api\Model\EmbeddedSignerWithSignatureLink;
 use Qdequippe\Yousign\Api\Model\FieldCheckbox;
 use Qdequippe\Yousign\Api\Model\FieldMention;
@@ -144,6 +146,7 @@ use Qdequippe\Yousign\Api\Model\SignatureRequestPlaceholderSignerSubstituteFromI
 use Qdequippe\Yousign\Api\Model\SignatureRequestPlaceholderSignerSubstituteFromUserIdInput;
 use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromContactIdInput;
 use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromInfoInput;
+use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromInfoInputCustomText;
 use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromInfoInputInfo;
 use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromInfoInputRedirectUrls;
 use Qdequippe\Yousign\Api\Model\SignatureRequestSignerFromUserIdInput;
@@ -390,7 +393,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             SmsNotification::class => SmsNotificationNormalizer::class,
 
+            EmailNotification::class => EmailNotificationNormalizer::class,
+
             SmsNotification1::class => SmsNotification1Normalizer::class,
+
+            EmailNotification1::class => EmailNotification1Normalizer::class,
 
             VideoIdentityVerificationVerified::class => VideoIdentityVerificationVerifiedNormalizer::class,
 
@@ -578,6 +585,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             SignatureRequestSignerFromInfoInputRedirectUrls::class => SignatureRequestSignerFromInfoInputRedirectUrlsNormalizer::class,
 
+            SignatureRequestSignerFromInfoInputCustomText::class => SignatureRequestSignerFromInfoInputCustomTextNormalizer::class,
+
             SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo::class => SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfoNormalizer::class,
 
             Signature2::class => Signature2Normalizer::class,
@@ -731,7 +740,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 CreateFieldFont::class => false,
                 UpdateFieldFont::class => false,
                 SmsNotification::class => false,
+                EmailNotification::class => false,
                 SmsNotification1::class => false,
+                EmailNotification1::class => false,
                 VideoIdentityVerificationVerified::class => false,
                 VideoIdentityVerificationDeclared::class => false,
                 VideoIdentityVerificationDocument::class => false,
@@ -825,6 +836,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 WorkspaceUsersInner::class => false,
                 SignatureRequestSignerFromInfoInputInfo::class => false,
                 SignatureRequestSignerFromInfoInputRedirectUrls::class => false,
+                SignatureRequestSignerFromInfoInputCustomText::class => false,
                 SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo::class => false,
                 Signature2::class => false,
                 Mention2::class => false,
@@ -1023,7 +1035,11 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             SmsNotification::class => SmsNotificationNormalizer::class,
 
+            EmailNotification::class => EmailNotificationNormalizer::class,
+
             SmsNotification1::class => SmsNotification1Normalizer::class,
+
+            EmailNotification1::class => EmailNotification1Normalizer::class,
 
             VideoIdentityVerificationVerified::class => VideoIdentityVerificationVerifiedNormalizer::class,
 
@@ -1211,6 +1227,8 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
 
             SignatureRequestSignerFromInfoInputRedirectUrls::class => SignatureRequestSignerFromInfoInputRedirectUrlsNormalizer::class,
 
+            SignatureRequestSignerFromInfoInputCustomText::class => SignatureRequestSignerFromInfoInputCustomTextNormalizer::class,
+
             SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo::class => SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfoNormalizer::class,
 
             Signature2::class => Signature2Normalizer::class,
@@ -1370,7 +1388,9 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 CreateFieldFont::class => false,
                 UpdateFieldFont::class => false,
                 SmsNotification::class => false,
+                EmailNotification::class => false,
                 SmsNotification1::class => false,
+                EmailNotification1::class => false,
                 VideoIdentityVerificationVerified::class => false,
                 VideoIdentityVerificationDeclared::class => false,
                 VideoIdentityVerificationDocument::class => false,
@@ -1464,6 +1484,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
                 WorkspaceUsersInner::class => false,
                 SignatureRequestSignerFromInfoInputInfo::class => false,
                 SignatureRequestSignerFromInfoInputRedirectUrls::class => false,
+                SignatureRequestSignerFromInfoInputCustomText::class => false,
                 SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo::class => false,
                 Signature2::class => false,
                 Mention2::class => false,
