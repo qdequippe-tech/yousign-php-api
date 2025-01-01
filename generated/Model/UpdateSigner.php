@@ -47,6 +47,10 @@ class UpdateSigner extends \ArrayObject
      * @var string|null
      */
     protected $identificationAttestationId;
+    /**
+     * @var EmailNotification1|null
+     */
+    protected $emailNotification;
 
     public function getInfo(): ?UpdateSignerInfo
     {
@@ -154,6 +158,19 @@ class UpdateSigner extends \ArrayObject
     {
         $this->initialized['identificationAttestationId'] = true;
         $this->identificationAttestationId = $identificationAttestationId;
+
+        return $this;
+    }
+
+    public function getEmailNotification(): ?EmailNotification1
+    {
+        return $this->emailNotification;
+    }
+
+    public function setEmailNotification(?EmailNotification1 $emailNotification): self
+    {
+        $this->initialized['emailNotification'] = true;
+        $this->emailNotification = $emailNotification;
 
         return $this;
     }
