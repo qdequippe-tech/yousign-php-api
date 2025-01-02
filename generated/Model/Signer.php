@@ -69,6 +69,10 @@ class Signer extends \ArrayObject
      * @var SmsNotification|null
      */
     protected $smsNotification;
+    /**
+     * @var EmailNotification|null
+     */
+    protected $emailNotification;
 
     public function getId(): ?string
     {
@@ -254,6 +258,19 @@ class Signer extends \ArrayObject
     {
         $this->initialized['smsNotification'] = true;
         $this->smsNotification = $smsNotification;
+
+        return $this;
+    }
+
+    public function getEmailNotification(): ?EmailNotification
+    {
+        return $this->emailNotification;
+    }
+
+    public function setEmailNotification(?EmailNotification $emailNotification): self
+    {
+        $this->initialized['emailNotification'] = true;
+        $this->emailNotification = $emailNotification;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace Qdequippe\Yousign\Api\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Qdequippe\Yousign\Api\Model\EmailNotification;
 use Qdequippe\Yousign\Api\Model\Signer;
 use Qdequippe\Yousign\Api\Model\SignerCustomText;
 use Qdequippe\Yousign\Api\Model\SignerInfo;
@@ -136,6 +137,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('sms_notification', $data) && null === $data['sms_notification']) {
                 $object->setSmsNotification(null);
             }
+            if (\array_key_exists('email_notification', $data) && null !== $data['email_notification']) {
+                $object->setEmailNotification($this->denormalizer->denormalize($data['email_notification'], EmailNotification::class, 'json', $context));
+                unset($data['email_notification']);
+            } elseif (\array_key_exists('email_notification', $data) && null === $data['email_notification']) {
+                $object->setEmailNotification(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -166,6 +173,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['delivery_mode'] = $object->getDeliveryMode();
             $data['identification_attestation_id'] = $object->getIdentificationAttestationId();
             $data['sms_notification'] = $this->normalizer->normalize($object->getSmsNotification(), 'json', $context);
+            $data['email_notification'] = $this->normalizer->normalize($object->getEmailNotification(), 'json', $context);
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;
@@ -301,6 +309,12 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             } elseif (\array_key_exists('sms_notification', $data) && null === $data['sms_notification']) {
                 $object->setSmsNotification(null);
             }
+            if (\array_key_exists('email_notification', $data) && null !== $data['email_notification']) {
+                $object->setEmailNotification($this->denormalizer->denormalize($data['email_notification'], EmailNotification::class, 'json', $context));
+                unset($data['email_notification']);
+            } elseif (\array_key_exists('email_notification', $data) && null === $data['email_notification']) {
+                $object->setEmailNotification(null);
+            }
             foreach ($data as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $object[$key] = $value_1;
@@ -334,6 +348,7 @@ if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR
             $data['delivery_mode'] = $object->getDeliveryMode();
             $data['identification_attestation_id'] = $object->getIdentificationAttestationId();
             $data['sms_notification'] = $this->normalizer->normalize($object->getSmsNotification(), 'json', $context);
+            $data['email_notification'] = $this->normalizer->normalize($object->getEmailNotification(), 'json', $context);
             foreach ($object as $key => $value_1) {
                 if (preg_match('/.*/', (string) $key)) {
                     $data[$key] = $value_1;
