@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'openapi-file' => 'https://developers.yousign.com/openapi/6759d057a53fa9006fec9ff0',
+    'openapi-file' => 'https://developers.yousign.com/openapi/6797ad02b552bd002410c61a',
     'namespace' => 'Qdequippe\Yousign\Api',
     'directory' =>  __DIR__ . '/generated/',
     'reference' => true,
