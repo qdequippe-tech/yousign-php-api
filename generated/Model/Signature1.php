@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Signature1 extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Signature1 implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -48,6 +52,12 @@ class Signature1 extends \ArrayObject
      * @var string|null
      */
     protected $reason;
+    /**
+     * Controls what is shown within the signature field.
+     *
+     * @var array<string, mixed>|null
+     */
+    protected $display;
 
     public function getSignerId(): ?string
     {
@@ -158,5 +168,33 @@ class Signature1 extends \ArrayObject
         $this->reason = $reason;
 
         return $this;
+    }
+
+    /**
+     * Controls what is shown within the signature field.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getDisplay(): ?iterable
+    {
+        return $this->display;
+    }
+
+    /**
+     * Controls what is shown within the signature field.
+     *
+     * @param array<string, mixed>|null $display
+     */
+    public function setDisplay(?iterable $display): self
+    {
+        $this->initialized['display'] = true;
+        $this->display = $display;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['signerId' => ['signer_id', 'getSignerId', 'setSignerId'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'height' => ['height', 'getHeight', 'setHeight'], 'width' => ['width', 'getWidth', 'setWidth'], 'reason' => ['reason', 'getReason', 'setReason'], 'display' => ['display', 'getDisplay', 'setDisplay']];
     }
 }

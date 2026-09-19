@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PatchCustomExperiencesCustomExperienceIdUnauthorizedException;
@@ -14,6 +15,7 @@ use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\CustomExperience;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -22,6 +24,7 @@ use Qdequippe\Yousign\Api\Model\UpdateCustomExperience;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
+use Qdequippe\Yousign\Api\Runtime\Client\JsonPayload;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PatchCustomExperiencesCustomExperienceId extends BaseEndpoint implements Endpoint
@@ -46,13 +49,13 @@ class PatchCustomExperiencesCustomExperienceId extends BaseEndpoint implements E
 
     public function getUri(): string
     {
-        return str_replace(['{customExperienceId}'], [$this->customExperienceId], '/custom_experiences/{customExperienceId}');
+        return str_replace(['{customExperienceId}'], [rawurlencode($this->customExperienceId)], '/custom_experiences/{customExperienceId}');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         if ($this->body instanceof UpdateCustomExperience) {
-            return [['Content-Type' => ['application/json']], $serializer->serialize($this->body, 'json')];
+            return [['Content-Type' => ['application/json']], JsonPayload::encode($serializer, $this->body)];
         }
 
         return [[], null];
@@ -70,6 +73,7 @@ class PatchCustomExperiencesCustomExperienceId extends BaseEndpoint implements E
      * @throws PatchCustomExperiencesCustomExperienceIdUnauthorizedException
      * @throws PatchCustomExperiencesCustomExperienceIdForbiddenException
      * @throws PatchCustomExperiencesCustomExperienceIdNotFoundException
+     * @throws PatchCustomExperiencesCustomExperienceIdMethodNotAllowedException
      * @throws PatchCustomExperiencesCustomExperienceIdUnsupportedMediaTypeException
      * @throws PatchCustomExperiencesCustomExperienceIdTooManyRequestsException
      * @throws PatchCustomExperiencesCustomExperienceIdInternalServerErrorException
@@ -78,32 +82,33 @@ class PatchCustomExperiencesCustomExperienceId extends BaseEndpoint implements E
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (200 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             return $serializer->deserialize($body, CustomExperience::class, 'json');
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchCustomExperiencesCustomExperienceIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchCustomExperiencesCustomExperienceIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchCustomExperiencesCustomExperienceIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchCustomExperiencesCustomExperienceIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new PatchCustomExperiencesCustomExperienceIdMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (415 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchCustomExperiencesCustomExperienceIdUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchCustomExperiencesCustomExperienceIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchCustomExperiencesCustomExperienceIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
-
-        return null;
     }
 
     public function getAuthenticationScopes(): array

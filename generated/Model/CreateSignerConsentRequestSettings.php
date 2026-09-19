@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateSignerConsentRequestSettings extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class CreateSignerConsentRequestSettings implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,14 +18,16 @@ class CreateSignerConsentRequestSettings extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Text associated to the checkbox. This property cannot start or end with whitespace, does not allow html tags or email.
+     * Text associated to the checkbox or the text_to_copy.\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string) allowing URL.
      *
      * @var string|null
      */
     protected $text;
 
     /**
-     * Text associated to the checkbox. This property cannot start or end with whitespace, does not allow html tags or email.
+     * Text associated to the checkbox or the text_to_copy.\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string) allowing URL.
      */
     public function getText(): ?string
     {
@@ -29,7 +35,8 @@ class CreateSignerConsentRequestSettings extends \ArrayObject
     }
 
     /**
-     * Text associated to the checkbox. This property cannot start or end with whitespace, does not allow html tags or email.
+     * Text associated to the checkbox or the text_to_copy.\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string) allowing URL.
      */
     public function setText(?string $text): self
     {
@@ -37,5 +44,10 @@ class CreateSignerConsentRequestSettings extends \ArrayObject
         $this->text = $text;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['text' => ['text', 'getText', 'setText']];
     }
 }

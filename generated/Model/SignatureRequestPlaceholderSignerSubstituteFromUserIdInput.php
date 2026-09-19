@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignatureRequestPlaceholderSignerSubstituteFromUserIdInput extends \ArrayObject
+class SignatureRequestPlaceholderSignerSubstituteFromUserIdInput
 {
     /**
      * @var array
@@ -14,6 +14,8 @@ class SignatureRequestPlaceholderSignerSubstituteFromUserIdInput extends \ArrayO
         return \array_key_exists($property, $this->initialized);
     }
     /**
+     * Placeholder label defined in the template to substitute.
+     *
      * @var string|null
      */
     protected $label;
@@ -24,15 +26,19 @@ class SignatureRequestPlaceholderSignerSubstituteFromUserIdInput extends \ArrayO
      */
     protected $userId;
     /**
+     * Legal level of the electronic signature required from the substitute Signer.
+     *
      * @var string|null
      */
     protected $signatureLevel = 'electronic_signature';
     /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     *
      * @var string|null
      */
     protected $signatureAuthenticationMode;
     /**
-     * @var FromScratch1RedirectUrls|null
+     * @var SignatureRequestPlaceholderSignerSubstituteFromInfoInputRedirectUrls|null
      */
     protected $redirectUrls;
     /**
@@ -46,11 +52,17 @@ class SignatureRequestPlaceholderSignerSubstituteFromUserIdInput extends \ArrayO
      */
     protected $deliveryMode;
 
+    /**
+     * Placeholder label defined in the template to substitute.
+     */
     public function getLabel(): ?string
     {
         return $this->label;
     }
 
+    /**
+     * Placeholder label defined in the template to substitute.
+     */
     public function setLabel(?string $label): self
     {
         $this->initialized['label'] = true;
@@ -78,11 +90,17 @@ class SignatureRequestPlaceholderSignerSubstituteFromUserIdInput extends \ArrayO
         return $this;
     }
 
+    /**
+     * Legal level of the electronic signature required from the substitute Signer.
+     */
     public function getSignatureLevel(): ?string
     {
         return $this->signatureLevel;
     }
 
+    /**
+     * Legal level of the electronic signature required from the substitute Signer.
+     */
     public function setSignatureLevel(?string $signatureLevel): self
     {
         $this->initialized['signatureLevel'] = true;
@@ -91,11 +109,17 @@ class SignatureRequestPlaceholderSignerSubstituteFromUserIdInput extends \ArrayO
         return $this;
     }
 
+    /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     */
     public function getSignatureAuthenticationMode(): ?string
     {
         return $this->signatureAuthenticationMode;
     }
 
+    /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     */
     public function setSignatureAuthenticationMode(?string $signatureAuthenticationMode): self
     {
         $this->initialized['signatureAuthenticationMode'] = true;
@@ -104,12 +128,12 @@ class SignatureRequestPlaceholderSignerSubstituteFromUserIdInput extends \ArrayO
         return $this;
     }
 
-    public function getRedirectUrls(): ?FromScratch1RedirectUrls
+    public function getRedirectUrls(): ?SignatureRequestPlaceholderSignerSubstituteFromInfoInputRedirectUrls
     {
         return $this->redirectUrls;
     }
 
-    public function setRedirectUrls(?FromScratch1RedirectUrls $redirectUrls): self
+    public function setRedirectUrls(?SignatureRequestPlaceholderSignerSubstituteFromInfoInputRedirectUrls $redirectUrls): self
     {
         $this->initialized['redirectUrls'] = true;
         $this->redirectUrls = $redirectUrls;

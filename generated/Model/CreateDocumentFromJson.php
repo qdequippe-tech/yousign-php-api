@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateDocumentFromJson extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class CreateDocumentFromJson implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -33,6 +37,24 @@ class CreateDocumentFromJson extends \ArrayObject
      * @var string|null
      */
     protected $insertAfterId;
+    /**
+     * If true, the system will parse the document exclusively for Signature-type Smart Anchors and automatically generate the required fields.
+     *
+     * @var bool|null
+     */
+    protected $parseAnchors = false;
+    /**
+     * List of Approver IDs who cannot see this Document. When omitted, all Approvers can see it (default). Only available when the document_visibility feature is enabled on the organization.
+     *
+     * @var list<string>|null
+     */
+    protected $excludedApprovers;
+    /**
+     * List of Signer IDs who cannot see this Document. When omitted, all Signers can see it (default). Requires the document_visibility feature to be enabled on the organization.
+     *
+     * @var list<string>|null
+     */
+    protected $excludedSigners;
 
     /**
      * Id of the Electronic Seal Document. The Electronic Seal must be done to use its Electronic Seal Document.
@@ -96,5 +118,75 @@ class CreateDocumentFromJson extends \ArrayObject
         $this->insertAfterId = $insertAfterId;
 
         return $this;
+    }
+
+    /**
+     * If true, the system will parse the document exclusively for Signature-type Smart Anchors and automatically generate the required fields.
+     */
+    public function getParseAnchors(): ?bool
+    {
+        return $this->parseAnchors;
+    }
+
+    /**
+     * If true, the system will parse the document exclusively for Signature-type Smart Anchors and automatically generate the required fields.
+     */
+    public function setParseAnchors(?bool $parseAnchors): self
+    {
+        $this->initialized['parseAnchors'] = true;
+        $this->parseAnchors = $parseAnchors;
+
+        return $this;
+    }
+
+    /**
+     * List of Approver IDs who cannot see this Document. When omitted, all Approvers can see it (default). Only available when the document_visibility feature is enabled on the organization.
+     *
+     * @return list<string>|null
+     */
+    public function getExcludedApprovers(): ?array
+    {
+        return $this->excludedApprovers;
+    }
+
+    /**
+     * List of Approver IDs who cannot see this Document. When omitted, all Approvers can see it (default). Only available when the document_visibility feature is enabled on the organization.
+     *
+     * @param list<string>|null $excludedApprovers
+     */
+    public function setExcludedApprovers(?array $excludedApprovers): self
+    {
+        $this->initialized['excludedApprovers'] = true;
+        $this->excludedApprovers = $excludedApprovers;
+
+        return $this;
+    }
+
+    /**
+     * List of Signer IDs who cannot see this Document. When omitted, all Signers can see it (default). Requires the document_visibility feature to be enabled on the organization.
+     *
+     * @return list<string>|null
+     */
+    public function getExcludedSigners(): ?array
+    {
+        return $this->excludedSigners;
+    }
+
+    /**
+     * List of Signer IDs who cannot see this Document. When omitted, all Signers can see it (default). Requires the document_visibility feature to be enabled on the organization.
+     *
+     * @param list<string>|null $excludedSigners
+     */
+    public function setExcludedSigners(?array $excludedSigners): self
+    {
+        $this->initialized['excludedSigners'] = true;
+        $this->excludedSigners = $excludedSigners;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['electronicSealDocumentId' => ['electronic_seal_document_id', 'getElectronicSealDocumentId', 'setElectronicSealDocumentId'], 'name' => ['name', 'getName', 'setName'], 'nature' => ['nature', 'getNature', 'setNature'], 'insertAfterId' => ['insert_after_id', 'getInsertAfterId', 'setInsertAfterId'], 'parseAnchors' => ['parse_anchors', 'getParseAnchors', 'setParseAnchors'], 'excludedApprovers' => ['excluded_approvers', 'getExcludedApprovers', 'setExcludedApprovers'], 'excludedSigners' => ['excluded_signers', 'getExcludedSigners', 'setExcludedSigners']];
     }
 }

@@ -1,0 +1,103 @@
+<?php
+
+namespace Qdequippe\Yousign\Api\Endpoint;
+
+use Psr\Http\Message\ResponseInterface;
+use Qdequippe\Yousign\Api\Exception\DeleteCustomPropertiesIdBadRequestException;
+use Qdequippe\Yousign\Api\Exception\DeleteCustomPropertiesIdForbiddenException;
+use Qdequippe\Yousign\Api\Exception\DeleteCustomPropertiesIdInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\DeleteCustomPropertiesIdMethodNotAllowedException;
+use Qdequippe\Yousign\Api\Exception\DeleteCustomPropertiesIdNotFoundException;
+use Qdequippe\Yousign\Api\Exception\DeleteCustomPropertiesIdTooManyRequestsException;
+use Qdequippe\Yousign\Api\Exception\DeleteCustomPropertiesIdUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
+use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
+use Qdequippe\Yousign\Api\Model\NotFoundResponse;
+use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
+use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
+use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
+use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
+use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class DeleteCustomPropertiesId extends BaseEndpoint implements Endpoint
+{
+    use EndpointTrait;
+
+    /**
+     * Deletes a given Custom Property.
+     *
+     * @param string $customPropertyId Custom Property Id
+     */
+    public function __construct(protected string $customPropertyId)
+    {
+    }
+
+    public function getMethod(): string
+    {
+        return 'DELETE';
+    }
+
+    public function getUri(): string
+    {
+        return str_replace(['{customPropertyId}'], [rawurlencode($this->customPropertyId)], '/custom_properties/{customPropertyId}');
+    }
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
+    {
+        return [[], null];
+    }
+
+    public function getExtraHeaders(): array
+    {
+        return ['Accept' => ['application/json']];
+    }
+
+    /**
+     * @throws DeleteCustomPropertiesIdBadRequestException
+     * @throws DeleteCustomPropertiesIdUnauthorizedException
+     * @throws DeleteCustomPropertiesIdForbiddenException
+     * @throws DeleteCustomPropertiesIdNotFoundException
+     * @throws DeleteCustomPropertiesIdMethodNotAllowedException
+     * @throws DeleteCustomPropertiesIdTooManyRequestsException
+     * @throws DeleteCustomPropertiesIdInternalServerErrorException
+     */
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
+    {
+        $status = $response->getStatusCode();
+        $body = (string) $response->getBody();
+        if (204 === $status) {
+            return null;
+        }
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DeleteCustomPropertiesIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DeleteCustomPropertiesIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DeleteCustomPropertiesIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DeleteCustomPropertiesIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DeleteCustomPropertiesIdMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DeleteCustomPropertiesIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DeleteCustomPropertiesIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
+        }
+
+        return null;
+    }
+
+    public function getAuthenticationScopes(): array
+    {
+        return ['bearerAuth'];
+    }
+}

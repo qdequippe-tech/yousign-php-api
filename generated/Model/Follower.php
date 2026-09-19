@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Follower extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Follower implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -71,5 +75,10 @@ class Follower extends \ArrayObject
         $this->followerLink = $followerLink;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['email' => ['email', 'getEmail', 'setEmail'], 'locale' => ['locale', 'getLocale', 'setLocale'], 'followerLink' => ['follower_link', 'getFollowerLink', 'setFollowerLink']];
     }
 }

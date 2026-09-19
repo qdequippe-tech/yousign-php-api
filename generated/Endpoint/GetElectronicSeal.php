@@ -3,12 +3,16 @@
 namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
+use Qdequippe\Yousign\Api\Exception\GetElectronicSealForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\GetElectronicSealMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetElectronicSealUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\ElectronicSeal;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -37,7 +41,7 @@ class GetElectronicSeal extends BaseEndpoint implements Endpoint
 
     public function getUri(): string
     {
-        return str_replace(['{electronicSealId}'], [$this->electronicSealId], '/electronic_seals/{electronicSealId}');
+        return str_replace(['{electronicSealId}'], [rawurlencode($this->electronicSealId)], '/electronic_seals/{electronicSealId}');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -54,7 +58,9 @@ class GetElectronicSeal extends BaseEndpoint implements Endpoint
      * @return ElectronicSeal|null
      *
      * @throws GetElectronicSealUnauthorizedException
+     * @throws GetElectronicSealForbiddenException
      * @throws GetElectronicSealNotFoundException
+     * @throws GetElectronicSealMethodNotAllowedException
      * @throws GetElectronicSealTooManyRequestsException
      * @throws GetElectronicSealInternalServerErrorException
      */
@@ -62,23 +68,27 @@ class GetElectronicSeal extends BaseEndpoint implements Endpoint
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (200 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             return $serializer->deserialize($body, ElectronicSeal::class, 'json');
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetElectronicSealUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new GetElectronicSealForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetElectronicSealNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new GetElectronicSealMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetElectronicSealTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetElectronicSealInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
-
-        return null;
     }
 
     public function getAuthenticationScopes(): array

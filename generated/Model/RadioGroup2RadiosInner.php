@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class RadioGroup2RadiosInner extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class RadioGroup2RadiosInner implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -20,19 +24,29 @@ class RadioGroup2RadiosInner extends \ArrayObject
      */
     protected $name;
     /**
+     * Horizontal position of the radio (points from left).
+     *
      * @var int|null
      */
     protected $x;
     /**
+     * Vertical position of the radio (points from top).
+     *
      * @var int|null
      */
     protected $y;
     /**
-     * The omission of size parameter is considered as deprecated. The size determines both the width and height of the checkbox.
+     * Size (width and height) of the radio in points.
      *
      * @var int|null
      */
     protected $size;
+    /**
+     * Indicates whether the radio is initially checked (`true`) or unchecked (`false`).
+     *
+     * @var bool|null
+     */
+    protected $defaultChecked = false;
 
     /**
      * Radio button's name.
@@ -53,11 +67,17 @@ class RadioGroup2RadiosInner extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Horizontal position of the radio (points from left).
+     */
     public function getX(): ?int
     {
         return $this->x;
     }
 
+    /**
+     * Horizontal position of the radio (points from left).
+     */
     public function setX(?int $x): self
     {
         $this->initialized['x'] = true;
@@ -66,11 +86,17 @@ class RadioGroup2RadiosInner extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Vertical position of the radio (points from top).
+     */
     public function getY(): ?int
     {
         return $this->y;
     }
 
+    /**
+     * Vertical position of the radio (points from top).
+     */
     public function setY(?int $y): self
     {
         $this->initialized['y'] = true;
@@ -80,7 +106,7 @@ class RadioGroup2RadiosInner extends \ArrayObject
     }
 
     /**
-     * The omission of size parameter is considered as deprecated. The size determines both the width and height of the checkbox.
+     * Size (width and height) of the radio in points.
      */
     public function getSize(): ?int
     {
@@ -88,7 +114,7 @@ class RadioGroup2RadiosInner extends \ArrayObject
     }
 
     /**
-     * The omission of size parameter is considered as deprecated. The size determines both the width and height of the checkbox.
+     * Size (width and height) of the radio in points.
      */
     public function setSize(?int $size): self
     {
@@ -96,5 +122,29 @@ class RadioGroup2RadiosInner extends \ArrayObject
         $this->size = $size;
 
         return $this;
+    }
+
+    /**
+     * Indicates whether the radio is initially checked (`true`) or unchecked (`false`).
+     */
+    public function getDefaultChecked(): ?bool
+    {
+        return $this->defaultChecked;
+    }
+
+    /**
+     * Indicates whether the radio is initially checked (`true`) or unchecked (`false`).
+     */
+    public function setDefaultChecked(?bool $defaultChecked): self
+    {
+        $this->initialized['defaultChecked'] = true;
+        $this->defaultChecked = $defaultChecked;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['name' => ['name', 'getName', 'setName'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'size' => ['size', 'getSize', 'setSize'], 'defaultChecked' => ['default_checked', 'getDefaultChecked', 'setDefaultChecked']];
     }
 }

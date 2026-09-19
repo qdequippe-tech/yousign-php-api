@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignatureRequestSignerFromInfoInputInfo extends \ArrayObject
+class SignatureRequestSignerFromInfoInputInfo
 {
     /**
      * @var array
@@ -14,14 +14,20 @@ class SignatureRequestSignerFromInfoInputInfo extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
+     * Signer's first name.
+     *
      * @var string|null
      */
     protected $firstName;
     /**
+     * Signer's last name.
+     *
      * @var string|null
      */
     protected $lastName;
     /**
+     * Signer's email address.
+     *
      * @var string|null
      */
     protected $email;
@@ -38,11 +44,17 @@ class SignatureRequestSignerFromInfoInputInfo extends \ArrayObject
      */
     protected $locale;
 
+    /**
+     * Signer's first name.
+     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
+    /**
+     * Signer's first name.
+     */
     public function setFirstName(?string $firstName): self
     {
         $this->initialized['firstName'] = true;
@@ -51,11 +63,17 @@ class SignatureRequestSignerFromInfoInputInfo extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Signer's last name.
+     */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
+    /**
+     * Signer's last name.
+     */
     public function setLastName(?string $lastName): self
     {
         $this->initialized['lastName'] = true;
@@ -64,11 +82,17 @@ class SignatureRequestSignerFromInfoInputInfo extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Signer's email address.
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * Signer's email address.
+     */
     public function setEmail(?string $email): self
     {
         $this->initialized['email'] = true;

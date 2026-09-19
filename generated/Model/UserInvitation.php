@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UserInvitation extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class UserInvitation implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -22,6 +26,10 @@ class UserInvitation extends \ArrayObject
      */
     protected $email;
     /**
+     * The role the invited User will hold in the Organization.
+     *
+     * `workspace_admin` is part of an unreleased feature. It cannot be assigned through the API, and its name, type and behavior may change before release. Do not use it.
+     *
      * @var string|null
      */
     protected $role;
@@ -64,11 +72,21 @@ class UserInvitation extends \ArrayObject
         return $this;
     }
 
+    /**
+     * The role the invited User will hold in the Organization.
+     *
+     * `workspace_admin` is part of an unreleased feature. It cannot be assigned through the API, and its name, type and behavior may change before release. Do not use it.
+     */
     public function getRole(): ?string
     {
         return $this->role;
     }
 
+    /**
+     * The role the invited User will hold in the Organization.
+     *
+     * `workspace_admin` is part of an unreleased feature. It cannot be assigned through the API, and its name, type and behavior may change before release. Do not use it.
+     */
     public function setRole(?string $role): self
     {
         $this->initialized['role'] = true;
@@ -120,5 +138,10 @@ class UserInvitation extends \ArrayObject
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'email' => ['email', 'getEmail', 'setEmail'], 'role' => ['role', 'getRole', 'setRole'], 'workspaces' => ['workspaces', 'getWorkspaces', 'setWorkspaces'], 'expiredAt' => ['expired_at', 'getExpiredAt', 'setExpiredAt'], 'createdAt' => ['created_at', 'getCreatedAt', 'setCreatedAt']];
     }
 }

@@ -2,8 +2,13 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UploadElectronicSealImage extends \ArrayObject
+use Psr\Http\Message\StreamInterface;
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class UploadElectronicSealImage implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,28 +19,35 @@ class UploadElectronicSealImage extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Seal image.
+     * Seal Image to be displayed on a sealed Document. Accepted formats: PNG/JPG/GIF, max 500 Ko.
      *
-     * @var string|null
+     * @var string|resource|StreamInterface|null
      */
     protected $file;
     /**
+     * Name of the Seal Image.\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     *
      * @var string|null
      */
     protected $name;
 
     /**
-     * Seal image.
+     * Seal Image to be displayed on a sealed Document. Accepted formats: PNG/JPG/GIF, max 500 Ko.
+     *
+     * @return string|resource|StreamInterface|null
      */
-    public function getFile(): ?string
+    public function getFile()
     {
         return $this->file;
     }
 
     /**
-     * Seal image.
+     * Seal Image to be displayed on a sealed Document. Accepted formats: PNG/JPG/GIF, max 500 Ko.
+     *
+     * @param string|resource|StreamInterface|null $file
      */
-    public function setFile(?string $file): self
+    public function setFile($file): self
     {
         $this->initialized['file'] = true;
         $this->file = $file;
@@ -43,16 +55,29 @@ class UploadElectronicSealImage extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Name of the Seal Image.\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * Name of the Seal Image.\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function setName(?string $name): self
     {
         $this->initialized['name'] = true;
         $this->name = $name;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['file' => ['file', 'getFile', 'setFile'], 'name' => ['name', 'getName', 'setName']];
     }
 }

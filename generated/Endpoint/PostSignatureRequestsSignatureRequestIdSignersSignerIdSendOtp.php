@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -41,7 +43,7 @@ class PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp extends Base
 
     public function getUri(): string
     {
-        return str_replace(['{signatureRequestId}', '{signerId}'], [$this->signatureRequestId, $this->signerId], '/signature_requests/{signatureRequestId}/signers/{signerId}/send_otp');
+        return str_replace(['{signatureRequestId}', '{signerId}'], [rawurlencode($this->signatureRequestId), rawurlencode($this->signerId)], '/signature_requests/{signatureRequestId}/signers/{signerId}/send_otp');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -59,6 +61,7 @@ class PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp extends Base
      * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException
      * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpMethodNotAllowedException
      * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpTooManyRequestsException
      * @throws PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpInternalServerErrorException
      */
@@ -69,22 +72,25 @@ class PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtp extends Base
         if (204 === $status) {
             return null;
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdSignersSignerIdSendOtpInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 

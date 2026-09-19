@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -41,7 +43,7 @@ class DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentId extends BaseE
 
     public function getUri(): string
     {
-        return str_replace(['{signatureRequestId}', '{documentId}'], [$this->signatureRequestId, $this->documentId], '/signature_requests/{signatureRequestId}/documents/{documentId}');
+        return str_replace(['{signatureRequestId}', '{documentId}'], [rawurlencode($this->signatureRequestId), rawurlencode($this->documentId)], '/signature_requests/{signatureRequestId}/documents/{documentId}');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -59,6 +61,7 @@ class DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentId extends BaseE
      * @throws DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException
      * @throws DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException
      * @throws DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException
+     * @throws DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdMethodNotAllowedException
      * @throws DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdTooManyRequestsException
      * @throws DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdInternalServerErrorException
      */
@@ -69,22 +72,25 @@ class DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentId extends BaseE
         if (204 === $status) {
             return null;
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteSignatureRequestsSignatureRequestIdDocumentsDocumentIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 

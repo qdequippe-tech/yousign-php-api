@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class ConsumptionAppQualifiedElectronicSignatureIdentificationMode extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class ConsumptionAppQualifiedElectronicSignatureIdentificationMode implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -46,5 +50,10 @@ class ConsumptionAppQualifiedElectronicSignatureIdentificationMode extends \Arra
         $this->savedIdentity = $savedIdentity;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['identityVerification' => ['identity_verification', 'getIdentityVerification', 'setIdentityVerification'], 'savedIdentity' => ['saved_identity', 'getSavedIdentity', 'setSavedIdentity']];
     }
 }

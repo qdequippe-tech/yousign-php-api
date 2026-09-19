@@ -2,8 +2,13 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignerSignWithUploadedSignatureImage extends \ArrayObject
+use Psr\Http\Message\StreamInterface;
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class SignerSignWithUploadedSignatureImage implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -18,15 +23,21 @@ class SignerSignWithUploadedSignatureImage extends \ArrayObject
      */
     protected $otp;
     /**
-     * @var mixed|null
+     * Signer's public IP address at the time of signing. Private IP addresses (e.g. 10.x.x.x, 172.16-31.x.x, 192.168.x.x) are not accepted, as a public IP is required to be recorded in the Audit Trail.
+     *
+     * @var string|null
      */
     protected $ipAddress;
     /**
+     * UTC date. Must be in format `2024-01-18T22:00:00+00:00`.
+     *
      * @var \DateTime|null
      */
     protected $consentGivenAt;
     /**
-     * @var string|null
+     * Signature image of the Signer to be displayed on the signed Document.
+     *
+     * @var string|resource|StreamInterface|null
      */
     protected $signatureImage;
 
@@ -43,11 +54,21 @@ class SignerSignWithUploadedSignatureImage extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Signer's public IP address at the time of signing. Private IP addresses (e.g. 10.x.x.x, 172.16-31.x.x, 192.168.x.x) are not accepted, as a public IP is required to be recorded in the Audit Trail.
+     *
+     * @return string|null
+     */
     public function getIpAddress()
     {
         return $this->ipAddress;
     }
 
+    /**
+     * Signer's public IP address at the time of signing. Private IP addresses (e.g. 10.x.x.x, 172.16-31.x.x, 192.168.x.x) are not accepted, as a public IP is required to be recorded in the Audit Trail.
+     *
+     * @param string|null $ipAddress
+     */
     public function setIpAddress($ipAddress): self
     {
         $this->initialized['ipAddress'] = true;
@@ -56,11 +77,17 @@ class SignerSignWithUploadedSignatureImage extends \ArrayObject
         return $this;
     }
 
+    /**
+     * UTC date. Must be in format `2024-01-18T22:00:00+00:00`.
+     */
     public function getConsentGivenAt(): ?\DateTime
     {
         return $this->consentGivenAt;
     }
 
+    /**
+     * UTC date. Must be in format `2024-01-18T22:00:00+00:00`.
+     */
     public function setConsentGivenAt(?\DateTime $consentGivenAt): self
     {
         $this->initialized['consentGivenAt'] = true;
@@ -69,16 +96,31 @@ class SignerSignWithUploadedSignatureImage extends \ArrayObject
         return $this;
     }
 
-    public function getSignatureImage(): ?string
+    /**
+     * Signature image of the Signer to be displayed on the signed Document.
+     *
+     * @return string|resource|StreamInterface|null
+     */
+    public function getSignatureImage()
     {
         return $this->signatureImage;
     }
 
-    public function setSignatureImage(?string $signatureImage): self
+    /**
+     * Signature image of the Signer to be displayed on the signed Document.
+     *
+     * @param string|resource|StreamInterface|null $signatureImage
+     */
+    public function setSignatureImage($signatureImage): self
     {
         $this->initialized['signatureImage'] = true;
         $this->signatureImage = $signatureImage;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['otp' => ['otp', 'getOtp', 'setOtp'], 'ipAddress' => ['ip_address', 'getIpAddress', 'setIpAddress'], 'consentGivenAt' => ['consent_given_at', 'getConsentGivenAt', 'setConsentGivenAt'], 'signatureImage' => ['signature_image', 'getSignatureImage', 'setSignatureImage']];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class ElectronicSealAuditTrail extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class ElectronicSealAuditTrail implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -115,5 +119,10 @@ class ElectronicSealAuditTrail extends \ArrayObject
         $this->document = $document;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['version' => ['version', 'getVersion', 'setVersion'], 'classification' => ['classification', 'getClassification', 'setClassification'], 'organization' => ['organization', 'getOrganization', 'setOrganization'], 'seal' => ['seal', 'getSeal', 'setSeal'], 'document' => ['document', 'getDocument', 'setDocument']];
     }
 }

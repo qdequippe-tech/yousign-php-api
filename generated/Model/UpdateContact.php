@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UpdateContact extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class UpdateContact implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -38,41 +42,43 @@ class UpdateContact extends \ArrayObject
      */
     protected $phoneNumber;
     /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     *
      * @var string|null
      */
     protected $companyName;
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      *
      * @var string|null
      */
     protected $jobTitle;
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      *
      * @var string|null
      */
     protected $addressLine1;
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      *
      * @var string|null
      */
     protected $addressLine2;
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      *
      * @var string|null
      */
     protected $addressCity;
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      *
      * @var string|null
      */
     protected $addressPostalCode;
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      *
      * @var string|null
      */
@@ -159,11 +165,17 @@ class UpdateContact extends \ArrayObject
         return $this;
     }
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function getCompanyName(): ?string
     {
         return $this->companyName;
     }
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function setCompanyName(?string $companyName): self
     {
         $this->initialized['companyName'] = true;
@@ -173,7 +185,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function getJobTitle(): ?string
     {
@@ -181,7 +193,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function setJobTitle(?string $jobTitle): self
     {
@@ -192,7 +204,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function getAddressLine1(): ?string
     {
@@ -200,7 +212,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function setAddressLine1(?string $addressLine1): self
     {
@@ -211,7 +223,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function getAddressLine2(): ?string
     {
@@ -219,7 +231,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function setAddressLine2(?string $addressLine2): self
     {
@@ -230,7 +242,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function getAddressCity(): ?string
     {
@@ -238,7 +250,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function setAddressCity(?string $addressCity): self
     {
@@ -249,7 +261,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function getAddressPostalCode(): ?string
     {
@@ -257,7 +269,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function setAddressPostalCode(?string $addressPostalCode): self
     {
@@ -268,7 +280,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function getAddressCountry(): ?string
     {
@@ -276,7 +288,7 @@ class UpdateContact extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function setAddressCountry(?string $addressCountry): self
     {
@@ -297,5 +309,10 @@ class UpdateContact extends \ArrayObject
         $this->workspaceId = $workspaceId;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['firstName' => ['first_name', 'getFirstName', 'setFirstName'], 'lastName' => ['last_name', 'getLastName', 'setLastName'], 'email' => ['email', 'getEmail', 'setEmail'], 'locale' => ['locale', 'getLocale', 'setLocale'], 'phoneNumber' => ['phone_number', 'getPhoneNumber', 'setPhoneNumber'], 'companyName' => ['company_name', 'getCompanyName', 'setCompanyName'], 'jobTitle' => ['job_title', 'getJobTitle', 'setJobTitle'], 'addressLine1' => ['address_line_1', 'getAddressLine1', 'setAddressLine1'], 'addressLine2' => ['address_line_2', 'getAddressLine2', 'setAddressLine2'], 'addressCity' => ['address_city', 'getAddressCity', 'setAddressCity'], 'addressPostalCode' => ['address_postal_code', 'getAddressPostalCode', 'setAddressPostalCode'], 'addressCountry' => ['address_country', 'getAddressCountry', 'setAddressCountry'], 'workspaceId' => ['workspace_id', 'getWorkspaceId', 'setWorkspaceId']];
     }
 }

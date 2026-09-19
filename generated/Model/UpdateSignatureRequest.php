@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UpdateSignatureRequest extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class UpdateSignatureRequest implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,6 +18,8 @@ class UpdateSignatureRequest extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
+     * Name of the Signature Request.
+     *
      * @var string|null
      */
     protected $name;
@@ -30,6 +36,15 @@ class UpdateSignatureRequest extends \ArrayObject
      */
     protected $orderedSigners;
     /**
+     * When enabled, Approvers are requested to approve sequentially.
+     * Each Approver will be invited to approve only once the previous one has completed their approval.
+     *
+     * @var bool|null
+     */
+    protected $orderedApprovers;
+    /**
+     * Automatic reminder configuration; set to `null` to disable.
+     *
      * @var UpdateSignatureRequestReminderSettings|null
      */
     protected $reminderSettings;
@@ -40,22 +55,29 @@ class UpdateSignatureRequest extends \ArrayObject
      */
     protected $timezone = 'Europe/Paris';
     /**
+     * Deprecated; use `email_notification.custom_text` instead.
+     *
      * @deprecated
      *
      * @var string|null
      */
     protected $emailCustomNote;
     /**
-     * Due date of the signature request (yyyy-mm-dd).
+     * Due date of the Signature Request (yyyy-mm-dd).
+     * The date cannot be in the past and cannot be more than one year after initiation.
      *
      * @var \DateTime|null
      */
     protected $expirationDate;
     /**
+     * Custom identifier added to webhooks and appended to redirect URLs.
+     *
      * @var string|null
      */
     protected $externalId;
     /**
+     * Deprecated. Identifier of the branding to apply; use `custom_experience_id` instead.
+     *
      * @deprecated
      *
      * @var string|null
@@ -86,15 +108,35 @@ class UpdateSignatureRequest extends \ArrayObject
      */
     protected $auditTrailLocale;
     /**
+     * Email notification configuration for recipients.
+     *
      * @var SignatureRequestEmailNotification|null
      */
     protected $emailNotification;
+    /**
+     * Embedded Preparation settings for this Signature Request.
+     *
+     * @var SignatureRequestEmbeddedPreparation|null
+     */
+    protected $embeddedPreparation;
+    /**
+     * List of Labels to associate with the Signature Request. Labels are identified by their ID.
+     *
+     * @var list<string>|null
+     */
+    protected $labels;
 
+    /**
+     * Name of the Signature Request.
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * Name of the Signature Request.
+     */
     public function setName(?string $name): self
     {
         $this->initialized['name'] = true;
@@ -141,11 +183,38 @@ class UpdateSignatureRequest extends \ArrayObject
         return $this;
     }
 
+    /**
+     * When enabled, Approvers are requested to approve sequentially.
+     * Each Approver will be invited to approve only once the previous one has completed their approval.
+     */
+    public function getOrderedApprovers(): ?bool
+    {
+        return $this->orderedApprovers;
+    }
+
+    /**
+     * When enabled, Approvers are requested to approve sequentially.
+     * Each Approver will be invited to approve only once the previous one has completed their approval.
+     */
+    public function setOrderedApprovers(?bool $orderedApprovers): self
+    {
+        $this->initialized['orderedApprovers'] = true;
+        $this->orderedApprovers = $orderedApprovers;
+
+        return $this;
+    }
+
+    /**
+     * Automatic reminder configuration; set to `null` to disable.
+     */
     public function getReminderSettings(): ?UpdateSignatureRequestReminderSettings
     {
         return $this->reminderSettings;
     }
 
+    /**
+     * Automatic reminder configuration; set to `null` to disable.
+     */
     public function setReminderSettings(?UpdateSignatureRequestReminderSettings $reminderSettings): self
     {
         $this->initialized['reminderSettings'] = true;
@@ -174,6 +243,8 @@ class UpdateSignatureRequest extends \ArrayObject
     }
 
     /**
+     * Deprecated; use `email_notification.custom_text` instead.
+     *
      * @deprecated
      */
     public function getEmailCustomNote(): ?string
@@ -182,6 +253,8 @@ class UpdateSignatureRequest extends \ArrayObject
     }
 
     /**
+     * Deprecated; use `email_notification.custom_text` instead.
+     *
      * @deprecated
      */
     public function setEmailCustomNote(?string $emailCustomNote): self
@@ -193,7 +266,8 @@ class UpdateSignatureRequest extends \ArrayObject
     }
 
     /**
-     * Due date of the signature request (yyyy-mm-dd).
+     * Due date of the Signature Request (yyyy-mm-dd).
+     * The date cannot be in the past and cannot be more than one year after initiation.
      */
     public function getExpirationDate(): ?\DateTime
     {
@@ -201,7 +275,8 @@ class UpdateSignatureRequest extends \ArrayObject
     }
 
     /**
-     * Due date of the signature request (yyyy-mm-dd).
+     * Due date of the Signature Request (yyyy-mm-dd).
+     * The date cannot be in the past and cannot be more than one year after initiation.
      */
     public function setExpirationDate(?\DateTime $expirationDate): self
     {
@@ -211,11 +286,17 @@ class UpdateSignatureRequest extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Custom identifier added to webhooks and appended to redirect URLs.
+     */
     public function getExternalId(): ?string
     {
         return $this->externalId;
     }
 
+    /**
+     * Custom identifier added to webhooks and appended to redirect URLs.
+     */
     public function setExternalId(?string $externalId): self
     {
         $this->initialized['externalId'] = true;
@@ -225,6 +306,8 @@ class UpdateSignatureRequest extends \ArrayObject
     }
 
     /**
+     * Deprecated. Identifier of the branding to apply; use `custom_experience_id` instead.
+     *
      * @deprecated
      */
     public function getBrandingId(): ?string
@@ -233,6 +316,8 @@ class UpdateSignatureRequest extends \ArrayObject
     }
 
     /**
+     * Deprecated. Identifier of the branding to apply; use `custom_experience_id` instead.
+     *
      * @deprecated
      */
     public function setBrandingId(?string $brandingId): self
@@ -319,16 +404,69 @@ class UpdateSignatureRequest extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Email notification configuration for recipients.
+     */
     public function getEmailNotification(): ?SignatureRequestEmailNotification
     {
         return $this->emailNotification;
     }
 
+    /**
+     * Email notification configuration for recipients.
+     */
     public function setEmailNotification(?SignatureRequestEmailNotification $emailNotification): self
     {
         $this->initialized['emailNotification'] = true;
         $this->emailNotification = $emailNotification;
 
         return $this;
+    }
+
+    /**
+     * Embedded Preparation settings for this Signature Request.
+     */
+    public function getEmbeddedPreparation(): ?SignatureRequestEmbeddedPreparation
+    {
+        return $this->embeddedPreparation;
+    }
+
+    /**
+     * Embedded Preparation settings for this Signature Request.
+     */
+    public function setEmbeddedPreparation(?SignatureRequestEmbeddedPreparation $embeddedPreparation): self
+    {
+        $this->initialized['embeddedPreparation'] = true;
+        $this->embeddedPreparation = $embeddedPreparation;
+
+        return $this;
+    }
+
+    /**
+     * List of Labels to associate with the Signature Request. Labels are identified by their ID.
+     *
+     * @return list<string>|null
+     */
+    public function getLabels(): ?array
+    {
+        return $this->labels;
+    }
+
+    /**
+     * List of Labels to associate with the Signature Request. Labels are identified by their ID.
+     *
+     * @param list<string>|null $labels
+     */
+    public function setLabels(?array $labels): self
+    {
+        $this->initialized['labels'] = true;
+        $this->labels = $labels;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['name' => ['name', 'getName', 'setName'], 'deliveryMode' => ['delivery_mode', 'getDeliveryMode', 'setDeliveryMode'], 'orderedSigners' => ['ordered_signers', 'getOrderedSigners', 'setOrderedSigners'], 'orderedApprovers' => ['ordered_approvers', 'getOrderedApprovers', 'setOrderedApprovers'], 'reminderSettings' => ['reminder_settings', 'getReminderSettings', 'setReminderSettings'], 'timezone' => ['timezone', 'getTimezone', 'setTimezone'], 'emailCustomNote' => ['email_custom_note', 'getEmailCustomNote', 'setEmailCustomNote'], 'expirationDate' => ['expiration_date', 'getExpirationDate', 'setExpirationDate'], 'externalId' => ['external_id', 'getExternalId', 'setExternalId'], 'brandingId' => ['branding_id', 'getBrandingId', 'setBrandingId'], 'customExperienceId' => ['custom_experience_id', 'getCustomExperienceId', 'setCustomExperienceId'], 'signersAllowedToDecline' => ['signers_allowed_to_decline', 'getSignersAllowedToDecline', 'setSignersAllowedToDecline'], 'workspaceId' => ['workspace_id', 'getWorkspaceId', 'setWorkspaceId'], 'auditTrailLocale' => ['audit_trail_locale', 'getAuditTrailLocale', 'setAuditTrailLocale'], 'emailNotification' => ['email_notification', 'getEmailNotification', 'setEmailNotification'], 'embeddedPreparation' => ['embedded_preparation', 'getEmbeddedPreparation', 'setEmbeddedPreparation'], 'labels' => ['labels', 'getLabels', 'setLabels']];
     }
 }

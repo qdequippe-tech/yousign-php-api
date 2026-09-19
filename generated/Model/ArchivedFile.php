@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class ArchivedFile extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class ArchivedFile implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -226,5 +230,10 @@ class ArchivedFile extends \ArrayObject
         $this->workspaceId = $workspaceId;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'sha256' => ['sha256', 'getSha256', 'setSha256'], 'filename' => ['filename', 'getFilename', 'setFilename'], 'createdAt' => ['created_at', 'getCreatedAt', 'setCreatedAt'], 'expiredAt' => ['expired_at', 'getExpiredAt', 'setExpiredAt'], 'contentType' => ['content_type', 'getContentType', 'setContentType'], 'size' => ['size', 'getSize', 'setSize'], 'archiveYIdentifier' => ['archive_y_identifier', 'getArchiveYIdentifier', 'setArchiveYIdentifier'], 'tags' => ['tags', 'getTags', 'setTags'], 'workspaceId' => ['workspace_id', 'getWorkspaceId', 'setWorkspaceId']];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateElectronicSealFieldSealPayload extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class CreateElectronicSealFieldSealPayload implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -41,6 +45,12 @@ class CreateElectronicSealFieldSealPayload extends \ArrayObject
      * @var string|null
      */
     protected $reason;
+    /**
+     * Optional captions to display on the seal image. Limited to one caption per field.
+     *
+     * @var list<CreateElectronicSealFieldSealPayloadCaptionsInner>|null
+     */
+    protected $captions;
 
     public function getType(): ?string
     {
@@ -131,5 +141,33 @@ class CreateElectronicSealFieldSealPayload extends \ArrayObject
         $this->reason = $reason;
 
         return $this;
+    }
+
+    /**
+     * Optional captions to display on the seal image. Limited to one caption per field.
+     *
+     * @return list<CreateElectronicSealFieldSealPayloadCaptionsInner>|null
+     */
+    public function getCaptions(): ?array
+    {
+        return $this->captions;
+    }
+
+    /**
+     * Optional captions to display on the seal image. Limited to one caption per field.
+     *
+     * @param list<CreateElectronicSealFieldSealPayloadCaptionsInner>|null $captions
+     */
+    public function setCaptions(?array $captions): self
+    {
+        $this->initialized['captions'] = true;
+        $this->captions = $captions;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['type' => ['type', 'getType', 'setType'], 'height' => ['height', 'getHeight', 'setHeight'], 'width' => ['width', 'getWidth', 'setWidth'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'reason' => ['reason', 'getReason', 'setReason'], 'captions' => ['captions', 'getCaptions', 'setCaptions']];
     }
 }

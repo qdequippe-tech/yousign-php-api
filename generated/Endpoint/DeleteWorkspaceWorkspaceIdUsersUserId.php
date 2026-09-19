@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceWorkspaceIdUsersUserIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceWorkspaceIdUsersUserIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceWorkspaceIdUsersUserIdInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceWorkspaceIdUsersUserIdMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceWorkspaceIdUsersUserIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceWorkspaceIdUsersUserIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceWorkspaceIdUsersUserIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -41,7 +43,7 @@ class DeleteWorkspaceWorkspaceIdUsersUserId extends BaseEndpoint implements Endp
 
     public function getUri(): string
     {
-        return str_replace(['{workspaceId}', '{userId}'], [$this->workspaceId, $this->userId], '/workspaces/{workspaceId}/users/{userId}');
+        return str_replace(['{workspaceId}', '{userId}'], [rawurlencode($this->workspaceId), rawurlencode($this->userId)], '/workspaces/{workspaceId}/users/{userId}');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -59,6 +61,7 @@ class DeleteWorkspaceWorkspaceIdUsersUserId extends BaseEndpoint implements Endp
      * @throws DeleteWorkspaceWorkspaceIdUsersUserIdUnauthorizedException
      * @throws DeleteWorkspaceWorkspaceIdUsersUserIdForbiddenException
      * @throws DeleteWorkspaceWorkspaceIdUsersUserIdNotFoundException
+     * @throws DeleteWorkspaceWorkspaceIdUsersUserIdMethodNotAllowedException
      * @throws DeleteWorkspaceWorkspaceIdUsersUserIdTooManyRequestsException
      * @throws DeleteWorkspaceWorkspaceIdUsersUserIdInternalServerErrorException
      */
@@ -69,22 +72,25 @@ class DeleteWorkspaceWorkspaceIdUsersUserId extends BaseEndpoint implements Endp
         if (204 === $status) {
             return null;
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceWorkspaceIdUsersUserIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceWorkspaceIdUsersUserIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceWorkspaceIdUsersUserIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceWorkspaceIdUsersUserIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DeleteWorkspaceWorkspaceIdUsersUserIdMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceWorkspaceIdUsersUserIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceWorkspaceIdUsersUserIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 

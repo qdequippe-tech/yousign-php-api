@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdFollowersUnauthorizedException;
@@ -15,6 +16,7 @@ use Qdequippe\Yousign\Api\Model\CreateFollowersInner;
 use Qdequippe\Yousign\Api\Model\Follower;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -46,7 +48,7 @@ class PostSignatureRequestsSignatureRequestIdFollowers extends BaseEndpoint impl
 
     public function getUri(): string
     {
-        return str_replace(['{signatureRequestId}'], [$this->signatureRequestId], '/signature_requests/{signatureRequestId}/followers');
+        return str_replace(['{signatureRequestId}'], [rawurlencode($this->signatureRequestId)], '/signature_requests/{signatureRequestId}/followers');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -70,6 +72,7 @@ class PostSignatureRequestsSignatureRequestIdFollowers extends BaseEndpoint impl
      * @throws PostSignatureRequestsSignatureRequestIdFollowersUnauthorizedException
      * @throws PostSignatureRequestsSignatureRequestIdFollowersForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdFollowersNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdFollowersMethodNotAllowedException
      * @throws PostSignatureRequestsSignatureRequestIdFollowersUnsupportedMediaTypeException
      * @throws PostSignatureRequestsSignatureRequestIdFollowersTooManyRequestsException
      * @throws PostSignatureRequestsSignatureRequestIdFollowersInternalServerErrorException
@@ -78,32 +81,33 @@ class PostSignatureRequestsSignatureRequestIdFollowers extends BaseEndpoint impl
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (201 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (201 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             return $serializer->deserialize($body, 'Qdequippe\Yousign\Api\Model\Follower[]', 'json');
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdFollowersBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdFollowersUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdFollowersForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdFollowersNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdFollowersMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (415 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdFollowersUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdFollowersTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdFollowersInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
-
-        return null;
     }
 
     public function getAuthenticationScopes(): array

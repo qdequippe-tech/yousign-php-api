@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class FieldCheckbox extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class FieldCheckbox implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -223,5 +227,10 @@ class FieldCheckbox extends \ArrayObject
         $this->size = $size;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'documentId' => ['document_id', 'getDocumentId', 'setDocumentId'], 'signerId' => ['signer_id', 'getSignerId', 'setSignerId'], 'type' => ['type', 'getType', 'setType'], 'name' => ['name', 'getName', 'setName'], 'checked' => ['checked', 'getChecked', 'setChecked'], 'page' => ['page', 'getPage', 'setPage'], 'optional' => ['optional', 'getOptional', 'setOptional'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'size' => ['size', 'getSize', 'setSize']];
     }
 }

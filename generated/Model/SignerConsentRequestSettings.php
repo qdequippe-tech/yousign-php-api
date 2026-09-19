@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignerConsentRequestSettings extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class SignerConsentRequestSettings implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,14 +18,14 @@ class SignerConsentRequestSettings extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Text associated to the checkbox.
+     * Text associated to the checkbox or text_to_copy.
      *
      * @var string|null
      */
     protected $text;
 
     /**
-     * Text associated to the checkbox.
+     * Text associated to the checkbox or text_to_copy.
      */
     public function getText(): ?string
     {
@@ -29,7 +33,7 @@ class SignerConsentRequestSettings extends \ArrayObject
     }
 
     /**
-     * Text associated to the checkbox.
+     * Text associated to the checkbox or text_to_copy.
      */
     public function setText(?string $text): self
     {
@@ -37,5 +41,10 @@ class SignerConsentRequestSettings extends \ArrayObject
         $this->text = $text;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['text' => ['text', 'getText', 'setText']];
     }
 }

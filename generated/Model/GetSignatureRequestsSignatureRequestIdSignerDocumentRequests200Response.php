@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -35,5 +39,10 @@ class GetSignatureRequestsSignatureRequestIdSignerDocumentRequests200Response ex
         $this->data = $data;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['data' => ['data', 'getData', 'setData']];
     }
 }

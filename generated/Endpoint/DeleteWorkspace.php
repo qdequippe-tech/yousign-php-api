@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceUnauthorizedException;
@@ -13,6 +14,7 @@ use Qdequippe\Yousign\Api\Exception\DeleteWorkspaceUnsupportedMediaTypeException
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -20,6 +22,7 @@ use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
+use Qdequippe\Yousign\Api\Runtime\Client\JsonPayload;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class DeleteWorkspace extends BaseEndpoint implements Endpoint
@@ -43,13 +46,13 @@ class DeleteWorkspace extends BaseEndpoint implements Endpoint
 
     public function getUri(): string
     {
-        return str_replace(['{workspaceId}'], [$this->workspaceId], '/workspaces/{workspaceId}');
+        return str_replace(['{workspaceId}'], [rawurlencode($this->workspaceId)], '/workspaces/{workspaceId}');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         if ($this->body instanceof \Qdequippe\Yousign\Api\Model\DeleteWorkspace) {
-            return [['Content-Type' => ['application/json']], $serializer->serialize($this->body, 'json')];
+            return [['Content-Type' => ['application/json']], JsonPayload::encode($serializer, $this->body)];
         }
 
         return [[], null];
@@ -65,6 +68,7 @@ class DeleteWorkspace extends BaseEndpoint implements Endpoint
      * @throws DeleteWorkspaceUnauthorizedException
      * @throws DeleteWorkspaceForbiddenException
      * @throws DeleteWorkspaceNotFoundException
+     * @throws DeleteWorkspaceMethodNotAllowedException
      * @throws DeleteWorkspaceUnsupportedMediaTypeException
      * @throws DeleteWorkspaceTooManyRequestsException
      * @throws DeleteWorkspaceInternalServerErrorException
@@ -76,25 +80,28 @@ class DeleteWorkspace extends BaseEndpoint implements Endpoint
         if (204 === $status) {
             return null;
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DeleteWorkspaceMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (415 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWorkspaceInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class FieldText extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class FieldText implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -36,7 +40,7 @@ class FieldText extends \ArrayObject
      */
     protected $width;
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is provided, max_length must be less than or equal to the maximum number of characters based on the width and height of the text field.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      *
      * @var int|null
      */
@@ -77,6 +81,18 @@ class FieldText extends \ArrayObject
      * @var Font|null
      */
     protected $font;
+    /**
+     * @var string|null
+     */
+    protected $name;
+    /**
+     * @var string|null
+     */
+    protected $defaultValue;
+    /**
+     * @var bool|null
+     */
+    protected $readOnly;
 
     public function getId(): ?string
     {
@@ -150,7 +166,7 @@ class FieldText extends \ArrayObject
     }
 
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is provided, max_length must be less than or equal to the maximum number of characters based on the width and height of the text field.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      */
     public function getHeight(): ?int
     {
@@ -158,7 +174,7 @@ class FieldText extends \ArrayObject
     }
 
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is provided, max_length must be less than or equal to the maximum number of characters based on the width and height of the text field.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      */
     public function setHeight(?int $height): self
     {
@@ -283,5 +299,49 @@ class FieldText extends \ArrayObject
         $this->font = $font;
 
         return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->initialized['name'] = true;
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDefaultValue(): ?string
+    {
+        return $this->defaultValue;
+    }
+
+    public function setDefaultValue(?string $defaultValue): self
+    {
+        $this->initialized['defaultValue'] = true;
+        $this->defaultValue = $defaultValue;
+
+        return $this;
+    }
+
+    public function getReadOnly(): ?bool
+    {
+        return $this->readOnly;
+    }
+
+    public function setReadOnly(?bool $readOnly): self
+    {
+        $this->initialized['readOnly'] = true;
+        $this->readOnly = $readOnly;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'documentId' => ['document_id', 'getDocumentId', 'setDocumentId'], 'signerId' => ['signer_id', 'getSignerId', 'setSignerId'], 'type' => ['type', 'getType', 'setType'], 'width' => ['width', 'getWidth', 'setWidth'], 'height' => ['height', 'getHeight', 'setHeight'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'question' => ['question', 'getQuestion', 'setQuestion'], 'instruction' => ['instruction', 'getInstruction', 'setInstruction'], 'optional' => ['optional', 'getOptional', 'setOptional'], 'answer' => ['answer', 'getAnswer', 'setAnswer'], 'maxLength' => ['max_length', 'getMaxLength', 'setMaxLength'], 'font' => ['font', 'getFont', 'setFont'], 'name' => ['name', 'getName', 'setName'], 'defaultValue' => ['default_value', 'getDefaultValue', 'setDefaultValue'], 'readOnly' => ['read_only', 'getReadOnly', 'setReadOnly']];
     }
 }

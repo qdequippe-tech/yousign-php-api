@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class FieldMention extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class FieldMention implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -30,6 +34,8 @@ class FieldMention extends \ArrayObject
      */
     protected $type;
     /**
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
+     *
      * @var int|null
      */
     protected $height;
@@ -57,6 +63,12 @@ class FieldMention extends \ArrayObject
      * @var Font|null
      */
     protected $font;
+    /**
+     * Name of the Field.
+     *
+     * @var string|null
+     */
+    protected $name;
 
     public function getId(): ?string
     {
@@ -110,11 +122,17 @@ class FieldMention extends \ArrayObject
         return $this;
     }
 
+    /**
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
+     */
     public function getHeight(): ?int
     {
         return $this->height;
     }
 
+    /**
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
+     */
     public function setHeight(?int $height): self
     {
         $this->initialized['height'] = true;
@@ -199,5 +217,29 @@ class FieldMention extends \ArrayObject
         $this->font = $font;
 
         return $this;
+    }
+
+    /**
+     * Name of the Field.
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Name of the Field.
+     */
+    public function setName(?string $name): self
+    {
+        $this->initialized['name'] = true;
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'documentId' => ['document_id', 'getDocumentId', 'setDocumentId'], 'signerId' => ['signer_id', 'getSignerId', 'setSignerId'], 'type' => ['type', 'getType', 'setType'], 'height' => ['height', 'getHeight', 'setHeight'], 'width' => ['width', 'getWidth', 'setWidth'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'mention' => ['mention', 'getMention', 'setMention'], 'font' => ['font', 'getFont', 'setFont'], 'name' => ['name', 'getName', 'setName']];
     }
 }

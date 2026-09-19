@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdUnauthorizedException;
@@ -13,6 +14,7 @@ use Qdequippe\Yousign\Api\Exception\PatchSignatureRequestsSignatureRequestIdUnsu
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\SignatureRequest;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
@@ -22,6 +24,7 @@ use Qdequippe\Yousign\Api\Model\UpdateSignatureRequest;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\Endpoint;
 use Qdequippe\Yousign\Api\Runtime\Client\EndpointTrait;
+use Qdequippe\Yousign\Api\Runtime\Client\JsonPayload;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PatchSignatureRequestsSignatureRequestId extends BaseEndpoint implements Endpoint
@@ -45,13 +48,13 @@ class PatchSignatureRequestsSignatureRequestId extends BaseEndpoint implements E
 
     public function getUri(): string
     {
-        return str_replace(['{signatureRequestId}'], [$this->signatureRequestId], '/signature_requests/{signatureRequestId}');
+        return str_replace(['{signatureRequestId}'], [rawurlencode($this->signatureRequestId)], '/signature_requests/{signatureRequestId}');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         if ($this->body instanceof UpdateSignatureRequest) {
-            return [['Content-Type' => ['application/json']], $serializer->serialize($this->body, 'json')];
+            return [['Content-Type' => ['application/json']], JsonPayload::encode($serializer, $this->body)];
         }
 
         return [[], null];
@@ -69,6 +72,7 @@ class PatchSignatureRequestsSignatureRequestId extends BaseEndpoint implements E
      * @throws PatchSignatureRequestsSignatureRequestIdUnauthorizedException
      * @throws PatchSignatureRequestsSignatureRequestIdForbiddenException
      * @throws PatchSignatureRequestsSignatureRequestIdNotFoundException
+     * @throws PatchSignatureRequestsSignatureRequestIdMethodNotAllowedException
      * @throws PatchSignatureRequestsSignatureRequestIdUnsupportedMediaTypeException
      * @throws PatchSignatureRequestsSignatureRequestIdTooManyRequestsException
      * @throws PatchSignatureRequestsSignatureRequestIdInternalServerErrorException
@@ -77,32 +81,33 @@ class PatchSignatureRequestsSignatureRequestId extends BaseEndpoint implements E
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (200 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             return $serializer->deserialize($body, SignatureRequest::class, 'json');
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new PatchSignatureRequestsSignatureRequestIdMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (415 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PatchSignatureRequestsSignatureRequestIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
-
-        return null;
     }
 
     public function getAuthenticationScopes(): array

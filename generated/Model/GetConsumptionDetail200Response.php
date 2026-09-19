@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class GetConsumptionDetail200Response extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class GetConsumptionDetail200Response implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -60,5 +64,10 @@ class GetConsumptionDetail200Response extends \ArrayObject
         $this->data = $data;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['meta' => ['meta', 'getMeta', 'setMeta'], 'data' => ['data', 'getData', 'setData']];
     }
 }

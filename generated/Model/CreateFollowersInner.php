@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateFollowersInner extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class CreateFollowersInner implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -54,5 +58,10 @@ class CreateFollowersInner extends \ArrayObject
         $this->locale = $locale;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['email' => ['email', 'getEmail', 'setEmail'], 'locale' => ['locale', 'getLocale', 'setLocale']];
     }
 }

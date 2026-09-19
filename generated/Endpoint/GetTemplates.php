@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetTemplatesBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetTemplatesForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetTemplatesInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\GetTemplatesMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\GetTemplatesTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetTemplatesUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\GetTemplates200Response;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -27,11 +29,10 @@ class GetTemplates extends BaseEndpoint implements Endpoint
     /**
      * Returns the list of all Templates within your Organization.
      *
-     * @param array $queryParameters {
-     *
-     * @var string $after After cursor (pagination)
-     * @var int    $limit The limit of items count to retrieve.
-     *             }
+     * @param array{
+     *    "after"?: string, //After cursor (pagination)
+     *    "limit"?: int, //The limit of items count to retrieve.
+     * } $queryParameters
      */
     public function __construct(array $queryParameters = [])
     {
@@ -63,7 +64,7 @@ class GetTemplates extends BaseEndpoint implements Endpoint
         $optionsResolver = parent::getQueryOptionsResolver();
         $optionsResolver->setDefined(['after', 'limit']);
         $optionsResolver->setRequired([]);
-        $optionsResolver->setDefaults(['limit' => 100]);
+        $optionsResolver->setDefaults(['limit' => 10]);
         $optionsResolver->addAllowedTypes('after', ['string']);
         $optionsResolver->addAllowedTypes('limit', ['int']);
 
@@ -76,6 +77,7 @@ class GetTemplates extends BaseEndpoint implements Endpoint
      * @throws GetTemplatesBadRequestException
      * @throws GetTemplatesUnauthorizedException
      * @throws GetTemplatesForbiddenException
+     * @throws GetTemplatesMethodNotAllowedException
      * @throws GetTemplatesTooManyRequestsException
      * @throws GetTemplatesInternalServerErrorException
      */
@@ -83,26 +85,27 @@ class GetTemplates extends BaseEndpoint implements Endpoint
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (200 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             return $serializer->deserialize($body, GetTemplates200Response::class, 'json');
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetTemplatesBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetTemplatesUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetTemplatesForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new GetTemplatesMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetTemplatesTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetTemplatesInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
-
-        return null;
     }
 
     public function getAuthenticationScopes(): array

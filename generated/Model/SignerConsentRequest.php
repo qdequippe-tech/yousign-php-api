@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignerConsentRequest extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class SignerConsentRequest implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -38,11 +42,17 @@ class SignerConsentRequest extends \ArrayObject
      */
     protected $optional;
     /**
-     * Ids of Signers to request a consent.
+     * Ids of Signers to request a consent. Empty when every Signer attached to the consent has been deleted from the Signature Request.
      *
      * @var list<string>|null
      */
     protected $signerIds;
+    /**
+     * The Document id to which it is linked.
+     *
+     * @var string|null
+     */
+    protected $documentId;
 
     /**
      * Unique identifier of the Signer Consent Request.
@@ -121,7 +131,7 @@ class SignerConsentRequest extends \ArrayObject
     }
 
     /**
-     * Ids of Signers to request a consent.
+     * Ids of Signers to request a consent. Empty when every Signer attached to the consent has been deleted from the Signature Request.
      *
      * @return list<string>|null
      */
@@ -131,7 +141,7 @@ class SignerConsentRequest extends \ArrayObject
     }
 
     /**
-     * Ids of Signers to request a consent.
+     * Ids of Signers to request a consent. Empty when every Signer attached to the consent has been deleted from the Signature Request.
      *
      * @param list<string>|null $signerIds
      */
@@ -141,5 +151,29 @@ class SignerConsentRequest extends \ArrayObject
         $this->signerIds = $signerIds;
 
         return $this;
+    }
+
+    /**
+     * The Document id to which it is linked.
+     */
+    public function getDocumentId(): ?string
+    {
+        return $this->documentId;
+    }
+
+    /**
+     * The Document id to which it is linked.
+     */
+    public function setDocumentId(?string $documentId): self
+    {
+        $this->initialized['documentId'] = true;
+        $this->documentId = $documentId;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'type' => ['type', 'getType', 'setType'], 'settings' => ['settings', 'getSettings', 'setSettings'], 'optional' => ['optional', 'getOptional', 'setOptional'], 'signerIds' => ['signer_ids', 'getSignerIds', 'setSignerIds'], 'documentId' => ['document_id', 'getDocumentId', 'setDocumentId']];
     }
 }

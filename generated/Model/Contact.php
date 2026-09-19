@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Contact extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Contact implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -258,5 +262,10 @@ class Contact extends \ArrayObject
         $this->workspaceId = $workspaceId;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'firstName' => ['first_name', 'getFirstName', 'setFirstName'], 'lastName' => ['last_name', 'getLastName', 'setLastName'], 'email' => ['email', 'getEmail', 'setEmail'], 'locale' => ['locale', 'getLocale', 'setLocale'], 'phoneNumber' => ['phone_number', 'getPhoneNumber', 'setPhoneNumber'], 'companyName' => ['company_name', 'getCompanyName', 'setCompanyName'], 'jobTitle' => ['job_title', 'getJobTitle', 'setJobTitle'], 'addressLine1' => ['address_line_1', 'getAddressLine1', 'setAddressLine1'], 'addressLine2' => ['address_line_2', 'getAddressLine2', 'setAddressLine2'], 'addressCity' => ['address_city', 'getAddressCity', 'setAddressCity'], 'addressPostalCode' => ['address_postal_code', 'getAddressPostalCode', 'setAddressPostalCode'], 'addressCountry' => ['address_country', 'getAddressCountry', 'setAddressCountry'], 'workspaceId' => ['workspace_id', 'getWorkspaceId', 'setWorkspaceId']];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateElectronicSealPayload extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class CreateElectronicSealPayload implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -32,10 +36,14 @@ class CreateElectronicSealPayload extends \ArrayObject
      */
     protected $externalId;
     /**
+     * Fields you want to add to your Document. At least one Seal Field is mandatory.
+     *
      * @var list<array<string, mixed>>|null
      */
     protected $fields;
     /**
+     * Level of Electronic Seal for your Document.
+     *
      * @var string|null
      */
     protected $signatureLevel;
@@ -104,6 +112,8 @@ class CreateElectronicSealPayload extends \ArrayObject
     }
 
     /**
+     * Fields you want to add to your Document. At least one Seal Field is mandatory.
+     *
      * @return list<array<string, mixed>>|null
      */
     public function getFields(): ?array
@@ -112,6 +122,8 @@ class CreateElectronicSealPayload extends \ArrayObject
     }
 
     /**
+     * Fields you want to add to your Document. At least one Seal Field is mandatory.
+     *
      * @param list<array<string, mixed>>|null $fields
      */
     public function setFields(?array $fields): self
@@ -122,11 +134,17 @@ class CreateElectronicSealPayload extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Level of Electronic Seal for your Document.
+     */
     public function getSignatureLevel(): ?string
     {
         return $this->signatureLevel;
     }
 
+    /**
+     * Level of Electronic Seal for your Document.
+     */
     public function setSignatureLevel(?string $signatureLevel): self
     {
         $this->initialized['signatureLevel'] = true;
@@ -152,5 +170,10 @@ class CreateElectronicSealPayload extends \ArrayObject
         $this->certificateId = $certificateId;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['documentId' => ['document_id', 'getDocumentId', 'setDocumentId'], 'imageId' => ['image_id', 'getImageId', 'setImageId'], 'externalId' => ['external_id', 'getExternalId', 'setExternalId'], 'fields' => ['fields', 'getFields', 'setFields'], 'signatureLevel' => ['signature_level', 'getSignatureLevel', 'setSignatureLevel'], 'certificateId' => ['certificate_id', 'getCertificateId', 'setCertificateId']];
     }
 }

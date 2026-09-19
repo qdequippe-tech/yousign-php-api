@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,18 +18,18 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Cursor based pagination.
+     * Metadata about the response.
      *
      * @var Pagination|null
      */
     protected $meta;
     /**
-     * @var list<mixed>|null
+     * @var list<FieldSignature>|list<FieldText>|list<FieldMention>|list<FieldCheckbox>|list<FieldRadioButtonGroup>|list<FieldReadOnlyText>|list<FieldSignatureDate>|list<FieldSignerName>|list<FieldSignerEmail>|null
      */
     protected $data;
 
     /**
-     * Cursor based pagination.
+     * Metadata about the response.
      */
     public function getMeta(): ?Pagination
     {
@@ -33,7 +37,7 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response
     }
 
     /**
-     * Cursor based pagination.
+     * Metadata about the response.
      */
     public function setMeta(?Pagination $meta): self
     {
@@ -44,7 +48,7 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response
     }
 
     /**
-     * @return list<mixed>|null
+     * @return list<FieldSignature>|list<FieldText>|list<FieldMention>|list<FieldCheckbox>|list<FieldRadioButtonGroup>|list<FieldReadOnlyText>|list<FieldSignatureDate>|list<FieldSignerName>|list<FieldSignerEmail>|null
      */
     public function getData(): ?array
     {
@@ -52,7 +56,7 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response
     }
 
     /**
-     * @param list<mixed>|null $data
+     * @param list<FieldSignature>|list<FieldText>|list<FieldMention>|list<FieldCheckbox>|list<FieldRadioButtonGroup>|list<FieldReadOnlyText>|list<FieldSignatureDate>|list<FieldSignerName>|list<FieldSignerEmail>|null $data
      */
     public function setData(?array $data): self
     {
@@ -60,5 +64,10 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentIdFields200Response
         $this->data = $data;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['meta' => ['meta', 'getMeta', 'setMeta'], 'data' => ['data', 'getData', 'setData']];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class EmailNotification extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class EmailNotification implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -41,5 +45,10 @@ class EmailNotification extends \ArrayObject
         $this->disabled = $disabled;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['disabled' => ['disabled', 'getDisabled', 'setDisabled']];
     }
 }

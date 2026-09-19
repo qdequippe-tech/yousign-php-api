@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Signature extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Signature implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -47,11 +51,20 @@ class Signature extends \ArrayObject
     protected $width;
     /**
      * Provide extra context to explain why the Document is being signed. Once the Document is signed, the custom reason is stored in the Audit Trail and is included in the signature certificate.
+     *
      * The default value is: "Signed by [Signer first name] [Signer last name]".
+     *
+     * This parameter is only available for users with a `pro` or `scale` plan.
      *
      * @var string|null
      */
     protected $reason;
+    /**
+     * Controls what is shown within the signature field.
+     *
+     * @var array<string, mixed>|null
+     */
+    protected $display;
 
     public function getSignerId(): ?string
     {
@@ -158,7 +171,10 @@ class Signature extends \ArrayObject
 
     /**
      * Provide extra context to explain why the Document is being signed. Once the Document is signed, the custom reason is stored in the Audit Trail and is included in the signature certificate.
+     *
      * The default value is: "Signed by [Signer first name] [Signer last name]".
+     *
+     * This parameter is only available for users with a `pro` or `scale` plan.
      */
     public function getReason(): ?string
     {
@@ -167,7 +183,10 @@ class Signature extends \ArrayObject
 
     /**
      * Provide extra context to explain why the Document is being signed. Once the Document is signed, the custom reason is stored in the Audit Trail and is included in the signature certificate.
+     *
      * The default value is: "Signed by [Signer first name] [Signer last name]".
+     *
+     * This parameter is only available for users with a `pro` or `scale` plan.
      */
     public function setReason(?string $reason): self
     {
@@ -175,5 +194,33 @@ class Signature extends \ArrayObject
         $this->reason = $reason;
 
         return $this;
+    }
+
+    /**
+     * Controls what is shown within the signature field.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getDisplay(): ?iterable
+    {
+        return $this->display;
+    }
+
+    /**
+     * Controls what is shown within the signature field.
+     *
+     * @param array<string, mixed>|null $display
+     */
+    public function setDisplay(?iterable $display): self
+    {
+        $this->initialized['display'] = true;
+        $this->display = $display;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['signerId' => ['signer_id', 'getSignerId', 'setSignerId'], 'type' => ['type', 'getType', 'setType'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'height' => ['height', 'getHeight', 'setHeight'], 'width' => ['width', 'getWidth', 'setWidth'], 'reason' => ['reason', 'getReason', 'setReason'], 'display' => ['display', 'getDisplay', 'setDisplay']];
     }
 }

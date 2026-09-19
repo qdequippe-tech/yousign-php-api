@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CustomExperience extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class CustomExperience implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -66,9 +70,27 @@ class CustomExperience extends \ArrayObject
      */
     protected $emailExpirationTextDisabled;
     /**
+     * @var bool|null
+     */
+    protected $recipientsActivityDisabled;
+    /**
+     * @var bool|null
+     */
+    protected $downloadDocumentsDisabled;
+    /**
+     * @var bool|null
+     */
+    protected $documentNavigationDisabled;
+    /**
      * @var CustomExperienceRedirectUrls|null
      */
     protected $redirectUrls;
+    /**
+     * Navigation bar of the Embedded Preparation page, or null when it is not displayed at all.
+     *
+     * @var CustomExperienceEmbeddedPreparationNavigationBar|null
+     */
+    protected $embeddedPreparationNavigationBar;
     /**
      * @var string|null
      */
@@ -79,6 +101,12 @@ class CustomExperience extends \ArrayObject
      * @var string|null
      */
     protected $source;
+    /**
+     * The Workspace the Custom Experience is scoped to, or null if it is Organization-wide.
+     *
+     * @var string|null
+     */
+    protected $workspaceId;
     /**
      * @var \DateTime|null
      */
@@ -259,6 +287,45 @@ class CustomExperience extends \ArrayObject
         return $this;
     }
 
+    public function getRecipientsActivityDisabled(): ?bool
+    {
+        return $this->recipientsActivityDisabled;
+    }
+
+    public function setRecipientsActivityDisabled(?bool $recipientsActivityDisabled): self
+    {
+        $this->initialized['recipientsActivityDisabled'] = true;
+        $this->recipientsActivityDisabled = $recipientsActivityDisabled;
+
+        return $this;
+    }
+
+    public function getDownloadDocumentsDisabled(): ?bool
+    {
+        return $this->downloadDocumentsDisabled;
+    }
+
+    public function setDownloadDocumentsDisabled(?bool $downloadDocumentsDisabled): self
+    {
+        $this->initialized['downloadDocumentsDisabled'] = true;
+        $this->downloadDocumentsDisabled = $downloadDocumentsDisabled;
+
+        return $this;
+    }
+
+    public function getDocumentNavigationDisabled(): ?bool
+    {
+        return $this->documentNavigationDisabled;
+    }
+
+    public function setDocumentNavigationDisabled(?bool $documentNavigationDisabled): self
+    {
+        $this->initialized['documentNavigationDisabled'] = true;
+        $this->documentNavigationDisabled = $documentNavigationDisabled;
+
+        return $this;
+    }
+
     public function getRedirectUrls(): ?CustomExperienceRedirectUrls
     {
         return $this->redirectUrls;
@@ -268,6 +335,25 @@ class CustomExperience extends \ArrayObject
     {
         $this->initialized['redirectUrls'] = true;
         $this->redirectUrls = $redirectUrls;
+
+        return $this;
+    }
+
+    /**
+     * Navigation bar of the Embedded Preparation page, or null when it is not displayed at all.
+     */
+    public function getEmbeddedPreparationNavigationBar(): ?CustomExperienceEmbeddedPreparationNavigationBar
+    {
+        return $this->embeddedPreparationNavigationBar;
+    }
+
+    /**
+     * Navigation bar of the Embedded Preparation page, or null when it is not displayed at all.
+     */
+    public function setEmbeddedPreparationNavigationBar(?CustomExperienceEmbeddedPreparationNavigationBar $embeddedPreparationNavigationBar): self
+    {
+        $this->initialized['embeddedPreparationNavigationBar'] = true;
+        $this->embeddedPreparationNavigationBar = $embeddedPreparationNavigationBar;
 
         return $this;
     }
@@ -304,6 +390,25 @@ class CustomExperience extends \ArrayObject
         return $this;
     }
 
+    /**
+     * The Workspace the Custom Experience is scoped to, or null if it is Organization-wide.
+     */
+    public function getWorkspaceId(): ?string
+    {
+        return $this->workspaceId;
+    }
+
+    /**
+     * The Workspace the Custom Experience is scoped to, or null if it is Organization-wide.
+     */
+    public function setWorkspaceId(?string $workspaceId): self
+    {
+        $this->initialized['workspaceId'] = true;
+        $this->workspaceId = $workspaceId;
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
@@ -315,5 +420,10 @@ class CustomExperience extends \ArrayObject
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'name' => ['name', 'getName', 'setName'], 'landingPageDisabled' => ['landing_page_disabled', 'getLandingPageDisabled', 'setLandingPageDisabled'], 'sidePanelDisabled' => ['side_panel_disabled', 'getSidePanelDisabled', 'setSidePanelDisabled'], 'backgroundColor' => ['background_color', 'getBackgroundColor', 'setBackgroundColor'], 'buttonColor' => ['button_color', 'getButtonColor', 'setButtonColor'], 'textColor' => ['text_color', 'getTextColor', 'setTextColor'], 'textButtonColor' => ['text_button_color', 'getTextButtonColor', 'setTextButtonColor'], 'disabledNotifications' => ['disabled_notifications', 'getDisabledNotifications', 'setDisabledNotifications'], 'emailLogoDisabled' => ['email_logo_disabled', 'getEmailLogoDisabled', 'setEmailLogoDisabled'], 'emailHeaderTextDisabled' => ['email_header_text_disabled', 'getEmailHeaderTextDisabled', 'setEmailHeaderTextDisabled'], 'emailFooterSignatureDisabled' => ['email_footer_signature_disabled', 'getEmailFooterSignatureDisabled', 'setEmailFooterSignatureDisabled'], 'emailExpirationTextDisabled' => ['email_expiration_text_disabled', 'getEmailExpirationTextDisabled', 'setEmailExpirationTextDisabled'], 'recipientsActivityDisabled' => ['recipients_activity_disabled', 'getRecipientsActivityDisabled', 'setRecipientsActivityDisabled'], 'downloadDocumentsDisabled' => ['download_documents_disabled', 'getDownloadDocumentsDisabled', 'setDownloadDocumentsDisabled'], 'documentNavigationDisabled' => ['document_navigation_disabled', 'getDocumentNavigationDisabled', 'setDocumentNavigationDisabled'], 'redirectUrls' => ['redirect_urls', 'getRedirectUrls', 'setRedirectUrls'], 'embeddedPreparationNavigationBar' => ['embedded_preparation_navigation_bar', 'getEmbeddedPreparationNavigationBar', 'setEmbeddedPreparationNavigationBar'], 'logo' => ['logo', 'getLogo', 'setLogo'], 'source' => ['source', 'getSource', 'setSource'], 'workspaceId' => ['workspace_id', 'getWorkspaceId', 'setWorkspaceId'], 'createdAt' => ['created_at', 'getCreatedAt', 'setCreatedAt']];
     }
 }

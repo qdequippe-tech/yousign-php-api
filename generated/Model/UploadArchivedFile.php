@@ -2,8 +2,13 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UploadArchivedFile extends \ArrayObject
+use Psr\Http\Message\StreamInterface;
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class UploadArchivedFile implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -16,10 +21,12 @@ class UploadArchivedFile extends \ArrayObject
     /**
      * File to be uploaded.
      *
-     * @var string|null
+     * @var string|resource|StreamInterface|null
      */
     protected $file;
     /**
+     * Workspace the archive is scoped to. Required for workspace-restricted API keys; when omitted with an organization-wide key, the organization default workspace is used.
+     *
      * @var string|null
      */
     protected $workspaceId;
@@ -42,16 +49,20 @@ class UploadArchivedFile extends \ArrayObject
 
     /**
      * File to be uploaded.
+     *
+     * @return string|resource|StreamInterface|null
      */
-    public function getFile(): ?string
+    public function getFile()
     {
         return $this->file;
     }
 
     /**
      * File to be uploaded.
+     *
+     * @param string|resource|StreamInterface|null $file
      */
-    public function setFile(?string $file): self
+    public function setFile($file): self
     {
         $this->initialized['file'] = true;
         $this->file = $file;
@@ -59,11 +70,17 @@ class UploadArchivedFile extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Workspace the archive is scoped to. Required for workspace-restricted API keys; when omitted with an organization-wide key, the organization default workspace is used.
+     */
     public function getWorkspaceId(): ?string
     {
         return $this->workspaceId;
     }
 
+    /**
+     * Workspace the archive is scoped to. Required for workspace-restricted API keys; when omitted with an organization-wide key, the organization default workspace is used.
+     */
     public function setWorkspaceId(?string $workspaceId): self
     {
         $this->initialized['workspaceId'] = true;
@@ -125,5 +142,10 @@ class UploadArchivedFile extends \ArrayObject
         $this->expiredAt = $expiredAt;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['file' => ['file', 'getFile', 'setFile'], 'workspaceId' => ['workspace_id', 'getWorkspaceId', 'setWorkspaceId'], 'archiveY' => ['archive_y', 'getArchiveY', 'setArchiveY'], 'tags' => ['tags', 'getTags', 'setTags'], 'expiredAt' => ['expired_at', 'getExpiredAt', 'setExpiredAt']];
     }
 }

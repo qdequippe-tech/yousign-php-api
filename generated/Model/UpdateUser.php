@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UpdateUser extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class UpdateUser implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -62,5 +66,10 @@ class UpdateUser extends \ArrayObject
         $this->active = $active;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['role' => ['role', 'getRole', 'setRole'], 'active' => ['active', 'getActive', 'setActive']];
     }
 }

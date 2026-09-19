@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetCustomExperiencesUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\GetCustomExperiences200Response;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Runtime\Client\BaseEndpoint;
@@ -28,11 +30,10 @@ class GetCustomExperiences extends BaseEndpoint implements Endpoint
      * Returns the list of all Custom Experiences in your Organization.
      * You can limit the number of items returned by using pagination.
      *
-     * @param array $queryParameters {
-     *
-     * @var string $after After cursor (pagination)
-     * @var int    $limit The limit of items count to retrieve.
-     *             }
+     * @param array{
+     *    "after"?: string, //After cursor (pagination)
+     *    "limit"?: int, //The limit of items count to retrieve.
+     * } $queryParameters
      */
     public function __construct(array $queryParameters = [])
     {
@@ -77,6 +78,7 @@ class GetCustomExperiences extends BaseEndpoint implements Endpoint
      * @throws GetCustomExperiencesBadRequestException
      * @throws GetCustomExperiencesUnauthorizedException
      * @throws GetCustomExperiencesForbiddenException
+     * @throws GetCustomExperiencesMethodNotAllowedException
      * @throws GetCustomExperiencesTooManyRequestsException
      * @throws GetCustomExperiencesInternalServerErrorException
      */
@@ -84,26 +86,27 @@ class GetCustomExperiences extends BaseEndpoint implements Endpoint
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (200 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             return $serializer->deserialize($body, GetCustomExperiences200Response::class, 'json');
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetCustomExperiencesBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetCustomExperiencesUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetCustomExperiencesForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new GetCustomExperiencesMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetCustomExperiencesTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetCustomExperiencesInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
-
-        return null;
     }
 
     public function getAuthenticationScopes(): array

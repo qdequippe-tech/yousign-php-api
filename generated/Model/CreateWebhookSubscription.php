@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateWebhookSubscription extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class CreateWebhookSubscription implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,13 +18,14 @@ class CreateWebhookSubscription extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Https target URL of the webhook.
+     * HTTPS target URL that will receive webhook POST requests. It must be publicly accessible and may include a specified port.
      *
      * @var string|null
      */
     protected $endpoint;
     /**
-     * Short description of the webhook. This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * Short description of the webhook.\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      *
      * @var string|null
      */
@@ -30,9 +35,9 @@ class CreateWebhookSubscription extends \ArrayObject
      */
     protected $sandbox;
     /**
-     * Choose between a wildcard symbol to select all subscribed events or specify a list of specific subscribed events.
+     * Select all the events to subscribe to.
      *
-     * @var mixed|null
+     * @var list<string>|null
      */
     protected $subscribedEvents;
     /**
@@ -44,17 +49,17 @@ class CreateWebhookSubscription extends \ArrayObject
     /**
      * Choose between a wildcard symbol to select all scopes or specify a list of specific scopes.
      *
-     * @var mixed|null
+     * @var list<string>|null
      */
     protected $scopes;
     /**
      * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs. The association of specific Workspaces with Webhook is temporarily restricted in the sandbox environment, only the value wildcard ("*") for Workspaces is allowed in this context.
      *
-     * @var mixed|null
+     * @var list<string>|null
      */
     protected $workspaces;
     /**
-     * If a Webhook request fails for any reason, Yousign will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
+     * If a Webhook request fails for any reason, Youtrust will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
      *
      * @var bool|null
      */
@@ -67,7 +72,7 @@ class CreateWebhookSubscription extends \ArrayObject
     protected $enabled;
 
     /**
-     * Https target URL of the webhook.
+     * HTTPS target URL that will receive webhook POST requests. It must be publicly accessible and may include a specified port.
      */
     public function getEndpoint(): ?string
     {
@@ -75,7 +80,7 @@ class CreateWebhookSubscription extends \ArrayObject
     }
 
     /**
-     * Https target URL of the webhook.
+     * HTTPS target URL that will receive webhook POST requests. It must be publicly accessible and may include a specified port.
      */
     public function setEndpoint(?string $endpoint): self
     {
@@ -86,7 +91,8 @@ class CreateWebhookSubscription extends \ArrayObject
     }
 
     /**
-     * Short description of the webhook. This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * Short description of the webhook.\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function getDescription(): ?string
     {
@@ -94,7 +100,8 @@ class CreateWebhookSubscription extends \ArrayObject
     }
 
     /**
-     * Short description of the webhook. This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * Short description of the webhook.\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function setDescription(?string $description): self
     {
@@ -118,7 +125,9 @@ class CreateWebhookSubscription extends \ArrayObject
     }
 
     /**
-     * Choose between a wildcard symbol to select all subscribed events or specify a list of specific subscribed events.
+     * Select all the events to subscribe to.
+     *
+     * @return list<string>|null
      */
     public function getSubscribedEvents()
     {
@@ -126,7 +135,9 @@ class CreateWebhookSubscription extends \ArrayObject
     }
 
     /**
-     * Choose between a wildcard symbol to select all subscribed events or specify a list of specific subscribed events.
+     * Select all the events to subscribe to.
+     *
+     * @param list<string>|null $subscribedEvents
      */
     public function setSubscribedEvents($subscribedEvents): self
     {
@@ -157,6 +168,8 @@ class CreateWebhookSubscription extends \ArrayObject
 
     /**
      * Choose between a wildcard symbol to select all scopes or specify a list of specific scopes.
+     *
+     * @return list<string>|null
      */
     public function getScopes()
     {
@@ -165,6 +178,8 @@ class CreateWebhookSubscription extends \ArrayObject
 
     /**
      * Choose between a wildcard symbol to select all scopes or specify a list of specific scopes.
+     *
+     * @param list<string>|null $scopes
      */
     public function setScopes($scopes): self
     {
@@ -176,6 +191,8 @@ class CreateWebhookSubscription extends \ArrayObject
 
     /**
      * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs. The association of specific Workspaces with Webhook is temporarily restricted in the sandbox environment, only the value wildcard ("*") for Workspaces is allowed in this context.
+     *
+     * @return list<string>|null
      */
     public function getWorkspaces()
     {
@@ -184,6 +201,8 @@ class CreateWebhookSubscription extends \ArrayObject
 
     /**
      * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs. The association of specific Workspaces with Webhook is temporarily restricted in the sandbox environment, only the value wildcard ("*") for Workspaces is allowed in this context.
+     *
+     * @param list<string>|null $workspaces
      */
     public function setWorkspaces($workspaces): self
     {
@@ -194,7 +213,7 @@ class CreateWebhookSubscription extends \ArrayObject
     }
 
     /**
-     * If a Webhook request fails for any reason, Yousign will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
+     * If a Webhook request fails for any reason, Youtrust will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
      */
     public function getAutoRetry(): ?bool
     {
@@ -202,7 +221,7 @@ class CreateWebhookSubscription extends \ArrayObject
     }
 
     /**
-     * If a Webhook request fails for any reason, Yousign will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
+     * If a Webhook request fails for any reason, Youtrust will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
      */
     public function setAutoRetry(?bool $autoRetry): self
     {
@@ -229,5 +248,10 @@ class CreateWebhookSubscription extends \ArrayObject
         $this->enabled = $enabled;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['endpoint' => ['endpoint', 'getEndpoint', 'setEndpoint'], 'description' => ['description', 'getDescription', 'setDescription'], 'sandbox' => ['sandbox', 'getSandbox', 'setSandbox'], 'subscribedEvents' => ['subscribed_events', 'getSubscribedEvents', 'setSubscribedEvents'], 'secretKey' => ['secret_key', 'getSecretKey', 'setSecretKey'], 'scopes' => ['scopes', 'getScopes', 'setScopes'], 'workspaces' => ['workspaces', 'getWorkspaces', 'setWorkspaces'], 'autoRetry' => ['auto_retry', 'getAutoRetry', 'setAutoRetry'], 'enabled' => ['enabled', 'getEnabled', 'setEnabled']];
     }
 }

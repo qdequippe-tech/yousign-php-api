@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class WebhookSubscription extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class WebhookSubscription implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -18,7 +22,7 @@ class WebhookSubscription extends \ArrayObject
      */
     protected $id;
     /**
-     * Https target URL of the webhook.
+     * HTTPS target URL that will receive webhook POST requests. It must be publicly accessible and may include a specified port.
      *
      * @var string|null
      */
@@ -36,7 +40,7 @@ class WebhookSubscription extends \ArrayObject
     /**
      * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
      *
-     * @var mixed|null
+     * @var list<string>|null
      */
     protected $subscribedEvents;
     /**
@@ -46,15 +50,15 @@ class WebhookSubscription extends \ArrayObject
      */
     protected $secretKey;
     /**
-     * @var mixed|null
+     * @var list<string>|null
      */
     protected $scopes;
     /**
-     * @var mixed|null
+     * @var list<string>|null
      */
     protected $workspaces;
     /**
-     * If a Webhook request fails for any reason, Yousign will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
+     * If a Webhook request fails for any reason, Youtrust will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
      *
      * @var bool|null
      */
@@ -88,7 +92,7 @@ class WebhookSubscription extends \ArrayObject
     }
 
     /**
-     * Https target URL of the webhook.
+     * HTTPS target URL that will receive webhook POST requests. It must be publicly accessible and may include a specified port.
      */
     public function getEndpoint(): ?string
     {
@@ -96,7 +100,7 @@ class WebhookSubscription extends \ArrayObject
     }
 
     /**
-     * Https target URL of the webhook.
+     * HTTPS target URL that will receive webhook POST requests. It must be publicly accessible and may include a specified port.
      */
     public function setEndpoint(?string $endpoint): self
     {
@@ -140,6 +144,8 @@ class WebhookSubscription extends \ArrayObject
 
     /**
      * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
+     *
+     * @return list<string>|null
      */
     public function getSubscribedEvents()
     {
@@ -148,6 +154,8 @@ class WebhookSubscription extends \ArrayObject
 
     /**
      * Choose between a wildcard symbol to select all Workspaces or specify a list of specific Workspace UUIDs.
+     *
+     * @param list<string>|null $subscribedEvents
      */
     public function setSubscribedEvents($subscribedEvents): self
     {
@@ -176,11 +184,17 @@ class WebhookSubscription extends \ArrayObject
         return $this;
     }
 
+    /**
+     * @return list<string>|null
+     */
     public function getScopes()
     {
         return $this->scopes;
     }
 
+    /**
+     * @param list<string>|null $scopes
+     */
     public function setScopes($scopes): self
     {
         $this->initialized['scopes'] = true;
@@ -189,11 +203,17 @@ class WebhookSubscription extends \ArrayObject
         return $this;
     }
 
+    /**
+     * @return list<string>|null
+     */
     public function getWorkspaces()
     {
         return $this->workspaces;
     }
 
+    /**
+     * @param list<string>|null $workspaces
+     */
     public function setWorkspaces($workspaces): self
     {
         $this->initialized['workspaces'] = true;
@@ -203,7 +223,7 @@ class WebhookSubscription extends \ArrayObject
     }
 
     /**
-     * If a Webhook request fails for any reason, Yousign will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
+     * If a Webhook request fails for any reason, Youtrust will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
      */
     public function getAutoRetry(): ?bool
     {
@@ -211,7 +231,7 @@ class WebhookSubscription extends \ArrayObject
     }
 
     /**
-     * If a Webhook request fails for any reason, Yousign will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
+     * If a Webhook request fails for any reason, Youtrust will retry the request 8 times using a back-off mechanism after: 2, 6, 30, 60, 300, 1080, 1440, 2880 min.
      */
     public function setAutoRetry(?bool $autoRetry): self
     {
@@ -264,5 +284,10 @@ class WebhookSubscription extends \ArrayObject
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'endpoint' => ['endpoint', 'getEndpoint', 'setEndpoint'], 'description' => ['description', 'getDescription', 'setDescription'], 'sandbox' => ['sandbox', 'getSandbox', 'setSandbox'], 'subscribedEvents' => ['subscribed_events', 'getSubscribedEvents', 'setSubscribedEvents'], 'secretKey' => ['secret_key', 'getSecretKey', 'setSecretKey'], 'scopes' => ['scopes', 'getScopes', 'setScopes'], 'workspaces' => ['workspaces', 'getWorkspaces', 'setWorkspaces'], 'autoRetry' => ['auto_retry', 'getAutoRetry', 'setAutoRetry'], 'enabled' => ['enabled', 'getEnabled', 'setEnabled'], 'createdAt' => ['created_at', 'getCreatedAt', 'setCreatedAt'], 'updatedAt' => ['updated_at', 'getUpdatedAt', 'setUpdatedAt']];
     }
 }

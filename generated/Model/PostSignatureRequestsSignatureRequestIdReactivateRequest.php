@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class PostSignatureRequestsSignatureRequestIdReactivateRequest extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class PostSignatureRequestsSignatureRequestIdReactivateRequest implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,14 +18,16 @@ class PostSignatureRequestsSignatureRequestIdReactivateRequest extends \ArrayObj
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Due date of the Signature Request (yyyy-mm-dd). Default to 6 month after the activation.
+     * Due date of the Signature Request (yyyy-mm-dd).
+     * The date cannot be in the past and cannot be more than one year after initiation.
      *
      * @var \DateTime|null
      */
     protected $expirationDate;
 
     /**
-     * Due date of the Signature Request (yyyy-mm-dd). Default to 6 month after the activation.
+     * Due date of the Signature Request (yyyy-mm-dd).
+     * The date cannot be in the past and cannot be more than one year after initiation.
      */
     public function getExpirationDate(): ?\DateTime
     {
@@ -29,7 +35,8 @@ class PostSignatureRequestsSignatureRequestIdReactivateRequest extends \ArrayObj
     }
 
     /**
-     * Due date of the Signature Request (yyyy-mm-dd). Default to 6 month after the activation.
+     * Due date of the Signature Request (yyyy-mm-dd).
+     * The date cannot be in the past and cannot be more than one year after initiation.
      */
     public function setExpirationDate(?\DateTime $expirationDate): self
     {
@@ -37,5 +44,10 @@ class PostSignatureRequestsSignatureRequestIdReactivateRequest extends \ArrayObj
         $this->expirationDate = $expirationDate;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['expirationDate' => ['expiration_date', 'getExpirationDate', 'setExpirationDate']];
     }
 }

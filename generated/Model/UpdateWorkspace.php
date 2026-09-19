@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UpdateWorkspace extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class UpdateWorkspace implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,19 +18,29 @@ class UpdateWorkspace extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     *
      * @var string|null
      */
     protected $name;
     /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     *
      * @var string|null
      */
     protected $externalName;
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function setName(?string $name): self
     {
         $this->initialized['name'] = true;
@@ -35,16 +49,27 @@ class UpdateWorkspace extends \ArrayObject
         return $this;
     }
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function getExternalName(): ?string
     {
         return $this->externalName;
     }
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function setExternalName(?string $externalName): self
     {
         $this->initialized['externalName'] = true;
         $this->externalName = $externalName;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['name' => ['name', 'getName', 'setName'], 'externalName' => ['external_name', 'getExternalName', 'setExternalName']];
     }
 }

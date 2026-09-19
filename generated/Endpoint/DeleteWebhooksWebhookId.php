@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DeleteWebhooksWebhookIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -40,7 +42,7 @@ class DeleteWebhooksWebhookId extends BaseEndpoint implements Endpoint
 
     public function getUri(): string
     {
-        return str_replace(['{webhookId}'], [$this->webhookId], '/webhooks/{webhookId}');
+        return str_replace(['{webhookId}'], [rawurlencode($this->webhookId)], '/webhooks/{webhookId}');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -58,6 +60,7 @@ class DeleteWebhooksWebhookId extends BaseEndpoint implements Endpoint
      * @throws DeleteWebhooksWebhookIdUnauthorizedException
      * @throws DeleteWebhooksWebhookIdForbiddenException
      * @throws DeleteWebhooksWebhookIdNotFoundException
+     * @throws DeleteWebhooksWebhookIdMethodNotAllowedException
      * @throws DeleteWebhooksWebhookIdTooManyRequestsException
      * @throws DeleteWebhooksWebhookIdInternalServerErrorException
      */
@@ -68,22 +71,25 @@ class DeleteWebhooksWebhookId extends BaseEndpoint implements Endpoint
         if (204 === $status) {
             return null;
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWebhooksWebhookIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWebhooksWebhookIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWebhooksWebhookIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWebhooksWebhookIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DeleteWebhooksWebhookIdMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWebhooksWebhookIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DeleteWebhooksWebhookIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 

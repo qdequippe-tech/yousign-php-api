@@ -2,8 +2,13 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateElectronicSealDocument extends \ArrayObject
+use Psr\Http\Message\StreamInterface;
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class CreateElectronicSealDocument implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,28 +19,34 @@ class CreateElectronicSealDocument extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * PDF file.
+     * Binary file. Accepted formats: PDF.
      *
-     * @var string|null
+     * @var string|resource|StreamInterface|null
      */
     protected $file;
     /**
+     * The password required to unlock the document if it is protected.
+     *
      * @var string|null
      */
     protected $password;
 
     /**
-     * PDF file.
+     * Binary file. Accepted formats: PDF.
+     *
+     * @return string|resource|StreamInterface|null
      */
-    public function getFile(): ?string
+    public function getFile()
     {
         return $this->file;
     }
 
     /**
-     * PDF file.
+     * Binary file. Accepted formats: PDF.
+     *
+     * @param string|resource|StreamInterface|null $file
      */
-    public function setFile(?string $file): self
+    public function setFile($file): self
     {
         $this->initialized['file'] = true;
         $this->file = $file;
@@ -43,16 +54,27 @@ class CreateElectronicSealDocument extends \ArrayObject
         return $this;
     }
 
+    /**
+     * The password required to unlock the document if it is protected.
+     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
+    /**
+     * The password required to unlock the document if it is protected.
+     */
     public function setPassword(?string $password): self
     {
         $this->initialized['password'] = true;
         $this->password = $password;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['file' => ['file', 'getFile', 'setFile'], 'password' => ['password', 'getPassword', 'setPassword']];
     }
 }

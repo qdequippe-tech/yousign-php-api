@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class DetailedConsumption extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class DetailedConsumption implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -22,11 +26,16 @@ class DetailedConsumption extends \ArrayObject
      */
     protected $type;
     /**
+     * Specifies the level of the consumed eSignature, eSeal and QES identification attempts: simple, advanced, or qualified.
      * Only set when type is either `invited_signer`, `electronic_seals`, `identification_attempts`.
      *
      * @var string|null
      */
     protected $level;
+    /**
+     * @var string|null
+     */
+    protected $verificationType;
     /**
      * Only set if type is identification_attempts.
      *
@@ -73,6 +82,7 @@ class DetailedConsumption extends \ArrayObject
     }
 
     /**
+     * Specifies the level of the consumed eSignature, eSeal and QES identification attempts: simple, advanced, or qualified.
      * Only set when type is either `invited_signer`, `electronic_seals`, `identification_attempts`.
      */
     public function getLevel(): ?string
@@ -81,12 +91,26 @@ class DetailedConsumption extends \ArrayObject
     }
 
     /**
+     * Specifies the level of the consumed eSignature, eSeal and QES identification attempts: simple, advanced, or qualified.
      * Only set when type is either `invited_signer`, `electronic_seals`, `identification_attempts`.
      */
     public function setLevel(?string $level): self
     {
         $this->initialized['level'] = true;
         $this->level = $level;
+
+        return $this;
+    }
+
+    public function getVerificationType(): ?string
+    {
+        return $this->verificationType;
+    }
+
+    public function setVerificationType(?string $verificationType): self
+    {
+        $this->initialized['verificationType'] = true;
+        $this->verificationType = $verificationType;
 
         return $this;
     }
@@ -146,5 +170,10 @@ class DetailedConsumption extends \ArrayObject
         $this->value = $value;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['source' => ['source', 'getSource', 'setSource'], 'type' => ['type', 'getType', 'setType'], 'level' => ['level', 'getLevel', 'setLevel'], 'verificationType' => ['verification_type', 'getVerificationType', 'setVerificationType'], 'identificationMode' => ['identification_mode', 'getIdentificationMode', 'setIdentificationMode'], 'workspaceId' => ['workspace_id', 'getWorkspaceId', 'setWorkspaceId'], 'value' => ['value', 'getValue', 'setValue']];
     }
 }

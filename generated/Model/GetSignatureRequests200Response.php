@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class GetSignatureRequests200Response extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class GetSignatureRequests200Response implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,28 +18,30 @@ class GetSignatureRequests200Response extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Cursor based pagination.
+     * Pagination metadata for the response.
      *
-     * @var Pagination|null
+     * @var GetSignatureRequests200ResponseMeta|null
      */
     protected $meta;
     /**
+     * List of Signature Requests matching the query.
+     *
      * @var list<SignatureRequestInList>|null
      */
     protected $data;
 
     /**
-     * Cursor based pagination.
+     * Pagination metadata for the response.
      */
-    public function getMeta(): ?Pagination
+    public function getMeta(): ?GetSignatureRequests200ResponseMeta
     {
         return $this->meta;
     }
 
     /**
-     * Cursor based pagination.
+     * Pagination metadata for the response.
      */
-    public function setMeta(?Pagination $meta): self
+    public function setMeta(?GetSignatureRequests200ResponseMeta $meta): self
     {
         $this->initialized['meta'] = true;
         $this->meta = $meta;
@@ -44,6 +50,8 @@ class GetSignatureRequests200Response extends \ArrayObject
     }
 
     /**
+     * List of Signature Requests matching the query.
+     *
      * @return list<SignatureRequestInList>|null
      */
     public function getData(): ?array
@@ -52,6 +60,8 @@ class GetSignatureRequests200Response extends \ArrayObject
     }
 
     /**
+     * List of Signature Requests matching the query.
+     *
      * @param list<SignatureRequestInList>|null $data
      */
     public function setData(?array $data): self
@@ -60,5 +70,10 @@ class GetSignatureRequests200Response extends \ArrayObject
         $this->data = $data;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['meta' => ['meta', 'getMeta', 'setMeta'], 'data' => ['data', 'getData', 'setData']];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class ConsumptionApi extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class ConsumptionApi implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -114,5 +118,10 @@ class ConsumptionApi extends \ArrayObject
         $this->qualifiedElectronicSignatureIdentificationMode = $qualifiedElectronicSignatureIdentificationMode;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['electronicSignature' => ['electronic_signature', 'getElectronicSignature', 'setElectronicSignature'], 'advancedElectronicSignature' => ['advanced_electronic_signature', 'getAdvancedElectronicSignature', 'setAdvancedElectronicSignature'], 'advancedElectronicSignatureWithQualifiedCertificate' => ['advanced_electronic_signature_with_qualified_certificate', 'getAdvancedElectronicSignatureWithQualifiedCertificate', 'setAdvancedElectronicSignatureWithQualifiedCertificate'], 'electronicSeal' => ['electronic_seal', 'getElectronicSeal', 'setElectronicSeal'], 'advancedElectronicSeal' => ['advanced_electronic_seal', 'getAdvancedElectronicSeal', 'setAdvancedElectronicSeal'], 'qualifiedElectronicSignatureIdentificationMode' => ['qualified_electronic_signature_identification_mode', 'getQualifiedElectronicSignatureIdentificationMode', 'setQualifiedElectronicSignatureIdentificationMode']];
     }
 }

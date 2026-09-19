@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class ElectronicSeal extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class ElectronicSeal implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -47,6 +51,12 @@ class ElectronicSeal extends \ArrayObject
      * @var string|null
      */
     protected $signatureLevel;
+    /**
+     * Unique identifier of the Workspace in which this Electronic Seal is scoped.
+     *
+     * @var string|null
+     */
+    protected $workspaceId;
 
     public function getId(): ?string
     {
@@ -156,5 +166,29 @@ class ElectronicSeal extends \ArrayObject
         $this->signatureLevel = $signatureLevel;
 
         return $this;
+    }
+
+    /**
+     * Unique identifier of the Workspace in which this Electronic Seal is scoped.
+     */
+    public function getWorkspaceId(): ?string
+    {
+        return $this->workspaceId;
+    }
+
+    /**
+     * Unique identifier of the Workspace in which this Electronic Seal is scoped.
+     */
+    public function setWorkspaceId(?string $workspaceId): self
+    {
+        $this->initialized['workspaceId'] = true;
+        $this->workspaceId = $workspaceId;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'status' => ['status', 'getStatus', 'setStatus'], 'createdAt' => ['created_at', 'getCreatedAt', 'setCreatedAt'], 'documentId' => ['document_id', 'getDocumentId', 'setDocumentId'], 'timestamp' => ['timestamp', 'getTimestamp', 'setTimestamp'], 'imageId' => ['image_id', 'getImageId', 'setImageId'], 'externalId' => ['external_id', 'getExternalId', 'setExternalId'], 'signatureLevel' => ['signature_level', 'getSignatureLevel', 'setSignatureLevel'], 'workspaceId' => ['workspace_id', 'getWorkspaceId', 'setWorkspaceId']];
     }
 }

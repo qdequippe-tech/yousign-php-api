@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignatureRequestPlaceholderSignerSubstituteFromContactIdInput extends \ArrayObject
+class SignatureRequestPlaceholderSignerSubstituteFromContactIdInput
 {
     /**
      * @var array
@@ -28,15 +28,17 @@ class SignatureRequestPlaceholderSignerSubstituteFromContactIdInput extends \Arr
      */
     protected $signatureLevel = 'electronic_signature';
     /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     *
      * @var string|null
      */
     protected $signatureAuthenticationMode;
     /**
-     * @var FromScratch1RedirectUrls|null
+     * @var SignatureRequestPlaceholderSignerSubstituteFromContactIdInputRedirectUrls|null
      */
     protected $redirectUrls;
     /**
-     * @var SignatureRequestSignerFromInfoInputCustomText|null
+     * @var SignatureRequestPlaceholderSignerSubstituteFromContactIdInputCustomText|null
      */
     protected $customText;
     /**
@@ -91,11 +93,17 @@ class SignatureRequestPlaceholderSignerSubstituteFromContactIdInput extends \Arr
         return $this;
     }
 
+    /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     */
     public function getSignatureAuthenticationMode(): ?string
     {
         return $this->signatureAuthenticationMode;
     }
 
+    /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     */
     public function setSignatureAuthenticationMode(?string $signatureAuthenticationMode): self
     {
         $this->initialized['signatureAuthenticationMode'] = true;
@@ -104,12 +112,12 @@ class SignatureRequestPlaceholderSignerSubstituteFromContactIdInput extends \Arr
         return $this;
     }
 
-    public function getRedirectUrls(): ?FromScratch1RedirectUrls
+    public function getRedirectUrls(): ?SignatureRequestPlaceholderSignerSubstituteFromContactIdInputRedirectUrls
     {
         return $this->redirectUrls;
     }
 
-    public function setRedirectUrls(?FromScratch1RedirectUrls $redirectUrls): self
+    public function setRedirectUrls(?SignatureRequestPlaceholderSignerSubstituteFromContactIdInputRedirectUrls $redirectUrls): self
     {
         $this->initialized['redirectUrls'] = true;
         $this->redirectUrls = $redirectUrls;
@@ -117,12 +125,12 @@ class SignatureRequestPlaceholderSignerSubstituteFromContactIdInput extends \Arr
         return $this;
     }
 
-    public function getCustomText(): ?SignatureRequestSignerFromInfoInputCustomText
+    public function getCustomText(): ?SignatureRequestPlaceholderSignerSubstituteFromContactIdInputCustomText
     {
         return $this->customText;
     }
 
-    public function setCustomText(?SignatureRequestSignerFromInfoInputCustomText $customText): self
+    public function setCustomText(?SignatureRequestPlaceholderSignerSubstituteFromContactIdInputCustomText $customText): self
     {
         $this->initialized['customText'] = true;
         $this->customText = $customText;

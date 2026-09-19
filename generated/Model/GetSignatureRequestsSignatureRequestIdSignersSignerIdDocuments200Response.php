@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,7 +18,7 @@ class GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response 
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Cursor based pagination.
+     * Metadata about the response.
      *
      * @var Pagination|null
      */
@@ -25,7 +29,7 @@ class GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response 
     protected $data;
 
     /**
-     * Cursor based pagination.
+     * Metadata about the response.
      */
     public function getMeta(): ?Pagination
     {
@@ -33,7 +37,7 @@ class GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response 
     }
 
     /**
-     * Cursor based pagination.
+     * Metadata about the response.
      */
     public function setMeta(?Pagination $meta): self
     {
@@ -60,5 +64,10 @@ class GetSignatureRequestsSignatureRequestIdSignersSignerIdDocuments200Response 
         $this->data = $data;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['meta' => ['meta', 'getMeta', 'setMeta'], 'data' => ['data', 'getData', 'setData']];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Mention extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Mention implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -40,12 +44,18 @@ class Mention extends \ArrayObject
      */
     protected $width;
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is not provided, it will be calculated depending on the number of newlines in the mention.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      *
      * @var int|null
      */
     protected $height;
     /**
+     * Content of the Mention.\
+     * You can use dynamic tags when creating the Mention:\
+     * • `%date%` will display the current date when the Signer sign the Signature Request (eg. "24-03-2025")\
+     * • `%datetime%` will display the current date and time when the Signer signs the Signature Request (eg. "24-03-2025 10:30 UTC+0")\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string) allowing email.
+     *
      * @var string|null
      */
     protected $mention;
@@ -55,6 +65,12 @@ class Mention extends \ArrayObject
      * @var CreateFieldFont|null
      */
     protected $font;
+    /**
+     * Name of the Field.
+     *
+     * @var string|null
+     */
+    protected $name;
 
     public function getSignerId(): ?string
     {
@@ -141,7 +157,7 @@ class Mention extends \ArrayObject
     }
 
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is not provided, it will be calculated depending on the number of newlines in the mention.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      */
     public function getHeight(): ?int
     {
@@ -149,7 +165,7 @@ class Mention extends \ArrayObject
     }
 
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is not provided, it will be calculated depending on the number of newlines in the mention.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      */
     public function setHeight(?int $height): self
     {
@@ -159,11 +175,25 @@ class Mention extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Content of the Mention.\
+     * You can use dynamic tags when creating the Mention:\
+     * • `%date%` will display the current date when the Signer sign the Signature Request (eg. "24-03-2025")\
+     * • `%datetime%` will display the current date and time when the Signer signs the Signature Request (eg. "24-03-2025 10:30 UTC+0")\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string) allowing email.
+     */
     public function getMention(): ?string
     {
         return $this->mention;
     }
 
+    /**
+     * Content of the Mention.\
+     * You can use dynamic tags when creating the Mention:\
+     * • `%date%` will display the current date when the Signer sign the Signature Request (eg. "24-03-2025")\
+     * • `%datetime%` will display the current date and time when the Signer signs the Signature Request (eg. "24-03-2025 10:30 UTC+0")\
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string) allowing email.
+     */
     public function setMention(?string $mention): self
     {
         $this->initialized['mention'] = true;
@@ -189,5 +219,29 @@ class Mention extends \ArrayObject
         $this->font = $font;
 
         return $this;
+    }
+
+    /**
+     * Name of the Field.
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Name of the Field.
+     */
+    public function setName(?string $name): self
+    {
+        $this->initialized['name'] = true;
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['signerId' => ['signer_id', 'getSignerId', 'setSignerId'], 'type' => ['type', 'getType', 'setType'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'width' => ['width', 'getWidth', 'setWidth'], 'height' => ['height', 'getHeight', 'setHeight'], 'mention' => ['mention', 'getMention', 'setMention'], 'font' => ['font', 'getFont', 'setFont'], 'name' => ['name', 'getName', 'setName']];
     }
 }

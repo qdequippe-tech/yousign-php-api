@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class ElectronicSealImage extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class ElectronicSealImage implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -25,6 +29,12 @@ class ElectronicSealImage extends \ArrayObject
      * @var \DateTime|null
      */
     protected $createdAt;
+    /**
+     * Unique identifier of the Workspace in which this Electronic Seal Image is scoped.
+     *
+     * @var string|null
+     */
+    protected $workspaceId;
 
     public function getId(): ?string
     {
@@ -63,5 +73,29 @@ class ElectronicSealImage extends \ArrayObject
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    /**
+     * Unique identifier of the Workspace in which this Electronic Seal Image is scoped.
+     */
+    public function getWorkspaceId(): ?string
+    {
+        return $this->workspaceId;
+    }
+
+    /**
+     * Unique identifier of the Workspace in which this Electronic Seal Image is scoped.
+     */
+    public function setWorkspaceId(?string $workspaceId): self
+    {
+        $this->initialized['workspaceId'] = true;
+        $this->workspaceId = $workspaceId;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'name' => ['name', 'getName', 'setName'], 'createdAt' => ['created_at', 'getCreatedAt', 'setCreatedAt'], 'workspaceId' => ['workspace_id', 'getWorkspaceId', 'setWorkspaceId']];
     }
 }

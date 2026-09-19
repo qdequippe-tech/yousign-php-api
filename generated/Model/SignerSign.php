@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignerSign extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class SignerSign implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -18,10 +22,14 @@ class SignerSign extends \ArrayObject
      */
     protected $otp;
     /**
-     * @var mixed|null
+     * Signer's public IP address at the time of signing. Private IP addresses (e.g. 10.x.x.x, 172.16-31.x.x, 192.168.x.x) are not accepted, as a public IP is required to be recorded in the Audit Trail.
+     *
+     * @var string|null
      */
     protected $ipAddress;
     /**
+     * UTC date. Must be in format `2024-01-18T22:00:00+00:00`.
+     *
      * @var \DateTime|null
      */
     protected $consentGivenAt;
@@ -39,11 +47,21 @@ class SignerSign extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Signer's public IP address at the time of signing. Private IP addresses (e.g. 10.x.x.x, 172.16-31.x.x, 192.168.x.x) are not accepted, as a public IP is required to be recorded in the Audit Trail.
+     *
+     * @return string|null
+     */
     public function getIpAddress()
     {
         return $this->ipAddress;
     }
 
+    /**
+     * Signer's public IP address at the time of signing. Private IP addresses (e.g. 10.x.x.x, 172.16-31.x.x, 192.168.x.x) are not accepted, as a public IP is required to be recorded in the Audit Trail.
+     *
+     * @param string|null $ipAddress
+     */
     public function setIpAddress($ipAddress): self
     {
         $this->initialized['ipAddress'] = true;
@@ -52,16 +70,27 @@ class SignerSign extends \ArrayObject
         return $this;
     }
 
+    /**
+     * UTC date. Must be in format `2024-01-18T22:00:00+00:00`.
+     */
     public function getConsentGivenAt(): ?\DateTime
     {
         return $this->consentGivenAt;
     }
 
+    /**
+     * UTC date. Must be in format `2024-01-18T22:00:00+00:00`.
+     */
     public function setConsentGivenAt(?\DateTime $consentGivenAt): self
     {
         $this->initialized['consentGivenAt'] = true;
         $this->consentGivenAt = $consentGivenAt;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['otp' => ['otp', 'getOtp', 'setOtp'], 'ipAddress' => ['ip_address', 'getIpAddress', 'setIpAddress'], 'consentGivenAt' => ['consent_given_at', 'getConsentGivenAt', 'setConsentGivenAt']];
     }
 }

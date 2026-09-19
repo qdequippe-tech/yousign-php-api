@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class FontVariants extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class FontVariants implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -46,5 +50,10 @@ class FontVariants extends \ArrayObject
         $this->bold = $bold;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['italic' => ['italic', 'getItalic', 'setItalic'], 'bold' => ['bold', 'getBold', 'setBold']];
     }
 }

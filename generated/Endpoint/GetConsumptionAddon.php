@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionAddonUnauthorizedException;
@@ -13,6 +14,7 @@ use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\GetConsumptionAddon200Response;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -29,10 +31,9 @@ class GetConsumptionAddon extends BaseEndpoint implements Endpoint
     /**
      * Retrieves detailed addon consumption for the current subscription period.
      *
-     * @param array $queryParameters {
-     *
-     * @var array $addons A list of add-ons to filter the results on.
-     *            }
+     * @param array{
+     *    "addons"?: array, //A list of add-ons to filter the results on.
+     * } $queryParameters
      */
     public function __construct(array $queryParameters = [])
     {
@@ -70,6 +71,11 @@ class GetConsumptionAddon extends BaseEndpoint implements Endpoint
         return $optionsResolver;
     }
 
+    protected function getQueryStyles(): array
+    {
+        return ['addons' => ['style' => 'form', 'explode' => true]];
+    }
+
     /**
      * @return GetConsumptionAddon200Response|null
      *
@@ -77,6 +83,7 @@ class GetConsumptionAddon extends BaseEndpoint implements Endpoint
      * @throws GetConsumptionAddonUnauthorizedException
      * @throws GetConsumptionAddonForbiddenException
      * @throws GetConsumptionAddonNotFoundException
+     * @throws GetConsumptionAddonMethodNotAllowedException
      * @throws GetConsumptionAddonTooManyRequestsException
      * @throws GetConsumptionAddonInternalServerErrorException
      */
@@ -84,29 +91,30 @@ class GetConsumptionAddon extends BaseEndpoint implements Endpoint
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (200 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             return $serializer->deserialize($body, GetConsumptionAddon200Response::class, 'json');
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionAddonBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionAddonUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionAddonForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionAddonNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new GetConsumptionAddonMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionAddonTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionAddonInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
-
-        return null;
     }
 
     public function getAuthenticationScopes(): array

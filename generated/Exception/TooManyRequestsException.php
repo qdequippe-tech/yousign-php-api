@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Exception;
 
-class TooManyRequestsException extends \RuntimeException implements ClientException
+abstract class TooManyRequestsException extends \RuntimeException implements ClientException, WithResponseInterface
 {
     public function __construct(string $message)
     {
