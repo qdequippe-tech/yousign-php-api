@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput extends \ArrayObject
+class SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput
 {
     /**
      * @var array
@@ -14,19 +14,29 @@ class SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput extends \Array
         return \array_key_exists($property, $this->initialized);
     }
     /**
+     * Placeholder label of the read-only text Field to substitute.
+     *
      * @var string|null
      */
     protected $label;
     /**
+     * Text value substituted into the read-only text Field.
+     *
      * @var string|null
      */
     protected $text;
 
+    /**
+     * Placeholder label of the read-only text Field to substitute.
+     */
     public function getLabel(): ?string
     {
         return $this->label;
     }
 
+    /**
+     * Placeholder label of the read-only text Field to substitute.
+     */
     public function setLabel(?string $label): self
     {
         $this->initialized['label'] = true;
@@ -35,11 +45,17 @@ class SignatureRequestPlaceholderReadOnlyTextFieldSubstituteInput extends \Array
         return $this;
     }
 
+    /**
+     * Text value substituted into the read-only text Field.
+     */
     public function getText(): ?string
     {
         return $this->text;
     }
 
+    /**
+     * Text value substituted into the read-only text Field.
+     */
     public function setText(?string $text): self
     {
         $this->initialized['text'] = true;

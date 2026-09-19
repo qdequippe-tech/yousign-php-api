@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateElectronicSealFieldReadOnlyTextPayload extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class CreateElectronicSealFieldReadOnlyTextPayload implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -38,6 +42,8 @@ class CreateElectronicSealFieldReadOnlyTextPayload extends \ArrayObject
      */
     protected $y;
     /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     *
      * @var string|null
      */
     protected $text;
@@ -120,16 +126,27 @@ class CreateElectronicSealFieldReadOnlyTextPayload extends \ArrayObject
         return $this;
     }
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function getText(): ?string
     {
         return $this->text;
     }
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function setText(?string $text): self
     {
         $this->initialized['text'] = true;
         $this->text = $text;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['type' => ['type', 'getType', 'setType'], 'height' => ['height', 'getHeight', 'setHeight'], 'width' => ['width', 'getWidth', 'setWidth'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'text' => ['text', 'getText', 'setText']];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UpdateSigner extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class UpdateSigner implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -18,23 +22,38 @@ class UpdateSigner extends \ArrayObject
      */
     protected $info;
     /**
+     * ID of the recipient this one must follow in an ordered flow; they will only be asked to act after that recipient.
+     * When `custom_recipient_order` is enabled, this can reference any approver or signer.
+     * When `custom_recipient_order` is disabled, the referenced ID must be a signer. `ordered_signers` must be enabled on the Signature Request.
+     *
      * @var string|null
      */
     protected $insertAfterId;
+    /**
+     * ID of another recipient (Approver or Signer); both will be allowed to act in parallel in an ordered flow.
+     * Only available when `custom_recipient_order` is enabled.
+     *
+     * @var string|null
+     */
+    protected $groupWithId;
     /**
      * @var string|null
      */
     protected $signatureLevel = 'electronic_signature';
     /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     * When the Signature Request in `draft` status, updating the authentication mode is available for all Signers, no matter their `signature_level`.\
+     * When the Signature Request is in `approval` or `ongoing` status, updating the authentication mode is only available for Simple Electronic Signature if Signers have an `initiated` or `notified` status.
+     *
      * @var string|null
      */
     protected $signatureAuthenticationMode;
     /**
-     * @var FromScratch1RedirectUrls|null
+     * @var NewSignerFromScratchRedirectUrls|null
      */
     protected $redirectUrls;
     /**
-     * @var FromScratch1CustomText|null
+     * @var NewSignerFromScratchCustomText|null
      */
     protected $customText;
     /**
@@ -51,6 +70,24 @@ class UpdateSigner extends \ArrayObject
      * @var EmailNotification1|null
      */
     protected $emailNotification;
+    /**
+     * Defines the way the Signer's Identity Documents will be uploaded for Verification. If set to `true`, `signature_level`should be equal to `advanced_electronic_signature` and `delivery_mode` set to `none`.
+     *
+     * @var bool|null
+     */
+    protected $preIdentityVerificationRequired;
+    /**
+     * List of Document IDs not visible to this Recipient. When omitted, the Recipient can see all Documents. Only available when the document_visibility feature is enabled on the organization.
+     *
+     * @var list<string>|null
+     */
+    protected $excludedDocuments;
+    /**
+     * Allows you to make Signature Requests unavailable in the contexts specified in this setting.
+     *
+     * @var list<string>|null
+     */
+    protected $disabledSigningContexts = [];
 
     public function getInfo(): ?UpdateSignerInfo
     {
@@ -65,15 +102,46 @@ class UpdateSigner extends \ArrayObject
         return $this;
     }
 
+    /**
+     * ID of the recipient this one must follow in an ordered flow; they will only be asked to act after that recipient.
+     * When `custom_recipient_order` is enabled, this can reference any approver or signer.
+     * When `custom_recipient_order` is disabled, the referenced ID must be a signer. `ordered_signers` must be enabled on the Signature Request.
+     */
     public function getInsertAfterId(): ?string
     {
         return $this->insertAfterId;
     }
 
+    /**
+     * ID of the recipient this one must follow in an ordered flow; they will only be asked to act after that recipient.
+     * When `custom_recipient_order` is enabled, this can reference any approver or signer.
+     * When `custom_recipient_order` is disabled, the referenced ID must be a signer. `ordered_signers` must be enabled on the Signature Request.
+     */
     public function setInsertAfterId(?string $insertAfterId): self
     {
         $this->initialized['insertAfterId'] = true;
         $this->insertAfterId = $insertAfterId;
+
+        return $this;
+    }
+
+    /**
+     * ID of another recipient (Approver or Signer); both will be allowed to act in parallel in an ordered flow.
+     * Only available when `custom_recipient_order` is enabled.
+     */
+    public function getGroupWithId(): ?string
+    {
+        return $this->groupWithId;
+    }
+
+    /**
+     * ID of another recipient (Approver or Signer); both will be allowed to act in parallel in an ordered flow.
+     * Only available when `custom_recipient_order` is enabled.
+     */
+    public function setGroupWithId(?string $groupWithId): self
+    {
+        $this->initialized['groupWithId'] = true;
+        $this->groupWithId = $groupWithId;
 
         return $this;
     }
@@ -91,11 +159,21 @@ class UpdateSigner extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     * When the Signature Request in `draft` status, updating the authentication mode is available for all Signers, no matter their `signature_level`.\
+     * When the Signature Request is in `approval` or `ongoing` status, updating the authentication mode is only available for Simple Electronic Signature if Signers have an `initiated` or `notified` status.
+     */
     public function getSignatureAuthenticationMode(): ?string
     {
         return $this->signatureAuthenticationMode;
     }
 
+    /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     * When the Signature Request in `draft` status, updating the authentication mode is available for all Signers, no matter their `signature_level`.\
+     * When the Signature Request is in `approval` or `ongoing` status, updating the authentication mode is only available for Simple Electronic Signature if Signers have an `initiated` or `notified` status.
+     */
     public function setSignatureAuthenticationMode(?string $signatureAuthenticationMode): self
     {
         $this->initialized['signatureAuthenticationMode'] = true;
@@ -104,12 +182,12 @@ class UpdateSigner extends \ArrayObject
         return $this;
     }
 
-    public function getRedirectUrls(): ?FromScratch1RedirectUrls
+    public function getRedirectUrls(): ?NewSignerFromScratchRedirectUrls
     {
         return $this->redirectUrls;
     }
 
-    public function setRedirectUrls(?FromScratch1RedirectUrls $redirectUrls): self
+    public function setRedirectUrls(?NewSignerFromScratchRedirectUrls $redirectUrls): self
     {
         $this->initialized['redirectUrls'] = true;
         $this->redirectUrls = $redirectUrls;
@@ -117,12 +195,12 @@ class UpdateSigner extends \ArrayObject
         return $this;
     }
 
-    public function getCustomText(): ?FromScratch1CustomText
+    public function getCustomText(): ?NewSignerFromScratchCustomText
     {
         return $this->customText;
     }
 
-    public function setCustomText(?FromScratch1CustomText $customText): self
+    public function setCustomText(?NewSignerFromScratchCustomText $customText): self
     {
         $this->initialized['customText'] = true;
         $this->customText = $customText;
@@ -173,5 +251,75 @@ class UpdateSigner extends \ArrayObject
         $this->emailNotification = $emailNotification;
 
         return $this;
+    }
+
+    /**
+     * Defines the way the Signer's Identity Documents will be uploaded for Verification. If set to `true`, `signature_level`should be equal to `advanced_electronic_signature` and `delivery_mode` set to `none`.
+     */
+    public function getPreIdentityVerificationRequired(): ?bool
+    {
+        return $this->preIdentityVerificationRequired;
+    }
+
+    /**
+     * Defines the way the Signer's Identity Documents will be uploaded for Verification. If set to `true`, `signature_level`should be equal to `advanced_electronic_signature` and `delivery_mode` set to `none`.
+     */
+    public function setPreIdentityVerificationRequired(?bool $preIdentityVerificationRequired): self
+    {
+        $this->initialized['preIdentityVerificationRequired'] = true;
+        $this->preIdentityVerificationRequired = $preIdentityVerificationRequired;
+
+        return $this;
+    }
+
+    /**
+     * List of Document IDs not visible to this Recipient. When omitted, the Recipient can see all Documents. Only available when the document_visibility feature is enabled on the organization.
+     *
+     * @return list<string>|null
+     */
+    public function getExcludedDocuments(): ?array
+    {
+        return $this->excludedDocuments;
+    }
+
+    /**
+     * List of Document IDs not visible to this Recipient. When omitted, the Recipient can see all Documents. Only available when the document_visibility feature is enabled on the organization.
+     *
+     * @param list<string>|null $excludedDocuments
+     */
+    public function setExcludedDocuments(?array $excludedDocuments): self
+    {
+        $this->initialized['excludedDocuments'] = true;
+        $this->excludedDocuments = $excludedDocuments;
+
+        return $this;
+    }
+
+    /**
+     * Allows you to make Signature Requests unavailable in the contexts specified in this setting.
+     *
+     * @return list<string>|null
+     */
+    public function getDisabledSigningContexts(): ?array
+    {
+        return $this->disabledSigningContexts;
+    }
+
+    /**
+     * Allows you to make Signature Requests unavailable in the contexts specified in this setting.
+     *
+     * @param list<string>|null $disabledSigningContexts
+     */
+    public function setDisabledSigningContexts(?array $disabledSigningContexts): self
+    {
+        $this->initialized['disabledSigningContexts'] = true;
+        $this->disabledSigningContexts = $disabledSigningContexts;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['info' => ['info', 'getInfo', 'setInfo'], 'insertAfterId' => ['insert_after_id', 'getInsertAfterId', 'setInsertAfterId'], 'groupWithId' => ['group_with_id', 'getGroupWithId', 'setGroupWithId'], 'signatureLevel' => ['signature_level', 'getSignatureLevel', 'setSignatureLevel'], 'signatureAuthenticationMode' => ['signature_authentication_mode', 'getSignatureAuthenticationMode', 'setSignatureAuthenticationMode'], 'redirectUrls' => ['redirect_urls', 'getRedirectUrls', 'setRedirectUrls'], 'customText' => ['custom_text', 'getCustomText', 'setCustomText'], 'deliveryMode' => ['delivery_mode', 'getDeliveryMode', 'setDeliveryMode'], 'identificationAttestationId' => ['identification_attestation_id', 'getIdentificationAttestationId', 'setIdentificationAttestationId'], 'emailNotification' => ['email_notification', 'getEmailNotification', 'setEmailNotification'], 'preIdentityVerificationRequired' => ['pre_identity_verification_required', 'getPreIdentityVerificationRequired', 'setPreIdentityVerificationRequired'], 'excludedDocuments' => ['excluded_documents', 'getExcludedDocuments', 'setExcludedDocuments'], 'disabledSigningContexts' => ['disabled_signing_contexts', 'getDisabledSigningContexts', 'setDisabledSigningContexts']];
     }
 }

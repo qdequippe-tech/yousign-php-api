@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UpdateCustomExperience extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class UpdateCustomExperience implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,6 +18,8 @@ class UpdateCustomExperience extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     *
      * @var string|null
      */
     protected $name;
@@ -70,15 +76,59 @@ class UpdateCustomExperience extends \ArrayObject
      */
     protected $emailExpirationTextDisabled;
     /**
+     * @var bool|null
+     */
+    protected $recipientsActivityDisabled;
+    /**
+     * If true, signers won't be able to download documents before signing.
+     *
+     * @var bool|null
+     */
+    protected $downloadDocumentsDisabled;
+    /**
+     * If true and the request contains more than 1 document, signers must read each document before moving to the next.
+     *
+     * @var bool|null
+     */
+    protected $documentNavigationDisabled = false;
+    /**
      * @var UpdateCustomExperienceRedirectUrls|null
      */
     protected $redirectUrls;
+    /**
+     * Navigation bar of the Embedded Preparation page.
+     * An explicit `null` hides the whole navigation bar and both button settings are then ignored.
+     * When omitted, the current value is kept.
+     *
+     * @var UpdateCustomExperienceEmbeddedPreparationNavigationBar|null
+     */
+    protected $embeddedPreparationNavigationBar;
+    /**
+     * Determines the display layout of the logo. Possible values are:
+     * - `round`: Displays the logo in a circular format.
+     * - `original`: Displays the logo in its original shape.
+     *
+     * @var string|null
+     */
+    protected $logoLayout;
+    /**
+     * If set, scopes the Custom Experience to a single Workspace. If null, the Custom Experience is Organization-wide. When omitted, the current value is kept.
+     *
+     * @var string|null
+     */
+    protected $workspaceId;
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function setName(?string $name): self
     {
         $this->initialized['name'] = true;
@@ -260,6 +310,57 @@ class UpdateCustomExperience extends \ArrayObject
         return $this;
     }
 
+    public function getRecipientsActivityDisabled(): ?bool
+    {
+        return $this->recipientsActivityDisabled;
+    }
+
+    public function setRecipientsActivityDisabled(?bool $recipientsActivityDisabled): self
+    {
+        $this->initialized['recipientsActivityDisabled'] = true;
+        $this->recipientsActivityDisabled = $recipientsActivityDisabled;
+
+        return $this;
+    }
+
+    /**
+     * If true, signers won't be able to download documents before signing.
+     */
+    public function getDownloadDocumentsDisabled(): ?bool
+    {
+        return $this->downloadDocumentsDisabled;
+    }
+
+    /**
+     * If true, signers won't be able to download documents before signing.
+     */
+    public function setDownloadDocumentsDisabled(?bool $downloadDocumentsDisabled): self
+    {
+        $this->initialized['downloadDocumentsDisabled'] = true;
+        $this->downloadDocumentsDisabled = $downloadDocumentsDisabled;
+
+        return $this;
+    }
+
+    /**
+     * If true and the request contains more than 1 document, signers must read each document before moving to the next.
+     */
+    public function getDocumentNavigationDisabled(): ?bool
+    {
+        return $this->documentNavigationDisabled;
+    }
+
+    /**
+     * If true and the request contains more than 1 document, signers must read each document before moving to the next.
+     */
+    public function setDocumentNavigationDisabled(?bool $documentNavigationDisabled): self
+    {
+        $this->initialized['documentNavigationDisabled'] = true;
+        $this->documentNavigationDisabled = $documentNavigationDisabled;
+
+        return $this;
+    }
+
     public function getRedirectUrls(): ?UpdateCustomExperienceRedirectUrls
     {
         return $this->redirectUrls;
@@ -271,5 +372,75 @@ class UpdateCustomExperience extends \ArrayObject
         $this->redirectUrls = $redirectUrls;
 
         return $this;
+    }
+
+    /**
+     * Navigation bar of the Embedded Preparation page.
+     * An explicit `null` hides the whole navigation bar and both button settings are then ignored.
+     * When omitted, the current value is kept.
+     */
+    public function getEmbeddedPreparationNavigationBar(): ?UpdateCustomExperienceEmbeddedPreparationNavigationBar
+    {
+        return $this->embeddedPreparationNavigationBar;
+    }
+
+    /**
+     * Navigation bar of the Embedded Preparation page.
+     * An explicit `null` hides the whole navigation bar and both button settings are then ignored.
+     * When omitted, the current value is kept.
+     */
+    public function setEmbeddedPreparationNavigationBar(?UpdateCustomExperienceEmbeddedPreparationNavigationBar $embeddedPreparationNavigationBar): self
+    {
+        $this->initialized['embeddedPreparationNavigationBar'] = true;
+        $this->embeddedPreparationNavigationBar = $embeddedPreparationNavigationBar;
+
+        return $this;
+    }
+
+    /**
+     * Determines the display layout of the logo. Possible values are:
+     * - `round`: Displays the logo in a circular format.
+     * - `original`: Displays the logo in its original shape.
+     */
+    public function getLogoLayout(): ?string
+    {
+        return $this->logoLayout;
+    }
+
+    /**
+     * Determines the display layout of the logo. Possible values are:
+     * - `round`: Displays the logo in a circular format.
+     * - `original`: Displays the logo in its original shape.
+     */
+    public function setLogoLayout(?string $logoLayout): self
+    {
+        $this->initialized['logoLayout'] = true;
+        $this->logoLayout = $logoLayout;
+
+        return $this;
+    }
+
+    /**
+     * If set, scopes the Custom Experience to a single Workspace. If null, the Custom Experience is Organization-wide. When omitted, the current value is kept.
+     */
+    public function getWorkspaceId(): ?string
+    {
+        return $this->workspaceId;
+    }
+
+    /**
+     * If set, scopes the Custom Experience to a single Workspace. If null, the Custom Experience is Organization-wide. When omitted, the current value is kept.
+     */
+    public function setWorkspaceId(?string $workspaceId): self
+    {
+        $this->initialized['workspaceId'] = true;
+        $this->workspaceId = $workspaceId;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['name' => ['name', 'getName', 'setName'], 'landingPageDisabled' => ['landing_page_disabled', 'getLandingPageDisabled', 'setLandingPageDisabled'], 'sidePanelDisabled' => ['side_panel_disabled', 'getSidePanelDisabled', 'setSidePanelDisabled'], 'backgroundColor' => ['background_color', 'getBackgroundColor', 'setBackgroundColor'], 'buttonColor' => ['button_color', 'getButtonColor', 'setButtonColor'], 'textColor' => ['text_color', 'getTextColor', 'setTextColor'], 'textButtonColor' => ['text_button_color', 'getTextButtonColor', 'setTextButtonColor'], 'disabledNotifications' => ['disabled_notifications', 'getDisabledNotifications', 'setDisabledNotifications'], 'emailLogoDisabled' => ['email_logo_disabled', 'getEmailLogoDisabled', 'setEmailLogoDisabled'], 'emailHeaderTextDisabled' => ['email_header_text_disabled', 'getEmailHeaderTextDisabled', 'setEmailHeaderTextDisabled'], 'emailFooterSignatureDisabled' => ['email_footer_signature_disabled', 'getEmailFooterSignatureDisabled', 'setEmailFooterSignatureDisabled'], 'emailExpirationTextDisabled' => ['email_expiration_text_disabled', 'getEmailExpirationTextDisabled', 'setEmailExpirationTextDisabled'], 'recipientsActivityDisabled' => ['recipients_activity_disabled', 'getRecipientsActivityDisabled', 'setRecipientsActivityDisabled'], 'downloadDocumentsDisabled' => ['download_documents_disabled', 'getDownloadDocumentsDisabled', 'setDownloadDocumentsDisabled'], 'documentNavigationDisabled' => ['document_navigation_disabled', 'getDocumentNavigationDisabled', 'setDocumentNavigationDisabled'], 'redirectUrls' => ['redirect_urls', 'getRedirectUrls', 'setRedirectUrls'], 'embeddedPreparationNavigationBar' => ['embedded_preparation_navigation_bar', 'getEmbeddedPreparationNavigationBar', 'setEmbeddedPreparationNavigationBar'], 'logoLayout' => ['logo_layout', 'getLogoLayout', 'setLogoLayout'], 'workspaceId' => ['workspace_id', 'getWorkspaceId', 'setWorkspaceId']];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class RadioGroup extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class RadioGroup implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -35,6 +39,12 @@ class RadioGroup extends \ArrayObject
      * @var string|null
      */
     protected $name;
+    /**
+     * If set to `true`, the radio button cannot be modified by the Signer.
+     *
+     * @var bool|null
+     */
+    protected $readOnly = false;
     /**
      * @var list<RadioGroupRadiosInner>|null
      */
@@ -112,6 +122,25 @@ class RadioGroup extends \ArrayObject
     }
 
     /**
+     * If set to `true`, the radio button cannot be modified by the Signer.
+     */
+    public function getReadOnly(): ?bool
+    {
+        return $this->readOnly;
+    }
+
+    /**
+     * If set to `true`, the radio button cannot be modified by the Signer.
+     */
+    public function setReadOnly(?bool $readOnly): self
+    {
+        $this->initialized['readOnly'] = true;
+        $this->readOnly = $readOnly;
+
+        return $this;
+    }
+
+    /**
      * @return list<RadioGroupRadiosInner>|null
      */
     public function getRadios(): ?array
@@ -128,5 +157,10 @@ class RadioGroup extends \ArrayObject
         $this->radios = $radios;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['signerId' => ['signer_id', 'getSignerId', 'setSignerId'], 'type' => ['type', 'getType', 'setType'], 'page' => ['page', 'getPage', 'setPage'], 'optional' => ['optional', 'getOptional', 'setOptional'], 'name' => ['name', 'getName', 'setName'], 'readOnly' => ['read_only', 'getReadOnly', 'setReadOnly'], 'radios' => ['radios', 'getRadios', 'setRadios']];
     }
 }

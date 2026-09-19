@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateWorkspace extends \ArrayObject
+class CreateWorkspace
 {
     /**
      * @var array
@@ -14,19 +14,29 @@ class CreateWorkspace extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     *
      * @var string|null
      */
     protected $name;
     /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     *
      * @var string|null
      */
     protected $externalName;
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function setName(?string $name): self
     {
         $this->initialized['name'] = true;
@@ -35,11 +45,17 @@ class CreateWorkspace extends \ArrayObject
         return $this;
     }
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function getExternalName(): ?string
     {
         return $this->externalName;
     }
 
+    /**
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
+     */
     public function setExternalName(?string $externalName): self
     {
         $this->initialized['externalName'] = true;

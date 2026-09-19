@@ -5,11 +5,13 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDownloadUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -27,12 +29,10 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDownload extends BaseEndpoi
      * Downloads the PDF version of all Documents attached to a given Signature Request.
      *
      * @param string $signatureRequestId Signature Request Id
-     * @param array  $queryParameters    {
-     *
-     * @var string $version specify Documents version to download, `completed` is only available when the Signature Request status is `done`
-     * @var bool   $archive Force zip archive download
-     *             }
-     *
+     * @param array{
+     *    "version"?: string, //Specify Documents version to download, `completed` is only available when the Signature Request status is `done`.
+     *    "archive"?: bool, //Force zip archive download
+     * } $queryParameters
      * @param array $accept Accept content header application/zip, application/pdf|application/json
      */
     public function __construct(protected string $signatureRequestId, array $queryParameters = [], protected array $accept = [])
@@ -47,7 +47,7 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDownload extends BaseEndpoi
 
     public function getUri(): string
     {
-        return str_replace(['{signatureRequestId}'], [$this->signatureRequestId], '/signature_requests/{signatureRequestId}/documents/download');
+        return str_replace(['{signatureRequestId}'], [rawurlencode($this->signatureRequestId)], '/signature_requests/{signatureRequestId}/documents/download');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -80,26 +80,30 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDownload extends BaseEndpoi
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDownloadBadRequestException
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDownloadUnauthorizedException
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDownloadNotFoundException
+     * @throws GetSignatureRequestsSignatureRequestIdDocumentsDownloadMethodNotAllowedException
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDownloadTooManyRequestsException
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDownloadInternalServerErrorException
      */
-    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null): void
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDownloadBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDownloadUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDownloadNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new GetSignatureRequestsSignatureRequestIdDocumentsDownloadMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDownloadTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDownloadInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
     }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerification implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -21,6 +25,10 @@ class ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerifi
      * @var int|null
      */
     protected $rejected;
+    /**
+     * @var int|null
+     */
+    protected $expiredAfterSucceeded;
 
     public function getSucceeded(): ?int
     {
@@ -46,5 +54,23 @@ class ConsumptionAppQualifiedElectronicSignatureIdentificationModeIdentityVerifi
         $this->rejected = $rejected;
 
         return $this;
+    }
+
+    public function getExpiredAfterSucceeded(): ?int
+    {
+        return $this->expiredAfterSucceeded;
+    }
+
+    public function setExpiredAfterSucceeded(?int $expiredAfterSucceeded): self
+    {
+        $this->initialized['expiredAfterSucceeded'] = true;
+        $this->expiredAfterSucceeded = $expiredAfterSucceeded;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['succeeded' => ['succeeded', 'getSucceeded', 'setSucceeded'], 'rejected' => ['rejected', 'getRejected', 'setRejected'], 'expiredAfterSucceeded' => ['expired_after_succeeded', 'getExpiredAfterSucceeded', 'setExpiredAfterSucceeded']];
     }
 }

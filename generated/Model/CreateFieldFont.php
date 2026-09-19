@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateFieldFont extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class CreateFieldFont implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -80,5 +84,10 @@ class CreateFieldFont extends \ArrayObject
         $this->variants = $variants;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['family' => ['family', 'getFamily', 'setFamily'], 'color' => ['color', 'getColor', 'setColor'], 'size' => ['size', 'getSize', 'setSize'], 'variants' => ['variants', 'getVariants', 'setVariants']];
     }
 }

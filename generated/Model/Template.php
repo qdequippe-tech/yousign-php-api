@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Template extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Template implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -114,5 +118,10 @@ class Template extends \ArrayObject
         $this->workspaceId = $workspaceId;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'name' => ['name', 'getName', 'setName'], 'description' => ['description', 'getDescription', 'setDescription'], 'status' => ['status', 'getStatus', 'setStatus'], 'createdAt' => ['created_at', 'getCreatedAt', 'setCreatedAt'], 'workspaceId' => ['workspace_id', 'getWorkspaceId', 'setWorkspaceId']];
     }
 }

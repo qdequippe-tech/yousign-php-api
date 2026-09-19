@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Text1 extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Text1 implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -36,7 +40,7 @@ class Text1 extends \ArrayObject
      */
     protected $width;
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is provided, max_length must be less than or equal to the maximum number of characters based on the width and height of the text field.
+     * The height must be 24 or a multiple of 15 greater than 24.
      *
      * @var int|null
      */
@@ -46,6 +50,8 @@ class Text1 extends \ArrayObject
      */
     protected $maxLength;
     /**
+     * If you don't want any question, you can give an empty string.
+     *
      * @var string|null
      */
     protected $question;
@@ -63,6 +69,24 @@ class Text1 extends \ArrayObject
      * @var UpdateFieldFont|null
      */
     protected $font;
+    /**
+     * Name of the Field.
+     *
+     * @var string|null
+     */
+    protected $name;
+    /**
+     * If a default value is provided, the Field will be pre-filled with this value. The Signer can modify it before signing unless the Field is set to `read-only`.
+     *
+     * @var string|null
+     */
+    protected $defaultValue;
+    /**
+     * If set to `true`, the Signer cannot modify the Field and the default value (if provided) will remain unchanged.
+     *
+     * @var bool|null
+     */
+    protected $readOnly = false;
 
     public function getSignerId(): ?string
     {
@@ -136,7 +160,7 @@ class Text1 extends \ArrayObject
     }
 
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is provided, max_length must be less than or equal to the maximum number of characters based on the width and height of the text field.
+     * The height must be 24 or a multiple of 15 greater than 24.
      */
     public function getHeight(): ?int
     {
@@ -144,7 +168,7 @@ class Text1 extends \ArrayObject
     }
 
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is provided, max_length must be less than or equal to the maximum number of characters based on the width and height of the text field.
+     * The height must be 24 or a multiple of 15 greater than 24.
      */
     public function setHeight(?int $height): self
     {
@@ -167,11 +191,17 @@ class Text1 extends \ArrayObject
         return $this;
     }
 
+    /**
+     * If you don't want any question, you can give an empty string.
+     */
     public function getQuestion(): ?string
     {
         return $this->question;
     }
 
+    /**
+     * If you don't want any question, you can give an empty string.
+     */
     public function setQuestion(?string $question): self
     {
         $this->initialized['question'] = true;
@@ -223,5 +253,67 @@ class Text1 extends \ArrayObject
         $this->font = $font;
 
         return $this;
+    }
+
+    /**
+     * Name of the Field.
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Name of the Field.
+     */
+    public function setName(?string $name): self
+    {
+        $this->initialized['name'] = true;
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * If a default value is provided, the Field will be pre-filled with this value. The Signer can modify it before signing unless the Field is set to `read-only`.
+     */
+    public function getDefaultValue(): ?string
+    {
+        return $this->defaultValue;
+    }
+
+    /**
+     * If a default value is provided, the Field will be pre-filled with this value. The Signer can modify it before signing unless the Field is set to `read-only`.
+     */
+    public function setDefaultValue(?string $defaultValue): self
+    {
+        $this->initialized['defaultValue'] = true;
+        $this->defaultValue = $defaultValue;
+
+        return $this;
+    }
+
+    /**
+     * If set to `true`, the Signer cannot modify the Field and the default value (if provided) will remain unchanged.
+     */
+    public function getReadOnly(): ?bool
+    {
+        return $this->readOnly;
+    }
+
+    /**
+     * If set to `true`, the Signer cannot modify the Field and the default value (if provided) will remain unchanged.
+     */
+    public function setReadOnly(?bool $readOnly): self
+    {
+        $this->initialized['readOnly'] = true;
+        $this->readOnly = $readOnly;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['signerId' => ['signer_id', 'getSignerId', 'setSignerId'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'width' => ['width', 'getWidth', 'setWidth'], 'height' => ['height', 'getHeight', 'setHeight'], 'maxLength' => ['max_length', 'getMaxLength', 'setMaxLength'], 'question' => ['question', 'getQuestion', 'setQuestion'], 'instruction' => ['instruction', 'getInstruction', 'setInstruction'], 'optional' => ['optional', 'getOptional', 'setOptional'], 'font' => ['font', 'getFont', 'setFont'], 'name' => ['name', 'getName', 'setName'], 'defaultValue' => ['default_value', 'getDefaultValue', 'setDefaultValue'], 'readOnly' => ['read_only', 'getReadOnly', 'setReadOnly']];
     }
 }

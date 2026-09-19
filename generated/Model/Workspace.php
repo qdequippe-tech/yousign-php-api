@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Workspace extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Workspace implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -154,5 +158,10 @@ class Workspace extends \ArrayObject
         $this->users = $users;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'name' => ['name', 'getName', 'setName'], 'externalName' => ['external_name', 'getExternalName', 'setExternalName'], 'default' => ['default', 'getDefault', 'setDefault'], 'createdAt' => ['created_at', 'getCreatedAt', 'setCreatedAt'], 'updatedAt' => ['updated_at', 'getUpdatedAt', 'setUpdatedAt'], 'deletedAt' => ['deleted_at', 'getDeletedAt', 'setDeletedAt'], 'users' => ['users', 'getUsers', 'setUsers']];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignerInfo extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class SignerInfo implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -113,5 +117,10 @@ class SignerInfo extends \ArrayObject
         $this->locale = $locale;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['firstName' => ['first_name', 'getFirstName', 'setFirstName'], 'lastName' => ['last_name', 'getLastName', 'setLastName'], 'email' => ['email', 'getEmail', 'setEmail'], 'phoneNumber' => ['phone_number', 'getPhoneNumber', 'setPhoneNumber'], 'locale' => ['locale', 'getLocale', 'setLocale']];
     }
 }

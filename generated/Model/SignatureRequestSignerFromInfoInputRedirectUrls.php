@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignatureRequestSignerFromInfoInputRedirectUrls extends \ArrayObject
+class SignatureRequestSignerFromInfoInputRedirectUrls
 {
     /**
      * @var array
@@ -14,19 +14,29 @@ class SignatureRequestSignerFromInfoInputRedirectUrls extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
+     * URL the Signer is redirected to after a successful signature.
+     *
      * @var string|null
      */
     protected $success;
     /**
+     * URL the Signer is redirected to after a signature error.
+     *
      * @var string|null
      */
     protected $error;
 
+    /**
+     * URL the Signer is redirected to after a successful signature.
+     */
     public function getSuccess(): ?string
     {
         return $this->success;
     }
 
+    /**
+     * URL the Signer is redirected to after a successful signature.
+     */
     public function setSuccess(?string $success): self
     {
         $this->initialized['success'] = true;
@@ -35,11 +45,17 @@ class SignatureRequestSignerFromInfoInputRedirectUrls extends \ArrayObject
         return $this;
     }
 
+    /**
+     * URL the Signer is redirected to after a signature error.
+     */
     public function getError(): ?string
     {
         return $this->error;
     }
 
+    /**
+     * URL the Signer is redirected to after a signature error.
+     */
     public function setError(?string $error): self
     {
         $this->initialized['error'] = true;

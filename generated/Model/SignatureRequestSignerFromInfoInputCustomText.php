@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignatureRequestSignerFromInfoInputCustomText extends \ArrayObject
+class SignatureRequestSignerFromInfoInputCustomText
 {
     /**
      * @var array
@@ -14,27 +14,41 @@ class SignatureRequestSignerFromInfoInputCustomText extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
+     * Custom subject of the signature request email.
+     *
      * @var string|null
      */
     protected $requestSubject;
     /**
+     * Custom body of the signature request email.
+     *
      * @var string|null
      */
     protected $requestBody;
     /**
+     * Custom subject of reminder emails.
+     *
      * @var string|null
      */
     protected $reminderSubject;
     /**
+     * Custom body of reminder emails.
+     *
      * @var string|null
      */
     protected $reminderBody;
 
+    /**
+     * Custom subject of the signature request email.
+     */
     public function getRequestSubject(): ?string
     {
         return $this->requestSubject;
     }
 
+    /**
+     * Custom subject of the signature request email.
+     */
     public function setRequestSubject(?string $requestSubject): self
     {
         $this->initialized['requestSubject'] = true;
@@ -43,11 +57,17 @@ class SignatureRequestSignerFromInfoInputCustomText extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Custom body of the signature request email.
+     */
     public function getRequestBody(): ?string
     {
         return $this->requestBody;
     }
 
+    /**
+     * Custom body of the signature request email.
+     */
     public function setRequestBody(?string $requestBody): self
     {
         $this->initialized['requestBody'] = true;
@@ -56,11 +76,17 @@ class SignatureRequestSignerFromInfoInputCustomText extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Custom subject of reminder emails.
+     */
     public function getReminderSubject(): ?string
     {
         return $this->reminderSubject;
     }
 
+    /**
+     * Custom subject of reminder emails.
+     */
     public function setReminderSubject(?string $reminderSubject): self
     {
         $this->initialized['reminderSubject'] = true;
@@ -69,11 +95,17 @@ class SignatureRequestSignerFromInfoInputCustomText extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Custom body of reminder emails.
+     */
     public function getReminderBody(): ?string
     {
         return $this->reminderBody;
     }
 
+    /**
+     * Custom body of reminder emails.
+     */
     public function setReminderBody(?string $reminderBody): self
     {
         $this->initialized['reminderBody'] = true;

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class User extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class User implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -56,6 +60,10 @@ class User extends \ArrayObject
      */
     protected $createdAt;
     /**
+     * The role the User holds in the Organization.
+     *
+     * `workspace_admin` is part of an unreleased feature. It cannot be assigned through the API, and its name, type and behavior may change before release. Do not use it.
+     *
      * @var string|null
      */
     protected $role;
@@ -210,11 +218,21 @@ class User extends \ArrayObject
         return $this;
     }
 
+    /**
+     * The role the User holds in the Organization.
+     *
+     * `workspace_admin` is part of an unreleased feature. It cannot be assigned through the API, and its name, type and behavior may change before release. Do not use it.
+     */
     public function getRole(): ?string
     {
         return $this->role;
     }
 
+    /**
+     * The role the User holds in the Organization.
+     *
+     * `workspace_admin` is part of an unreleased feature. It cannot be assigned through the API, and its name, type and behavior may change before release. Do not use it.
+     */
     public function setRole(?string $role): self
     {
         $this->initialized['role'] = true;
@@ -272,5 +290,10 @@ class User extends \ArrayObject
         $this->source = $source;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'firstName' => ['first_name', 'getFirstName', 'setFirstName'], 'lastName' => ['last_name', 'getLastName', 'setLastName'], 'email' => ['email', 'getEmail', 'setEmail'], 'phoneNumber' => ['phone_number', 'getPhoneNumber', 'setPhoneNumber'], 'locale' => ['locale', 'getLocale', 'setLocale'], 'avatar' => ['avatar', 'getAvatar', 'setAvatar'], 'jobTitle' => ['job_title', 'getJobTitle', 'setJobTitle'], 'isActive' => ['is_active', 'getIsActive', 'setIsActive'], 'createdAt' => ['created_at', 'getCreatedAt', 'setCreatedAt'], 'role' => ['role', 'getRole', 'setRole'], 'workspaces' => ['workspaces', 'getWorkspaces', 'setWorkspaces'], 'status' => ['status', 'getStatus', 'setStatus'], 'source' => ['source', 'getSource', 'setSource']];
     }
 }

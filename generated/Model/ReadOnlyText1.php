@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class ReadOnlyText1 extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class ReadOnlyText1 implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -155,5 +159,10 @@ class ReadOnlyText1 extends \ArrayObject
         $this->font = $font;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'width' => ['width', 'getWidth', 'setWidth'], 'height' => ['height', 'getHeight', 'setHeight'], 'text' => ['text', 'getText', 'setText'], 'font' => ['font', 'getFont', 'setFont']];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class DocumentInitials extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class DocumentInitials implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,20 +18,24 @@ class DocumentInitials extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Initials alignment on the document.
+     * Alignment of the initials on the document’s pages.
      *
      * @var string|null
      */
     protected $alignment;
     /**
-     *  y-axis position on the document.
+     * Y-axis position of the initials on the first page of the document.
      *
      * @var int|null
      */
     protected $y;
+    /**
+     * @var list<DocumentInitialsPerPageInner>|null
+     */
+    protected $perPage;
 
     /**
-     * Initials alignment on the document.
+     * Alignment of the initials on the document’s pages.
      */
     public function getAlignment(): ?string
     {
@@ -35,7 +43,7 @@ class DocumentInitials extends \ArrayObject
     }
 
     /**
-     * Initials alignment on the document.
+     * Alignment of the initials on the document’s pages.
      */
     public function setAlignment(?string $alignment): self
     {
@@ -46,7 +54,7 @@ class DocumentInitials extends \ArrayObject
     }
 
     /**
-     *  y-axis position on the document.
+     * Y-axis position of the initials on the first page of the document.
      */
     public function getY(): ?int
     {
@@ -54,7 +62,7 @@ class DocumentInitials extends \ArrayObject
     }
 
     /**
-     *  y-axis position on the document.
+     * Y-axis position of the initials on the first page of the document.
      */
     public function setY(?int $y): self
     {
@@ -62,5 +70,29 @@ class DocumentInitials extends \ArrayObject
         $this->y = $y;
 
         return $this;
+    }
+
+    /**
+     * @return list<DocumentInitialsPerPageInner>|null
+     */
+    public function getPerPage(): ?array
+    {
+        return $this->perPage;
+    }
+
+    /**
+     * @param list<DocumentInitialsPerPageInner>|null $perPage
+     */
+    public function setPerPage(?array $perPage): self
+    {
+        $this->initialized['perPage'] = true;
+        $this->perPage = $perPage;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['alignment' => ['alignment', 'getAlignment', 'setAlignment'], 'y' => ['y', 'getY', 'setY'], 'perPage' => ['per_page', 'getPerPage', 'setPerPage']];
     }
 }

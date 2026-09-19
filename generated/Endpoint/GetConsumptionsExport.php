@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetConsumptionsExportUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -28,13 +30,11 @@ class GetConsumptionsExport extends BaseEndpoint implements Endpoint
     /**
      * Get a binary .csv file containing all the Consumption data of the underlying signatures.
      *
-     * @param array $queryParameters {
-     *
-     * @var string $from The "from" date must not be more than 1 year in the past
-     * @var string $to The "to" date must be more recent than the "from" date
-     * @var string $authentication_key The API authentication key to use to retrieve the data
-     *             }
-     *
+     * @param array{
+     *    "from": string, //The "from" date must not be more than 1 year in the past
+     *    "to": string, //The "to" date must be more recent than the "from" date
+     *    "authentication_key"?: string, //The API authentication key to use to retrieve the data
+     * } $queryParameters
      * @param array $accept Accept content header text/csv|application/json
      */
     public function __construct(array $queryParameters = [], protected array $accept = [])
@@ -84,29 +84,33 @@ class GetConsumptionsExport extends BaseEndpoint implements Endpoint
      * @throws GetConsumptionsExportUnauthorizedException
      * @throws GetConsumptionsExportForbiddenException
      * @throws GetConsumptionsExportNotFoundException
+     * @throws GetConsumptionsExportMethodNotAllowedException
      * @throws GetConsumptionsExportTooManyRequestsException
      * @throws GetConsumptionsExportInternalServerErrorException
      */
-    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null): void
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionsExportBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionsExportUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionsExportForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionsExportNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new GetConsumptionsExportMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionsExportTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetConsumptionsExportInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
     }

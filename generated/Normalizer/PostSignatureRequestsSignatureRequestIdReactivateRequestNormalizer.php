@@ -5,8 +5,8 @@ namespace Qdequippe\Yousign\Api\Normalizer;
 use Jane\Component\JsonSchemaRuntime\Reference;
 use Qdequippe\Yousign\Api\Model\PostSignatureRequestsSignatureRequestIdReactivateRequest;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
+use Qdequippe\Yousign\Api\Runtime\Normalizer\InvalidDateException;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -14,136 +14,70 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR_VERSION === 6 && Kernel::MINOR_VERSION === 4)) {
-    class PostSignatureRequestsSignatureRequestIdReactivateRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+class PostSignatureRequestsSignatureRequestIdReactivateRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+{
+    use CheckArray;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+    use ValidatorTrait;
+
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        use CheckArray;
-        use DenormalizerAwareTrait;
-        use NormalizerAwareTrait;
-        use ValidatorTrait;
-
-        public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
-        {
-            return PostSignatureRequestsSignatureRequestIdReactivateRequest::class === $type;
-        }
-
-        public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
-        {
-            return \is_object($data) && PostSignatureRequestsSignatureRequestIdReactivateRequest::class === $data::class;
-        }
-
-        public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
-        {
-            if (isset($data['$ref'])) {
-                return new Reference($data['$ref'], $context['document-origin']);
-            }
-            if (isset($data['$recursiveRef'])) {
-                return new Reference($data['$recursiveRef'], $context['document-origin']);
-            }
-            $object = new PostSignatureRequestsSignatureRequestIdReactivateRequest();
-            if (null === $data || false === \is_array($data)) {
-                return $object;
-            }
-            if (\array_key_exists('expiration_date', $data) && null !== $data['expiration_date']) {
-                $object->setExpirationDate(\DateTime::createFromFormat('Y-m-d', $data['expiration_date'])->setTime(0, 0, 0));
-                unset($data['expiration_date']);
-            } elseif (\array_key_exists('expiration_date', $data) && null === $data['expiration_date']) {
-                $object->setExpirationDate(null);
-            }
-            foreach ($data as $key => $value) {
-                if (preg_match('/.*/', (string) $key)) {
-                    $object[$key] = $value;
-                }
-            }
-
-            return $object;
-        }
-
-        public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
-        {
-            $data = [];
-            $data['expiration_date'] = $object->getExpirationDate()?->format('Y-m-d');
-            foreach ($object as $key => $value) {
-                if (preg_match('/.*/', (string) $key)) {
-                    $data[$key] = $value;
-                }
-            }
-
-            return $data;
-        }
-
-        public function getSupportedTypes(?string $format = null): array
-        {
-            return [PostSignatureRequestsSignatureRequestIdReactivateRequest::class => false];
-        }
+        return PostSignatureRequestsSignatureRequestIdReactivateRequest::class === $type;
     }
-} else {
-    class PostSignatureRequestsSignatureRequestIdReactivateRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        use CheckArray;
-        use DenormalizerAwareTrait;
-        use NormalizerAwareTrait;
-        use ValidatorTrait;
+        return \is_object($data) && PostSignatureRequestsSignatureRequestIdReactivateRequest::class === $data::class;
+    }
 
-        public function supportsDenormalization($data, $type, ?string $format = null, array $context = []): bool
-        {
-            return PostSignatureRequestsSignatureRequestIdReactivateRequest::class === $type;
-        }
-
-        public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
-        {
-            return \is_object($data) && PostSignatureRequestsSignatureRequestIdReactivateRequest::class === $data::class;
-        }
-
-        /**
-         * @param mixed|null $format
-         */
-        public function denormalize($data, $type, $format = null, array $context = []): mixed
-        {
-            if (isset($data['$ref'])) {
-                return new Reference($data['$ref'], $context['document-origin']);
-            }
-            if (isset($data['$recursiveRef'])) {
-                return new Reference($data['$recursiveRef'], $context['document-origin']);
-            }
-            $object = new PostSignatureRequestsSignatureRequestIdReactivateRequest();
-            if (null === $data || false === \is_array($data)) {
-                return $object;
-            }
-            if (\array_key_exists('expiration_date', $data) && null !== $data['expiration_date']) {
-                $object->setExpirationDate(\DateTime::createFromFormat('Y-m-d', $data['expiration_date'])->setTime(0, 0, 0));
-                unset($data['expiration_date']);
-            } elseif (\array_key_exists('expiration_date', $data) && null === $data['expiration_date']) {
-                $object->setExpirationDate(null);
-            }
-            foreach ($data as $key => $value) {
-                if (preg_match('/.*/', (string) $key)) {
-                    $object[$key] = $value;
-                }
-            }
-
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
+    {
+        $object = new PostSignatureRequestsSignatureRequestIdReactivateRequest();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-
-        /**
-         * @param mixed|null $format
-         */
-        public function normalize($object, $format = null, array $context = []): string|int|float|bool|\ArrayObject|array|null
-        {
-            $data = [];
-            $data['expiration_date'] = $object->getExpirationDate()?->format('Y-m-d');
-            foreach ($object as $key => $value) {
-                if (preg_match('/.*/', (string) $key)) {
-                    $data[$key] = $value;
-                }
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+            return new Reference($data['$ref'], $context['document-origin']);
+        }
+        if (isset($data['$recursiveRef'])) {
+            return new Reference($data['$recursiveRef'], $context['document-origin']);
+        }
+        if (\array_key_exists('expiration_date', $data) && null !== $data['expiration_date']) {
+            $date = \DateTime::createFromFormat('Y-m-d', $data['expiration_date']);
+            if (false === $date) {
+                throw new InvalidDateException($data['expiration_date'], 'Y-m-d');
             }
-
-            return $data;
+            $object->setExpirationDate($date->setTime(0, 0, 0));
+            unset($data['expiration_date']);
+        } elseif (\array_key_exists('expiration_date', $data) && null === $data['expiration_date']) {
+            $object->setExpirationDate(null);
+            unset($data['expiration_date']);
+        }
+        foreach ($data as $key => $value) {
+            if (preg_match('/.*/', (string) $key)) {
+                $object[$key] = $value;
+            }
         }
 
-        public function getSupportedTypes(?string $format = null): array
-        {
-            return [PostSignatureRequestsSignatureRequestIdReactivateRequest::class => false];
+        return $object;
+    }
+
+    public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+    {
+        $dataArray = [];
+        $dataArray['expiration_date'] = $data->getExpirationDate()->format('Y-m-d');
+        foreach ($data->additionalPropertyEntries() as $key => $value) {
+            if (preg_match('/.*/', (string) $key)) {
+                $dataArray[$key] = $value;
+            }
         }
+
+        return $dataArray;
+    }
+
+    public function getSupportedTypes(?string $format = null): array
+    {
+        return [PostSignatureRequestsSignatureRequestIdReactivateRequest::class => false];
     }
 }

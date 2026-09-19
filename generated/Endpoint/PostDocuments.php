@@ -4,9 +4,11 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Http\Message\MultipartStream\MultipartStreamBuilder;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PostDocumentsMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\PostDocumentsUnsupportedMediaTypeException;
@@ -15,6 +17,7 @@ use Qdequippe\Yousign\Api\Model\CreateDocumentFromMultipart;
 use Qdequippe\Yousign\Api\Model\Document;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
@@ -50,9 +53,26 @@ class PostDocuments extends BaseEndpoint implements Endpoint
         if ($this->body instanceof CreateDocumentFromMultipart) {
             $bodyBuilder = new MultipartStreamBuilder($streamFactory);
             $formParameters = $serializer->normalize($this->body, 'json');
+            $partOptions = ['file' => ['filename' => 'file']];
             foreach ($formParameters as $key => $value) {
                 $value = \is_int($value) ? (string) $value : $value;
-                $bodyBuilder->addResource($key, $value);
+                $value = \is_bool($value) ? $value ? 'true' : 'false' : $value;
+                if (\is_array($value) || $value instanceof \stdClass) {
+                    $value = $serializer->serialize((array) $value, 'json');
+                }
+                $resourceOptions = $partOptions[$key] ?? [];
+                if (isset($resourceOptions['filename'])) {
+                    $uri = null;
+                    if ($value instanceof StreamInterface) {
+                        $uri = $value->getMetadata('uri');
+                    } elseif (\is_resource($value)) {
+                        $uri = stream_get_meta_data($value)['uri'] ?? null;
+                    }
+                    if (\is_string($uri) && is_file($uri)) {
+                        unset($resourceOptions['filename']);
+                    }
+                }
+                $bodyBuilder->addResource($key, $value, $resourceOptions);
             }
 
             return [['Content-Type' => ['multipart/form-data; boundary="'.($bodyBuilder->getBoundary().'"')]], $bodyBuilder->build()];
@@ -72,6 +92,7 @@ class PostDocuments extends BaseEndpoint implements Endpoint
      * @throws PostDocumentsBadRequestException
      * @throws PostDocumentsUnauthorizedException
      * @throws PostDocumentsForbiddenException
+     * @throws PostDocumentsMethodNotAllowedException
      * @throws PostDocumentsUnsupportedMediaTypeException
      * @throws PostDocumentsTooManyRequestsException
      * @throws PostDocumentsInternalServerErrorException
@@ -80,29 +101,30 @@ class PostDocuments extends BaseEndpoint implements Endpoint
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (201 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (201 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             return $serializer->deserialize($body, Document::class, 'json');
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostDocumentsBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostDocumentsUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostDocumentsForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new PostDocumentsMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (415 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostDocumentsUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostDocumentsTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostDocumentsInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
-
-        return null;
     }
 
     public function getAuthenticationScopes(): array

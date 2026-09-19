@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignerDocumentRequest extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class SignerDocumentRequest implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -116,5 +120,10 @@ class SignerDocumentRequest extends \ArrayObject
         $this->signerIds = $signerIds;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'title' => ['title', 'getTitle', 'setTitle'], 'optional' => ['optional', 'getOptional', 'setOptional'], 'signerIds' => ['signer_ids', 'getSignerIds', 'setSignerIds']];
     }
 }

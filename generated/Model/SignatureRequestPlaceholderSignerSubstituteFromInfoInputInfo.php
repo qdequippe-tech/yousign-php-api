@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo extends \ArrayObject
+class SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo
 {
     /**
      * @var array
@@ -14,14 +14,20 @@ class SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo extends \Arra
         return \array_key_exists($property, $this->initialized);
     }
     /**
+     * Substitute Signer's first name.
+     *
      * @var string|null
      */
     protected $firstName;
     /**
+     * Substitute Signer's last name.
+     *
      * @var string|null
      */
     protected $lastName;
     /**
+     * Substitute Signer's email address.
+     *
      * @var string|null
      */
     protected $email;
@@ -38,11 +44,17 @@ class SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo extends \Arra
      */
     protected $locale;
 
+    /**
+     * Substitute Signer's first name.
+     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
+    /**
+     * Substitute Signer's first name.
+     */
     public function setFirstName(?string $firstName): self
     {
         $this->initialized['firstName'] = true;
@@ -51,11 +63,17 @@ class SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo extends \Arra
         return $this;
     }
 
+    /**
+     * Substitute Signer's last name.
+     */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
+    /**
+     * Substitute Signer's last name.
+     */
     public function setLastName(?string $lastName): self
     {
         $this->initialized['lastName'] = true;
@@ -64,11 +82,17 @@ class SignatureRequestPlaceholderSignerSubstituteFromInfoInputInfo extends \Arra
         return $this;
     }
 
+    /**
+     * Substitute Signer's email address.
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * Substitute Signer's email address.
+     */
     public function setEmail(?string $email): self
     {
         $this->initialized['email'] = true;

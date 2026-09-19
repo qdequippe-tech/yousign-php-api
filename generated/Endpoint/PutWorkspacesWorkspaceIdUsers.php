@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PutWorkspacesWorkspaceIdUsersUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -41,7 +43,7 @@ class PutWorkspacesWorkspaceIdUsers extends BaseEndpoint implements Endpoint
 
     public function getUri(): string
     {
-        return str_replace(['{workspaceId}', '{userId}'], [$this->workspaceId, $this->userId], '/workspaces/{workspaceId}/users/{userId}');
+        return str_replace(['{workspaceId}', '{userId}'], [rawurlencode($this->workspaceId), rawurlencode($this->userId)], '/workspaces/{workspaceId}/users/{userId}');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -59,6 +61,7 @@ class PutWorkspacesWorkspaceIdUsers extends BaseEndpoint implements Endpoint
      * @throws PutWorkspacesWorkspaceIdUsersUnauthorizedException
      * @throws PutWorkspacesWorkspaceIdUsersForbiddenException
      * @throws PutWorkspacesWorkspaceIdUsersNotFoundException
+     * @throws PutWorkspacesWorkspaceIdUsersMethodNotAllowedException
      * @throws PutWorkspacesWorkspaceIdUsersTooManyRequestsException
      * @throws PutWorkspacesWorkspaceIdUsersInternalServerErrorException
      */
@@ -69,22 +72,25 @@ class PutWorkspacesWorkspaceIdUsers extends BaseEndpoint implements Endpoint
         if (204 === $status) {
             return null;
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutWorkspacesWorkspaceIdUsersBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutWorkspacesWorkspaceIdUsersUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutWorkspacesWorkspaceIdUsersForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutWorkspacesWorkspaceIdUsersNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new PutWorkspacesWorkspaceIdUsersMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutWorkspacesWorkspaceIdUsersTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutWorkspacesWorkspaceIdUsersInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 

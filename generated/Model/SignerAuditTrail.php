@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SignerAuditTrail extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class SignerAuditTrail implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -190,5 +194,10 @@ class SignerAuditTrail extends \ArrayObject
         $this->electronicSignatureLevel = $electronicSignatureLevel;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['version' => ['version', 'getVersion', 'setVersion'], 'signatureRequest' => ['signature_request', 'getSignatureRequest', 'setSignatureRequest'], 'sender' => ['sender', 'getSender', 'setSender'], 'signer' => ['signer', 'getSigner', 'setSigner'], 'documents' => ['documents', 'getDocuments', 'setDocuments'], 'organization' => ['organization', 'getOrganization', 'setOrganization'], 'authentication' => ['authentication', 'getAuthentication', 'setAuthentication'], 'electronicSignatureLevel' => ['electronic_signature_level', 'getElectronicSignatureLevel', 'setElectronicSignatureLevel']];
     }
 }

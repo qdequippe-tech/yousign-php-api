@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class ReadOnlyText extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class ReadOnlyText implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -36,7 +40,7 @@ class ReadOnlyText extends \ArrayObject
      */
     protected $width;
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is not provided, it will be calculated depending on the number of newlines in the read only text.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      *
      * @var int|null
      */
@@ -124,7 +128,7 @@ class ReadOnlyText extends \ArrayObject
     }
 
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is not provided, it will be calculated depending on the number of newlines in the read only text.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      */
     public function getHeight(): ?int
     {
@@ -132,7 +136,7 @@ class ReadOnlyText extends \ArrayObject
     }
 
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is not provided, it will be calculated depending on the number of newlines in the read only text.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      */
     public function setHeight(?int $height): self
     {
@@ -172,5 +176,10 @@ class ReadOnlyText extends \ArrayObject
         $this->font = $font;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['type' => ['type', 'getType', 'setType'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'width' => ['width', 'getWidth', 'setWidth'], 'height' => ['height', 'getHeight', 'setHeight'], 'text' => ['text', 'getText', 'setText'], 'font' => ['font', 'getFont', 'setFont']];
     }
 }

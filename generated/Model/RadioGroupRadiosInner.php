@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class RadioGroupRadiosInner extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class RadioGroupRadiosInner implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -31,6 +35,12 @@ class RadioGroupRadiosInner extends \ArrayObject
      * @var int|null
      */
     protected $size = 24;
+    /**
+     * Indicates whether the radio is initially checked (`true`) or unchecked (`false`).
+     *
+     * @var bool|null
+     */
+    protected $defaultChecked = false;
 
     /**
      * Radio button's name.
@@ -88,5 +98,29 @@ class RadioGroupRadiosInner extends \ArrayObject
         $this->size = $size;
 
         return $this;
+    }
+
+    /**
+     * Indicates whether the radio is initially checked (`true`) or unchecked (`false`).
+     */
+    public function getDefaultChecked(): ?bool
+    {
+        return $this->defaultChecked;
+    }
+
+    /**
+     * Indicates whether the radio is initially checked (`true`) or unchecked (`false`).
+     */
+    public function setDefaultChecked(?bool $defaultChecked): self
+    {
+        $this->initialized['defaultChecked'] = true;
+        $this->defaultChecked = $defaultChecked;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['name' => ['name', 'getName', 'setName'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'size' => ['size', 'getSize', 'setSize'], 'defaultChecked' => ['default_checked', 'getDefaultChecked', 'setDefaultChecked']];
     }
 }

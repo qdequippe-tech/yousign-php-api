@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Approver extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Approver implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -33,6 +37,28 @@ class Approver extends \ArrayObject
      * @var \DateTime|null
      */
     protected $approvalLinkExpirationDate;
+    /**
+     * Custom Text.
+     *
+     * @var CustomText|null
+     */
+    protected $customText;
+    /**
+     * @var \DateTime|null
+     */
+    protected $approvedAt;
+    /**
+     * Position of the recipient in the signing flow. Recipients with the same index are notified simultaneously.
+     *
+     * @var int|null
+     */
+    protected $recipientStageIndex;
+    /**
+     * List of Document IDs not visible to this Approver.
+     *
+     * @var list<string>|null
+     */
+    protected $excludedDocuments;
 
     public function getId(): ?string
     {
@@ -97,5 +123,84 @@ class Approver extends \ArrayObject
         $this->approvalLinkExpirationDate = $approvalLinkExpirationDate;
 
         return $this;
+    }
+
+    /**
+     * Custom Text.
+     */
+    public function getCustomText(): ?CustomText
+    {
+        return $this->customText;
+    }
+
+    /**
+     * Custom Text.
+     */
+    public function setCustomText(?CustomText $customText): self
+    {
+        $this->initialized['customText'] = true;
+        $this->customText = $customText;
+
+        return $this;
+    }
+
+    public function getApprovedAt(): ?\DateTime
+    {
+        return $this->approvedAt;
+    }
+
+    public function setApprovedAt(?\DateTime $approvedAt): self
+    {
+        $this->initialized['approvedAt'] = true;
+        $this->approvedAt = $approvedAt;
+
+        return $this;
+    }
+
+    /**
+     * Position of the recipient in the signing flow. Recipients with the same index are notified simultaneously.
+     */
+    public function getRecipientStageIndex(): ?int
+    {
+        return $this->recipientStageIndex;
+    }
+
+    /**
+     * Position of the recipient in the signing flow. Recipients with the same index are notified simultaneously.
+     */
+    public function setRecipientStageIndex(?int $recipientStageIndex): self
+    {
+        $this->initialized['recipientStageIndex'] = true;
+        $this->recipientStageIndex = $recipientStageIndex;
+
+        return $this;
+    }
+
+    /**
+     * List of Document IDs not visible to this Approver.
+     *
+     * @return list<string>|null
+     */
+    public function getExcludedDocuments(): ?array
+    {
+        return $this->excludedDocuments;
+    }
+
+    /**
+     * List of Document IDs not visible to this Approver.
+     *
+     * @param list<string>|null $excludedDocuments
+     */
+    public function setExcludedDocuments(?array $excludedDocuments): self
+    {
+        $this->initialized['excludedDocuments'] = true;
+        $this->excludedDocuments = $excludedDocuments;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'status' => ['status', 'getStatus', 'setStatus'], 'info' => ['info', 'getInfo', 'setInfo'], 'approvalLink' => ['approval_link', 'getApprovalLink', 'setApprovalLink'], 'approvalLinkExpirationDate' => ['approval_link_expiration_date', 'getApprovalLinkExpirationDate', 'setApprovalLinkExpirationDate'], 'customText' => ['custom_text', 'getCustomText', 'setCustomText'], 'approvedAt' => ['approved_at', 'getApprovedAt', 'setApprovedAt'], 'recipientStageIndex' => ['recipient_stage_index', 'getRecipientStageIndex', 'setRecipientStageIndex'], 'excludedDocuments' => ['excluded_documents', 'getExcludedDocuments', 'setExcludedDocuments']];
     }
 }

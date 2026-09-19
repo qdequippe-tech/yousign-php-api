@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Consumption extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Consumption implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -63,5 +67,10 @@ class Consumption extends \ArrayObject
         $this->connector = $connector;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['app' => ['app', 'getApp', 'setApp'], 'api' => ['api', 'getApi', 'setApi'], 'connector' => ['connector', 'getConnector', 'setConnector']];
     }
 }

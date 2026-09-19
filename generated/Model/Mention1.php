@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Mention1 extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Mention1 implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -42,6 +46,11 @@ class Mention1 extends \ArrayObject
      */
     protected $height;
     /**
+     * Content of the Mention.
+     * You can use dynamic tags when creating the Mention:
+     * • %date% will display the current date when the Signer sign the Signature Request (eg. "24-03-2025")
+     * • %datetime% will display the current date and time when the Signer signs the Signature Request (eg. "24-03-2025 10:30 UTC+0").
+     *
      * @var string|null
      */
     protected $mention;
@@ -51,6 +60,12 @@ class Mention1 extends \ArrayObject
      * @var UpdateFieldFont|null
      */
     protected $font;
+    /**
+     * Name of the Field.
+     *
+     * @var string|null
+     */
+    protected $name;
 
     public function getSignerId(): ?string
     {
@@ -142,11 +157,23 @@ class Mention1 extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Content of the Mention.
+     * You can use dynamic tags when creating the Mention:
+     * • %date% will display the current date when the Signer sign the Signature Request (eg. "24-03-2025")
+     * • %datetime% will display the current date and time when the Signer signs the Signature Request (eg. "24-03-2025 10:30 UTC+0").
+     */
     public function getMention(): ?string
     {
         return $this->mention;
     }
 
+    /**
+     * Content of the Mention.
+     * You can use dynamic tags when creating the Mention:
+     * • %date% will display the current date when the Signer sign the Signature Request (eg. "24-03-2025")
+     * • %datetime% will display the current date and time when the Signer signs the Signature Request (eg. "24-03-2025 10:30 UTC+0").
+     */
     public function setMention(?string $mention): self
     {
         $this->initialized['mention'] = true;
@@ -172,5 +199,29 @@ class Mention1 extends \ArrayObject
         $this->font = $font;
 
         return $this;
+    }
+
+    /**
+     * Name of the Field.
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Name of the Field.
+     */
+    public function setName(?string $name): self
+    {
+        $this->initialized['name'] = true;
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['signerId' => ['signer_id', 'getSignerId', 'setSignerId'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'width' => ['width', 'getWidth', 'setWidth'], 'height' => ['height', 'getHeight', 'setHeight'], 'mention' => ['mention', 'getMention', 'setMention'], 'font' => ['font', 'getFont', 'setFont'], 'name' => ['name', 'getName', 'setName']];
     }
 }

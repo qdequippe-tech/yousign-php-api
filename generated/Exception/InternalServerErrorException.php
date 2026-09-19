@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Exception;
 
-class InternalServerErrorException extends \RuntimeException implements ServerException
+abstract class InternalServerErrorException extends \RuntimeException implements ServerException, WithResponseInterface
 {
     public function __construct(string $message)
     {

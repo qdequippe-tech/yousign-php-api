@@ -23,10 +23,10 @@ jobs:
               run: rm -rf generated && vendor/bin/jane-openapi generate --config-file=.jane-openapi.php
 
             - name: Rector
-              run: vendor/bin/rector
+              run: tools/bin/rector
 
             - name: Code style
-              run: ./vendor/bin/php-cs-fixer fix
+              run: ./tools/bin/php-cs-fixer fix
 
             - name: Create Pull Request
               uses: peter-evans/create-pull-request@v8

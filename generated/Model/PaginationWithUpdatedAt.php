@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class PaginationWithUpdatedAt extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class PaginationWithUpdatedAt implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -46,5 +50,10 @@ class PaginationWithUpdatedAt extends \ArrayObject
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['nextCursor' => ['next_cursor', 'getNextCursor', 'setNextCursor'], 'updatedAt' => ['updated_at', 'getUpdatedAt', 'setUpdatedAt']];
     }
 }

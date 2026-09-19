@@ -1,0 +1,83 @@
+<?php
+
+namespace Qdequippe\Yousign\Api\Normalizer;
+
+use Jane\Component\JsonSchemaRuntime\Reference;
+use Qdequippe\Yousign\Api\Model\SocialSecurityExtraction;
+use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
+use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
+class SocialSecurityExtractionNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+{
+    use CheckArray;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+    use ValidatorTrait;
+
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
+    {
+        return SocialSecurityExtraction::class === $type;
+    }
+
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
+    {
+        return \is_object($data) && SocialSecurityExtraction::class === $data::class;
+    }
+
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
+    {
+        $object = new SocialSecurityExtraction();
+        if (null === $data || false === \is_array($data)) {
+            return $object;
+        }
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+            return new Reference($data['$ref'], $context['document-origin']);
+        }
+        if (isset($data['$recursiveRef'])) {
+            return new Reference($data['$recursiveRef'], $context['document-origin']);
+        }
+        if (\array_key_exists('social_security_number', $data) && null !== $data['social_security_number']) {
+            $object->setSocialSecurityNumber($data['social_security_number']);
+        } elseif (\array_key_exists('social_security_number', $data) && null === $data['social_security_number']) {
+            $object->setSocialSecurityNumber(null);
+        }
+        if (\array_key_exists('first_name', $data) && null !== $data['first_name']) {
+            $object->setFirstName($data['first_name']);
+        } elseif (\array_key_exists('first_name', $data) && null === $data['first_name']) {
+            $object->setFirstName(null);
+        }
+        if (\array_key_exists('last_name', $data) && null !== $data['last_name']) {
+            $object->setLastName($data['last_name']);
+        } elseif (\array_key_exists('last_name', $data) && null === $data['last_name']) {
+            $object->setLastName(null);
+        }
+        if (\array_key_exists('full_name', $data) && null !== $data['full_name']) {
+            $object->setFullName($data['full_name']);
+        } elseif (\array_key_exists('full_name', $data) && null === $data['full_name']) {
+            $object->setFullName(null);
+        }
+        if (\array_key_exists('document_type', $data) && null !== $data['document_type']) {
+            $object->setDocumentType($data['document_type']);
+        } elseif (\array_key_exists('document_type', $data) && null === $data['document_type']) {
+            $object->setDocumentType(null);
+        }
+
+        return $object;
+    }
+
+    public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+    {
+        return ['social_security_number' => $data->getSocialSecurityNumber(), 'first_name' => $data->getFirstName(), 'last_name' => $data->getLastName(), 'full_name' => $data->getFullName(), 'document_type' => $data->getDocumentType()];
+    }
+
+    public function getSupportedTypes(?string $format = null): array
+    {
+        return [SocialSecurityExtraction::class => false];
+    }
+}

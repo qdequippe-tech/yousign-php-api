@@ -4,9 +4,11 @@ namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Http\Message\MultipartStream\MultipartStreamBuilder;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageBadRequestException;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageForbiddenException;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageUnauthorizedException;
 use Qdequippe\Yousign\Api\Exception\UploadElectronicSealImageUnsupportedMediaTypeException;
@@ -14,6 +16,7 @@ use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ElectronicSealImage;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
 use Qdequippe\Yousign\Api\Model\UnsupportedMediaTypeResponse;
@@ -49,9 +52,26 @@ class UploadElectronicSealImage extends BaseEndpoint implements Endpoint
         if ($this->body instanceof \Qdequippe\Yousign\Api\Model\UploadElectronicSealImage) {
             $bodyBuilder = new MultipartStreamBuilder($streamFactory);
             $formParameters = $serializer->normalize($this->body, 'json');
+            $partOptions = ['file' => ['filename' => 'file']];
             foreach ($formParameters as $key => $value) {
                 $value = \is_int($value) ? (string) $value : $value;
-                $bodyBuilder->addResource($key, $value);
+                $value = \is_bool($value) ? $value ? 'true' : 'false' : $value;
+                if (\is_array($value) || $value instanceof \stdClass) {
+                    $value = $serializer->serialize((array) $value, 'json');
+                }
+                $resourceOptions = $partOptions[$key] ?? [];
+                if (isset($resourceOptions['filename'])) {
+                    $uri = null;
+                    if ($value instanceof StreamInterface) {
+                        $uri = $value->getMetadata('uri');
+                    } elseif (\is_resource($value)) {
+                        $uri = stream_get_meta_data($value)['uri'] ?? null;
+                    }
+                    if (\is_string($uri) && is_file($uri)) {
+                        unset($resourceOptions['filename']);
+                    }
+                }
+                $bodyBuilder->addResource($key, $value, $resourceOptions);
             }
 
             return [['Content-Type' => ['multipart/form-data; boundary="'.($bodyBuilder->getBoundary().'"')]], $bodyBuilder->build()];
@@ -71,6 +91,7 @@ class UploadElectronicSealImage extends BaseEndpoint implements Endpoint
      * @throws UploadElectronicSealImageBadRequestException
      * @throws UploadElectronicSealImageUnauthorizedException
      * @throws UploadElectronicSealImageForbiddenException
+     * @throws UploadElectronicSealImageMethodNotAllowedException
      * @throws UploadElectronicSealImageUnsupportedMediaTypeException
      * @throws UploadElectronicSealImageTooManyRequestsException
      * @throws UploadElectronicSealImageInternalServerErrorException
@@ -79,29 +100,30 @@ class UploadElectronicSealImage extends BaseEndpoint implements Endpoint
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (201 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (201 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             return $serializer->deserialize($body, ElectronicSealImage::class, 'json');
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new UploadElectronicSealImageBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new UploadElectronicSealImageUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new UploadElectronicSealImageForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (415 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new UploadElectronicSealImageMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (415 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new UploadElectronicSealImageUnsupportedMediaTypeException($serializer->deserialize($body, UnsupportedMediaTypeResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new UploadElectronicSealImageTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new UploadElectronicSealImageInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
-
-        return null;
     }
 
     public function getAuthenticationScopes(): array

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class GetTemplates200Response extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class GetTemplates200Response implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,7 +18,7 @@ class GetTemplates200Response extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Cursor based pagination.
+     * Metadata about the response.
      *
      * @var Pagination|null
      */
@@ -25,7 +29,7 @@ class GetTemplates200Response extends \ArrayObject
     protected $data;
 
     /**
-     * Cursor based pagination.
+     * Metadata about the response.
      */
     public function getMeta(): ?Pagination
     {
@@ -33,7 +37,7 @@ class GetTemplates200Response extends \ArrayObject
     }
 
     /**
-     * Cursor based pagination.
+     * Metadata about the response.
      */
     public function setMeta(?Pagination $meta): self
     {
@@ -60,5 +64,10 @@ class GetTemplates200Response extends \ArrayObject
         $this->data = $data;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['meta' => ['meta', 'getMeta', 'setMeta'], 'data' => ['data', 'getData', 'setData']];
     }
 }

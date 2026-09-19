@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadBadRequestException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadForbiddenException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadNotFoundException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -42,7 +44,7 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownload extends
 
     public function getUri(): string
     {
-        return str_replace(['{signatureRequestId}', '{documentId}'], [$this->signatureRequestId, $this->documentId], '/signature_requests/{signatureRequestId}/documents/{documentId}/download');
+        return str_replace(['{signatureRequestId}', '{documentId}'], [rawurlencode($this->signatureRequestId), rawurlencode($this->documentId)], '/signature_requests/{signatureRequestId}/documents/{documentId}/download');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -64,29 +66,33 @@ class GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownload extends
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadUnauthorizedException
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadForbiddenException
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadNotFoundException
+     * @throws GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadMethodNotAllowedException
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadTooManyRequestsException
      * @throws GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadInternalServerErrorException
      */
-    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null): void
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new GetSignatureRequestsSignatureRequestIdDocumentsDocumentsIdDownloadInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
     }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class ConsumptionApp extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class ConsumptionApp implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -80,5 +84,10 @@ class ConsumptionApp extends \ArrayObject
         $this->qualifiedElectronicSignatureIdentificationMode = $qualifiedElectronicSignatureIdentificationMode;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['electronicSignature' => ['electronic_signature', 'getElectronicSignature', 'setElectronicSignature'], 'advancedElectronicSignature' => ['advanced_electronic_signature', 'getAdvancedElectronicSignature', 'setAdvancedElectronicSignature'], 'advancedElectronicSignatureWithQualifiedCertificate' => ['advanced_electronic_signature_with_qualified_certificate', 'getAdvancedElectronicSignatureWithQualifiedCertificate', 'setAdvancedElectronicSignatureWithQualifiedCertificate'], 'qualifiedElectronicSignatureIdentificationMode' => ['qualified_electronic_signature_identification_mode', 'getQualifiedElectronicSignatureIdentificationMode', 'setQualifiedElectronicSignatureIdentificationMode']];
     }
 }

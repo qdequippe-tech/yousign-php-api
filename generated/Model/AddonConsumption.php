@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class AddonConsumption extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class AddonConsumption implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -138,5 +142,10 @@ class AddonConsumption extends \ArrayObject
         $this->provisioned = $provisioned;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['name' => ['name', 'getName', 'setName'], 'startAt' => ['start_at', 'getStartAt', 'setStartAt'], 'endAt' => ['end_at', 'getEndAt', 'setEndAt'], 'quota' => ['quota', 'getQuota', 'setQuota'], 'consumed' => ['consumed', 'getConsumed', 'setConsumed'], 'provisioned' => ['provisioned', 'getProvisioned', 'setProvisioned']];
     }
 }

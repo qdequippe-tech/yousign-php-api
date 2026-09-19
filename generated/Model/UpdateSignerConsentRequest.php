@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UpdateSignerConsentRequest extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class UpdateSignerConsentRequest implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -31,6 +35,12 @@ class UpdateSignerConsentRequest extends \ArrayObject
      * @var string|null
      */
     protected $insertAfterId;
+    /**
+     * Link the Signer Consent Request to a given Document by its id.
+     *
+     * @var string|null
+     */
+    protected $documentId;
 
     /**
      * Settings relative to Signer Consent Request's type.
@@ -87,5 +97,29 @@ class UpdateSignerConsentRequest extends \ArrayObject
         $this->insertAfterId = $insertAfterId;
 
         return $this;
+    }
+
+    /**
+     * Link the Signer Consent Request to a given Document by its id.
+     */
+    public function getDocumentId(): ?string
+    {
+        return $this->documentId;
+    }
+
+    /**
+     * Link the Signer Consent Request to a given Document by its id.
+     */
+    public function setDocumentId(?string $documentId): self
+    {
+        $this->initialized['documentId'] = true;
+        $this->documentId = $documentId;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['settings' => ['settings', 'getSettings', 'setSettings'], 'optional' => ['optional', 'getOptional', 'setOptional'], 'insertAfterId' => ['insert_after_id', 'getInsertAfterId', 'setInsertAfterId'], 'documentId' => ['document_id', 'getDocumentId', 'setDocumentId']];
     }
 }

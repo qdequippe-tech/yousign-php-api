@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class SmsNotification1 extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class SmsNotification1 implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -29,5 +33,10 @@ class SmsNotification1 extends \ArrayObject
         $this->otpMessage = $otpMessage;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['otpMessage' => ['otp_message', 'getOtpMessage', 'setOtpMessage']];
     }
 }

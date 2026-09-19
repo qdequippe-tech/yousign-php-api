@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\SignerDocumentRequest;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
@@ -26,7 +28,7 @@ class PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSig
     use EndpointTrait;
 
     /**
-     * Adds a Signer to a given Signer Document Request. This action is only permitted when the Signature Request is a draft.
+     * Adds a Signer to a given Signer Document Request. This action is only permitted when the Signature Request is a draft or paused.
      *
      * @param string $signatureRequestId Signature Request Id
      * @param string $documentRequestId  Signer Document Request Id
@@ -43,7 +45,7 @@ class PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSig
 
     public function getUri(): string
     {
-        return str_replace(['{signatureRequestId}', '{documentRequestId}', '{signerId}'], [$this->signatureRequestId, $this->documentRequestId, $this->signerId], '/signature_requests/{signatureRequestId}/document_requests/{documentRequestId}/signers/{signerId}');
+        return str_replace(['{signatureRequestId}', '{documentRequestId}', '{signerId}'], [rawurlencode($this->signatureRequestId), rawurlencode($this->documentRequestId), rawurlencode($this->signerId)], '/signature_requests/{signatureRequestId}/document_requests/{documentRequestId}/signers/{signerId}');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -63,6 +65,7 @@ class PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSig
      * @throws PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdUnauthorizedException
      * @throws PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdForbiddenException
      * @throws PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdNotFoundException
+     * @throws PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdMethodNotAllowedException
      * @throws PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdTooManyRequestsException
      * @throws PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdInternalServerErrorException
      */
@@ -70,29 +73,30 @@ class PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSig
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (200 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (200 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             return $serializer->deserialize($body, SignerDocumentRequest::class, 'json');
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PutSignatureRequestsSignatureRequestIdDocumentRequestsDocumentRequestIdSignersSignerIdInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
-
-        return null;
     }
 
     public function getAuthenticationScopes(): array

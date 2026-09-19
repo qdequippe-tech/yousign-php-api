@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderBadRequestException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderForbiddenException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderNotFoundException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderUnauthorizedException;
 use Qdequippe\Yousign\Api\Model\BadRequestResponse;
 use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -42,7 +44,7 @@ class PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminder ext
 
     public function getUri(): string
     {
-        return str_replace(['{signatureRequestId}', '{approverId}'], [$this->signatureRequestId, $this->approverId], '/signature_requests/{signatureRequestId}/approvers/{approverId}/send_reminder');
+        return str_replace(['{signatureRequestId}', '{approverId}'], [rawurlencode($this->signatureRequestId), rawurlencode($this->approverId)], '/signature_requests/{signatureRequestId}/approvers/{approverId}/send_reminder');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -60,6 +62,7 @@ class PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminder ext
      * @throws PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderUnauthorizedException
      * @throws PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderForbiddenException
      * @throws PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderNotFoundException
+     * @throws PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderMethodNotAllowedException
      * @throws PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderTooManyRequestsException
      * @throws PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderInternalServerErrorException
      */
@@ -70,22 +73,25 @@ class PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminder ext
         if (201 === $status) {
             return null;
         }
-        if (null !== $contentType && (400 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (403 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new PostSignatureRequestsSignatureRequestIdApproversApproverIdSendReminderInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
 

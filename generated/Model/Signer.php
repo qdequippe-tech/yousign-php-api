@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Signer extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Signer implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -26,7 +30,7 @@ class Signer extends \ArrayObject
      */
     protected $status;
     /**
-     * @var list<mixed>|null
+     * @var list<FieldSignature>|list<FieldText>|list<FieldMention>|list<FieldCheckbox>|list<FieldRadioButtonGroup>|null
      */
     protected $fields;
     /**
@@ -34,6 +38,8 @@ class Signer extends \ArrayObject
      */
     protected $signatureLevel = 'electronic_signature';
     /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     *
      * @var string|null
      */
     protected $signatureAuthenticationMode;
@@ -54,7 +60,9 @@ class Signer extends \ArrayObject
      */
     protected $redirectUrls;
     /**
-     * @var SignerCustomText|null
+     * Custom Text.
+     *
+     * @var CustomText|null
      */
     protected $customText;
     /**
@@ -73,6 +81,38 @@ class Signer extends \ArrayObject
      * @var EmailNotification|null
      */
     protected $emailNotification;
+    /**
+     * @var bool|null
+     */
+    protected $preIdentityVerificationRequired;
+    /**
+     * @var string|null
+     */
+    protected $verifiedIdentityId;
+    /**
+     * Position of the recipient in the signing flow. Recipients with the same index are notified simultaneously.
+     *
+     * @var int|null
+     */
+    protected $recipientStageIndex;
+    /**
+     * List of Document IDs not visible to this Signer.
+     *
+     * @var list<string>|null
+     */
+    protected $excludedDocuments;
+    /**
+     * Allows you to make Signature Requests unavailable in the contexts specified in this setting.
+     *
+     * @var list<string>|null
+     */
+    protected $disabledSigningContexts = [];
+    /**
+     * Timestamp indicating when the Signer completed their signature. Returns null otherwise.
+     *
+     * @var \DateTime|null
+     */
+    protected $signedAt;
 
     public function getId(): ?string
     {
@@ -114,7 +154,7 @@ class Signer extends \ArrayObject
     }
 
     /**
-     * @return list<mixed>|null
+     * @return list<FieldSignature>|list<FieldText>|list<FieldMention>|list<FieldCheckbox>|list<FieldRadioButtonGroup>|null
      */
     public function getFields(): ?array
     {
@@ -122,7 +162,7 @@ class Signer extends \ArrayObject
     }
 
     /**
-     * @param list<mixed>|null $fields
+     * @param list<FieldSignature>|list<FieldText>|list<FieldMention>|list<FieldCheckbox>|list<FieldRadioButtonGroup>|null $fields
      */
     public function setFields(?array $fields): self
     {
@@ -145,11 +185,17 @@ class Signer extends \ArrayObject
         return $this;
     }
 
+    /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     */
     public function getSignatureAuthenticationMode(): ?string
     {
         return $this->signatureAuthenticationMode;
     }
 
+    /**
+     * Method to authenticate the Signers. Authentication via SMS one-time password (otp_sms) is unavailable for phone numbers in China.
+     */
     public function setSignatureAuthenticationMode(?string $signatureAuthenticationMode): self
     {
         $this->initialized['signatureAuthenticationMode'] = true;
@@ -210,12 +256,18 @@ class Signer extends \ArrayObject
         return $this;
     }
 
-    public function getCustomText(): ?SignerCustomText
+    /**
+     * Custom Text.
+     */
+    public function getCustomText(): ?CustomText
     {
         return $this->customText;
     }
 
-    public function setCustomText(?SignerCustomText $customText): self
+    /**
+     * Custom Text.
+     */
+    public function setCustomText(?CustomText $customText): self
     {
         $this->initialized['customText'] = true;
         $this->customText = $customText;
@@ -273,5 +325,120 @@ class Signer extends \ArrayObject
         $this->emailNotification = $emailNotification;
 
         return $this;
+    }
+
+    public function getPreIdentityVerificationRequired(): ?bool
+    {
+        return $this->preIdentityVerificationRequired;
+    }
+
+    public function setPreIdentityVerificationRequired(?bool $preIdentityVerificationRequired): self
+    {
+        $this->initialized['preIdentityVerificationRequired'] = true;
+        $this->preIdentityVerificationRequired = $preIdentityVerificationRequired;
+
+        return $this;
+    }
+
+    public function getVerifiedIdentityId(): ?string
+    {
+        return $this->verifiedIdentityId;
+    }
+
+    public function setVerifiedIdentityId(?string $verifiedIdentityId): self
+    {
+        $this->initialized['verifiedIdentityId'] = true;
+        $this->verifiedIdentityId = $verifiedIdentityId;
+
+        return $this;
+    }
+
+    /**
+     * Position of the recipient in the signing flow. Recipients with the same index are notified simultaneously.
+     */
+    public function getRecipientStageIndex(): ?int
+    {
+        return $this->recipientStageIndex;
+    }
+
+    /**
+     * Position of the recipient in the signing flow. Recipients with the same index are notified simultaneously.
+     */
+    public function setRecipientStageIndex(?int $recipientStageIndex): self
+    {
+        $this->initialized['recipientStageIndex'] = true;
+        $this->recipientStageIndex = $recipientStageIndex;
+
+        return $this;
+    }
+
+    /**
+     * List of Document IDs not visible to this Signer.
+     *
+     * @return list<string>|null
+     */
+    public function getExcludedDocuments(): ?array
+    {
+        return $this->excludedDocuments;
+    }
+
+    /**
+     * List of Document IDs not visible to this Signer.
+     *
+     * @param list<string>|null $excludedDocuments
+     */
+    public function setExcludedDocuments(?array $excludedDocuments): self
+    {
+        $this->initialized['excludedDocuments'] = true;
+        $this->excludedDocuments = $excludedDocuments;
+
+        return $this;
+    }
+
+    /**
+     * Allows you to make Signature Requests unavailable in the contexts specified in this setting.
+     *
+     * @return list<string>|null
+     */
+    public function getDisabledSigningContexts(): ?array
+    {
+        return $this->disabledSigningContexts;
+    }
+
+    /**
+     * Allows you to make Signature Requests unavailable in the contexts specified in this setting.
+     *
+     * @param list<string>|null $disabledSigningContexts
+     */
+    public function setDisabledSigningContexts(?array $disabledSigningContexts): self
+    {
+        $this->initialized['disabledSigningContexts'] = true;
+        $this->disabledSigningContexts = $disabledSigningContexts;
+
+        return $this;
+    }
+
+    /**
+     * Timestamp indicating when the Signer completed their signature. Returns null otherwise.
+     */
+    public function getSignedAt(): ?\DateTime
+    {
+        return $this->signedAt;
+    }
+
+    /**
+     * Timestamp indicating when the Signer completed their signature. Returns null otherwise.
+     */
+    public function setSignedAt(?\DateTime $signedAt): self
+    {
+        $this->initialized['signedAt'] = true;
+        $this->signedAt = $signedAt;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'info' => ['info', 'getInfo', 'setInfo'], 'status' => ['status', 'getStatus', 'setStatus'], 'fields' => ['fields', 'getFields', 'setFields'], 'signatureLevel' => ['signature_level', 'getSignatureLevel', 'setSignatureLevel'], 'signatureAuthenticationMode' => ['signature_authentication_mode', 'getSignatureAuthenticationMode', 'setSignatureAuthenticationMode'], 'signatureLink' => ['signature_link', 'getSignatureLink', 'setSignatureLink'], 'signatureLinkExpirationDate' => ['signature_link_expiration_date', 'getSignatureLinkExpirationDate', 'setSignatureLinkExpirationDate'], 'signatureImagePreview' => ['signature_image_preview', 'getSignatureImagePreview', 'setSignatureImagePreview'], 'redirectUrls' => ['redirect_urls', 'getRedirectUrls', 'setRedirectUrls'], 'customText' => ['custom_text', 'getCustomText', 'setCustomText'], 'deliveryMode' => ['delivery_mode', 'getDeliveryMode', 'setDeliveryMode'], 'identificationAttestationId' => ['identification_attestation_id', 'getIdentificationAttestationId', 'setIdentificationAttestationId'], 'smsNotification' => ['sms_notification', 'getSmsNotification', 'setSmsNotification'], 'emailNotification' => ['email_notification', 'getEmailNotification', 'setEmailNotification'], 'preIdentityVerificationRequired' => ['pre_identity_verification_required', 'getPreIdentityVerificationRequired', 'setPreIdentityVerificationRequired'], 'verifiedIdentityId' => ['verified_identity_id', 'getVerifiedIdentityId', 'setVerifiedIdentityId'], 'recipientStageIndex' => ['recipient_stage_index', 'getRecipientStageIndex', 'setRecipientStageIndex'], 'excludedDocuments' => ['excluded_documents', 'getExcludedDocuments', 'setExcludedDocuments'], 'disabledSigningContexts' => ['disabled_signing_contexts', 'getDisabledSigningContexts', 'setDisabledSigningContexts'], 'signedAt' => ['signed_at', 'getSignedAt', 'setSignedAt']];
     }
 }

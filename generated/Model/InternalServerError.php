@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class InternalServerError extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class InternalServerError implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -46,5 +50,10 @@ class InternalServerError extends \ArrayObject
         $this->detail = $detail;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['type' => ['type', 'getType', 'setType'], 'detail' => ['detail', 'getDetail', 'setDetail']];
     }
 }

@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class UpdateCustomExperienceRedirectUrls extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class UpdateCustomExperienceRedirectUrls implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -63,5 +67,10 @@ class UpdateCustomExperienceRedirectUrls extends \ArrayObject
         $this->decline = $decline;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['success' => ['success', 'getSuccess', 'setSuccess'], 'error' => ['error', 'getError', 'setError'], 'decline' => ['decline', 'getDecline', 'setDecline']];
     }
 }

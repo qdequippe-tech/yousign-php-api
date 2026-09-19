@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Checkbox1 extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Checkbox1 implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -45,6 +49,12 @@ class Checkbox1 extends \ArrayObject
      * @var bool|null
      */
     protected $checked = false;
+    /**
+     * If set to `true`, the checkbox cannot be modified by the Signer.
+     *
+     * @var bool|null
+     */
+    protected $readOnly = false;
 
     public function getSignerId(): ?string
     {
@@ -148,5 +158,29 @@ class Checkbox1 extends \ArrayObject
         $this->checked = $checked;
 
         return $this;
+    }
+
+    /**
+     * If set to `true`, the checkbox cannot be modified by the Signer.
+     */
+    public function getReadOnly(): ?bool
+    {
+        return $this->readOnly;
+    }
+
+    /**
+     * If set to `true`, the checkbox cannot be modified by the Signer.
+     */
+    public function setReadOnly(?bool $readOnly): self
+    {
+        $this->initialized['readOnly'] = true;
+        $this->readOnly = $readOnly;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['signerId' => ['signer_id', 'getSignerId', 'setSignerId'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'size' => ['size', 'getSize', 'setSize'], 'optional' => ['optional', 'getOptional', 'setOptional'], 'name' => ['name', 'getName', 'setName'], 'checked' => ['checked', 'getChecked', 'setChecked'], 'readOnly' => ['read_only', 'getReadOnly', 'setReadOnly']];
     }
 }

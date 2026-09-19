@@ -2,7 +2,7 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class DeleteWorkspace extends \ArrayObject
+class DeleteWorkspace
 {
     /**
      * @var array

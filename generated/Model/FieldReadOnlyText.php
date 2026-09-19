@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class FieldReadOnlyText extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class FieldReadOnlyText implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -26,7 +30,7 @@ class FieldReadOnlyText extends \ArrayObject
      */
     protected $type;
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is provided, max_length must be less than or equal to the maximum number of characters based on the width and height of the text field.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      *
      * @var int|null
      */
@@ -100,7 +104,7 @@ class FieldReadOnlyText extends \ArrayObject
     }
 
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is provided, max_length must be less than or equal to the maximum number of characters based on the width and height of the text field.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      */
     public function getHeight(): ?int
     {
@@ -108,7 +112,7 @@ class FieldReadOnlyText extends \ArrayObject
     }
 
     /**
-     * The height must be 24 or a multiple of 15 greater than 24. If height is provided, max_length must be less than or equal to the maximum number of characters based on the width and height of the text field.
+     * The height must be calculated using the formula: "height = number_of_lines \* font_size \* line_height", where the line height is always set to 1.5.
      */
     public function setHeight(?int $height): self
     {
@@ -206,5 +210,10 @@ class FieldReadOnlyText extends \ArrayObject
         $this->font = $font;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'documentId' => ['document_id', 'getDocumentId', 'setDocumentId'], 'type' => ['type', 'getType', 'setType'], 'height' => ['height', 'getHeight', 'setHeight'], 'width' => ['width', 'getWidth', 'setWidth'], 'page' => ['page', 'getPage', 'setPage'], 'x' => ['x', 'getX', 'setX'], 'y' => ['y', 'getY', 'setY'], 'text' => ['text', 'getText', 'setText'], 'font' => ['font', 'getFont', 'setFont']];
     }
 }

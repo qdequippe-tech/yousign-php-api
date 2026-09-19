@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class InitialsArea extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class InitialsArea implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,20 +18,20 @@ class InitialsArea extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * Initials alignment on the document.
+     * Alignment of the Initials on the document. The `left`, `right` and `center` options are aligned on top of the page by default.
      *
      * @var string|null
      */
     protected $alignment;
     /**
-     * y-axis position on the document.
+     * Offset of the initials from the edge of the page (in pixels). The offset is from the top or bottom of the page, depending on what has been defined in the `alignment` attribute.
      *
      * @var int|null
      */
     protected $y;
 
     /**
-     * Initials alignment on the document.
+     * Alignment of the Initials on the document. The `left`, `right` and `center` options are aligned on top of the page by default.
      */
     public function getAlignment(): ?string
     {
@@ -35,7 +39,7 @@ class InitialsArea extends \ArrayObject
     }
 
     /**
-     * Initials alignment on the document.
+     * Alignment of the Initials on the document. The `left`, `right` and `center` options are aligned on top of the page by default.
      */
     public function setAlignment(?string $alignment): self
     {
@@ -46,7 +50,7 @@ class InitialsArea extends \ArrayObject
     }
 
     /**
-     * y-axis position on the document.
+     * Offset of the initials from the edge of the page (in pixels). The offset is from the top or bottom of the page, depending on what has been defined in the `alignment` attribute.
      */
     public function getY(): ?int
     {
@@ -54,7 +58,7 @@ class InitialsArea extends \ArrayObject
     }
 
     /**
-     * y-axis position on the document.
+     * Offset of the initials from the edge of the page (in pixels). The offset is from the top or bottom of the page, depending on what has been defined in the `alignment` attribute.
      */
     public function setY(?int $y): self
     {
@@ -62,5 +66,10 @@ class InitialsArea extends \ArrayObject
         $this->y = $y;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['alignment' => ['alignment', 'getAlignment', 'setAlignment'], 'y' => ['y', 'getY', 'setY']];
     }
 }

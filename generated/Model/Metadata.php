@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Metadata extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Metadata implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -14,12 +18,12 @@ class Metadata extends \ArrayObject
         return \array_key_exists($property, $this->initialized);
     }
     /**
-     * @var array<string, mixed>|null
+     * @var array<string, string|float|bool>|null
      */
     protected $data;
 
     /**
-     * @return array<string, mixed>|null
+     * @return array<string, string|float|bool>|null
      */
     public function getData(): ?iterable
     {
@@ -27,7 +31,7 @@ class Metadata extends \ArrayObject
     }
 
     /**
-     * @param array<string, mixed>|null $data
+     * @param array<string, string|float|bool>|null $data
      */
     public function setData(?iterable $data): self
     {
@@ -35,5 +39,10 @@ class Metadata extends \ArrayObject
         $this->data = $data;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['data' => ['data', 'getData', 'setData']];
     }
 }

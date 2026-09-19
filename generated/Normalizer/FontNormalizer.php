@@ -5,9 +5,9 @@ namespace Qdequippe\Yousign\Api\Normalizer;
 use Jane\Component\JsonSchemaRuntime\Reference;
 use Qdequippe\Yousign\Api\Model\Font;
 use Qdequippe\Yousign\Api\Model\FontVariants;
+use Qdequippe\Yousign\Api\Runtime\JsonObject;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\CheckArray;
 use Qdequippe\Yousign\Api\Runtime\Normalizer\ValidatorTrait;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -15,178 +15,90 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-if (!class_exists(Kernel::class) || (Kernel::MAJOR_VERSION >= 7 || Kernel::MAJOR_VERSION === 6 && Kernel::MINOR_VERSION === 4)) {
-    class FontNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+class FontNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+{
+    use CheckArray;
+    use DenormalizerAwareTrait;
+    use NormalizerAwareTrait;
+    use ValidatorTrait;
+
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        use CheckArray;
-        use DenormalizerAwareTrait;
-        use NormalizerAwareTrait;
-        use ValidatorTrait;
-
-        public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
-        {
-            return Font::class === $type;
-        }
-
-        public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
-        {
-            return \is_object($data) && Font::class === $data::class;
-        }
-
-        public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
-        {
-            if (isset($data['$ref'])) {
-                return new Reference($data['$ref'], $context['document-origin']);
-            }
-            if (isset($data['$recursiveRef'])) {
-                return new Reference($data['$recursiveRef'], $context['document-origin']);
-            }
-            $object = new Font();
-            if (null === $data || false === \is_array($data)) {
-                return $object;
-            }
-            if (\array_key_exists('family', $data) && null !== $data['family']) {
-                $object->setFamily($data['family']);
-                unset($data['family']);
-            } elseif (\array_key_exists('family', $data) && null === $data['family']) {
-                $object->setFamily(null);
-            }
-            if (\array_key_exists('color', $data) && null !== $data['color']) {
-                $object->setColor($data['color']);
-                unset($data['color']);
-            } elseif (\array_key_exists('color', $data) && null === $data['color']) {
-                $object->setColor(null);
-            }
-            if (\array_key_exists('size', $data) && null !== $data['size']) {
-                $object->setSize($data['size']);
-                unset($data['size']);
-            } elseif (\array_key_exists('size', $data) && null === $data['size']) {
-                $object->setSize(null);
-            }
-            if (\array_key_exists('variants', $data) && null !== $data['variants']) {
-                $object->setVariants($this->denormalizer->denormalize($data['variants'], FontVariants::class, 'json', $context));
-                unset($data['variants']);
-            } elseif (\array_key_exists('variants', $data) && null === $data['variants']) {
-                $object->setVariants(null);
-            }
-            foreach ($data as $key => $value) {
-                if (preg_match('/.*/', (string) $key)) {
-                    $object[$key] = $value;
-                }
-            }
-
-            return $object;
-        }
-
-        public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
-        {
-            $data = [];
-            $data['family'] = $object->getFamily();
-            $data['color'] = $object->getColor();
-            $data['size'] = $object->getSize();
-            $data['variants'] = $this->normalizer->normalize($object->getVariants(), 'json', $context);
-            foreach ($object as $key => $value) {
-                if (preg_match('/.*/', (string) $key)) {
-                    $data[$key] = $value;
-                }
-            }
-
-            return $data;
-        }
-
-        public function getSupportedTypes(?string $format = null): array
-        {
-            return [Font::class => false];
-        }
+        return Font::class === $type;
     }
-} else {
-    class FontNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        use CheckArray;
-        use DenormalizerAwareTrait;
-        use NormalizerAwareTrait;
-        use ValidatorTrait;
+        return \is_object($data) && Font::class === $data::class;
+    }
 
-        public function supportsDenormalization($data, $type, ?string $format = null, array $context = []): bool
-        {
-            return Font::class === $type;
-        }
-
-        public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
-        {
-            return \is_object($data) && Font::class === $data::class;
-        }
-
-        /**
-         * @param mixed|null $format
-         */
-        public function denormalize($data, $type, $format = null, array $context = []): mixed
-        {
-            if (isset($data['$ref'])) {
-                return new Reference($data['$ref'], $context['document-origin']);
-            }
-            if (isset($data['$recursiveRef'])) {
-                return new Reference($data['$recursiveRef'], $context['document-origin']);
-            }
-            $object = new Font();
-            if (null === $data || false === \is_array($data)) {
-                return $object;
-            }
-            if (\array_key_exists('family', $data) && null !== $data['family']) {
-                $object->setFamily($data['family']);
-                unset($data['family']);
-            } elseif (\array_key_exists('family', $data) && null === $data['family']) {
-                $object->setFamily(null);
-            }
-            if (\array_key_exists('color', $data) && null !== $data['color']) {
-                $object->setColor($data['color']);
-                unset($data['color']);
-            } elseif (\array_key_exists('color', $data) && null === $data['color']) {
-                $object->setColor(null);
-            }
-            if (\array_key_exists('size', $data) && null !== $data['size']) {
-                $object->setSize($data['size']);
-                unset($data['size']);
-            } elseif (\array_key_exists('size', $data) && null === $data['size']) {
-                $object->setSize(null);
-            }
-            if (\array_key_exists('variants', $data) && null !== $data['variants']) {
-                $object->setVariants($this->denormalizer->denormalize($data['variants'], FontVariants::class, 'json', $context));
-                unset($data['variants']);
-            } elseif (\array_key_exists('variants', $data) && null === $data['variants']) {
-                $object->setVariants(null);
-            }
-            foreach ($data as $key => $value) {
-                if (preg_match('/.*/', (string) $key)) {
-                    $object[$key] = $value;
-                }
-            }
-
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
+    {
+        $object = new Font();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-
-        /**
-         * @param mixed|null $format
-         */
-        public function normalize($object, $format = null, array $context = []): string|int|float|bool|\ArrayObject|array|null
-        {
-            $data = [];
-            $data['family'] = $object->getFamily();
-            $data['color'] = $object->getColor();
-            $data['size'] = $object->getSize();
-            $data['variants'] = $this->normalizer->normalize($object->getVariants(), 'json', $context);
-            foreach ($object as $key => $value) {
-                if (preg_match('/.*/', (string) $key)) {
-                    $data[$key] = $value;
-                }
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+            return new Reference($data['$ref'], $context['document-origin']);
+        }
+        if (isset($data['$recursiveRef'])) {
+            return new Reference($data['$recursiveRef'], $context['document-origin']);
+        }
+        if (\array_key_exists('family', $data) && null !== $data['family']) {
+            $object->setFamily($data['family']);
+            unset($data['family']);
+        } elseif (\array_key_exists('family', $data) && null === $data['family']) {
+            $object->setFamily(null);
+            unset($data['family']);
+        }
+        if (\array_key_exists('color', $data) && null !== $data['color']) {
+            $object->setColor($data['color']);
+            unset($data['color']);
+        } elseif (\array_key_exists('color', $data) && null === $data['color']) {
+            $object->setColor(null);
+            unset($data['color']);
+        }
+        if (\array_key_exists('size', $data) && null !== $data['size']) {
+            $object->setSize($data['size']);
+            unset($data['size']);
+        } elseif (\array_key_exists('size', $data) && null === $data['size']) {
+            $object->setSize(null);
+            unset($data['size']);
+        }
+        if (\array_key_exists('variants', $data) && null !== $data['variants']) {
+            $object->setVariants($this->denormalizer->denormalize($data['variants'], FontVariants::class, 'json', $context));
+            unset($data['variants']);
+        } elseif (\array_key_exists('variants', $data) && null === $data['variants']) {
+            $object->setVariants(null);
+            unset($data['variants']);
+        }
+        foreach ($data as $key => $value) {
+            if (preg_match('/.*/', (string) $key)) {
+                $object[$key] = $value;
             }
-
-            return $data;
         }
 
-        public function getSupportedTypes(?string $format = null): array
-        {
-            return [Font::class => false];
+        return $object;
+    }
+
+    public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+    {
+        $dataArray = [];
+        $dataArray['family'] = $data->getFamily();
+        $dataArray['color'] = $data->getColor();
+        $dataArray['size'] = $data->getSize();
+        $dataArray['variants'] = null === $data->getVariants() ? null : new JsonObject($this->normalizer->normalize($data->getVariants(), 'json', $context));
+        foreach ($data->additionalPropertyEntries() as $key => $value) {
+            if (preg_match('/.*/', (string) $key)) {
+                $dataArray[$key] = $value;
+            }
         }
+
+        return $dataArray;
+    }
+
+    public function getSupportedTypes(?string $format = null): array
+    {
+        return [Font::class => false];
     }
 }

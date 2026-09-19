@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class Document extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class Document implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -69,6 +73,18 @@ class Document extends \ArrayObject
      * @var int|null
      */
     protected $totalAnchors;
+    /**
+     * List of Approver IDs who cannot see this Document.
+     *
+     * @var list<string>|null
+     */
+    protected $excludedApprovers;
+    /**
+     * List of Signer IDs who cannot see this Document.
+     *
+     * @var list<string>|null
+     */
+    protected $excludedSigners;
 
     public function getId(): ?string
     {
@@ -248,5 +264,56 @@ class Document extends \ArrayObject
         $this->totalAnchors = $totalAnchors;
 
         return $this;
+    }
+
+    /**
+     * List of Approver IDs who cannot see this Document.
+     *
+     * @return list<string>|null
+     */
+    public function getExcludedApprovers(): ?array
+    {
+        return $this->excludedApprovers;
+    }
+
+    /**
+     * List of Approver IDs who cannot see this Document.
+     *
+     * @param list<string>|null $excludedApprovers
+     */
+    public function setExcludedApprovers(?array $excludedApprovers): self
+    {
+        $this->initialized['excludedApprovers'] = true;
+        $this->excludedApprovers = $excludedApprovers;
+
+        return $this;
+    }
+
+    /**
+     * List of Signer IDs who cannot see this Document.
+     *
+     * @return list<string>|null
+     */
+    public function getExcludedSigners(): ?array
+    {
+        return $this->excludedSigners;
+    }
+
+    /**
+     * List of Signer IDs who cannot see this Document.
+     *
+     * @param list<string>|null $excludedSigners
+     */
+    public function setExcludedSigners(?array $excludedSigners): self
+    {
+        $this->initialized['excludedSigners'] = true;
+        $this->excludedSigners = $excludedSigners;
+
+        return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['id' => ['id', 'getId', 'setId'], 'filename' => ['filename', 'getFilename', 'setFilename'], 'nature' => ['nature', 'getNature', 'setNature'], 'contentType' => ['content_type', 'getContentType', 'setContentType'], 'sha256' => ['sha256', 'getSha256', 'setSha256'], 'isProtected' => ['is_protected', 'getIsProtected', 'setIsProtected'], 'isSigned' => ['is_signed', 'getIsSigned', 'setIsSigned'], 'createdAt' => ['created_at', 'getCreatedAt', 'setCreatedAt'], 'totalPages' => ['total_pages', 'getTotalPages', 'setTotalPages'], 'isLocked' => ['is_locked', 'getIsLocked', 'setIsLocked'], 'initials' => ['initials', 'getInitials', 'setInitials'], 'totalAnchors' => ['total_anchors', 'getTotalAnchors', 'setTotalAnchors'], 'excludedApprovers' => ['excluded_approvers', 'getExcludedApprovers', 'setExcludedApprovers'], 'excludedSigners' => ['excluded_signers', 'getExcludedSigners', 'setExcludedSigners']];
     }
 }

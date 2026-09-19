@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class TooManyRequestsResponse extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class TooManyRequestsResponse implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -29,5 +33,10 @@ class TooManyRequestsResponse extends \ArrayObject
         $this->message = $message;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['message' => ['message', 'getMessage', 'setMessage']];
     }
 }

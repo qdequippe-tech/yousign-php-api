@@ -3,11 +3,17 @@
 namespace Qdequippe\Yousign\Api\Endpoint;
 
 use Psr\Http\Message\ResponseInterface;
+use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealImageBadRequestException;
+use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealImageForbiddenException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealImageInternalServerErrorException;
+use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealImageMethodNotAllowedException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealImageNotFoundException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealImageTooManyRequestsException;
 use Qdequippe\Yousign\Api\Exception\DownloadElectronicSealImageUnauthorizedException;
+use Qdequippe\Yousign\Api\Model\BadRequestResponse;
+use Qdequippe\Yousign\Api\Model\ForbiddenResponse;
 use Qdequippe\Yousign\Api\Model\InternalServerError;
+use Qdequippe\Yousign\Api\Model\MethodNotAllowed;
 use Qdequippe\Yousign\Api\Model\NotFoundResponse;
 use Qdequippe\Yousign\Api\Model\TooManyRequestsResponse;
 use Qdequippe\Yousign\Api\Model\UnauthorizedResponse;
@@ -37,7 +43,7 @@ class DownloadElectronicSealImage extends BaseEndpoint implements Endpoint
 
     public function getUri(): string
     {
-        return str_replace(['{electronicSealImageId}'], [$this->electronicSealImageId], '/electronic_seal_images/{electronicSealImageId}/download');
+        return str_replace(['{electronicSealImageId}'], [rawurlencode($this->electronicSealImageId)], '/electronic_seal_images/{electronicSealImageId}/download');
     }
 
     public function getBody(SerializerInterface $serializer, $streamFactory = null): array
@@ -55,25 +61,37 @@ class DownloadElectronicSealImage extends BaseEndpoint implements Endpoint
     }
 
     /**
+     * @throws DownloadElectronicSealImageBadRequestException
      * @throws DownloadElectronicSealImageUnauthorizedException
+     * @throws DownloadElectronicSealImageForbiddenException
      * @throws DownloadElectronicSealImageNotFoundException
+     * @throws DownloadElectronicSealImageMethodNotAllowedException
      * @throws DownloadElectronicSealImageTooManyRequestsException
      * @throws DownloadElectronicSealImageInternalServerErrorException
      */
-    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null): void
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (null !== $contentType && (401 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (400 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DownloadElectronicSealImageBadRequestException($serializer->deserialize($body, BadRequestResponse::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (401 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DownloadElectronicSealImageUnauthorizedException($serializer->deserialize($body, UnauthorizedResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (404 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (403 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DownloadElectronicSealImageForbiddenException($serializer->deserialize($body, ForbiddenResponse::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (404 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DownloadElectronicSealImageNotFoundException($serializer->deserialize($body, NotFoundResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (429 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (405 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
+            throw new DownloadElectronicSealImageMethodNotAllowedException($serializer->deserialize($body, MethodNotAllowed::class, 'json'), $response);
+        }
+        if ((null === $contentType) === false && (429 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DownloadElectronicSealImageTooManyRequestsException($serializer->deserialize($body, TooManyRequestsResponse::class, 'json'), $response);
         }
-        if (null !== $contentType && (500 === $status && false !== mb_strpos($contentType, 'application/json'))) {
+        if ((null === $contentType) === false && (500 === $status && false !== stripos(strtolower($contentType), 'application/json'))) {
             throw new DownloadElectronicSealImageInternalServerErrorException($serializer->deserialize($body, InternalServerError::class, 'json'), $response);
         }
     }

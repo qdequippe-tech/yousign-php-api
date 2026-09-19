@@ -2,8 +2,12 @@
 
 namespace Qdequippe\Yousign\Api\Model;
 
-class CreateUser extends \ArrayObject
+use Qdequippe\Yousign\Api\Runtime\AdditionalAndPatternProperties;
+use Qdequippe\Yousign\Api\Runtime\AdditionalPropertiesInterface;
+
+class CreateUser implements AdditionalPropertiesInterface
 {
+    use AdditionalAndPatternProperties;
     /**
      * @var array
      */
@@ -56,7 +60,7 @@ class CreateUser extends \ArrayObject
      */
     protected $phoneNumber;
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      *
      * @var string|null
      */
@@ -200,7 +204,7 @@ class CreateUser extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function getJobTitle(): ?string
     {
@@ -208,7 +212,7 @@ class CreateUser extends \ArrayObject
     }
 
     /**
-     * This property cannot start or end with whitespace, does not allow HTML tags, URL or email.
+     * This property is a [Safe String](https://developers.youtrust.com/reference/oas-specification#safe-string).
      */
     public function setJobTitle(?string $jobTitle): self
     {
@@ -216,5 +220,10 @@ class CreateUser extends \ArrayObject
         $this->jobTitle = $jobTitle;
 
         return $this;
+    }
+
+    public function definedProperties(): array
+    {
+        return ['email' => ['email', 'getEmail', 'setEmail'], 'role' => ['role', 'getRole', 'setRole'], 'locale' => ['locale', 'getLocale', 'setLocale'], 'workspaces' => ['workspaces', 'getWorkspaces', 'setWorkspaces'], 'firstName' => ['first_name', 'getFirstName', 'setFirstName'], 'lastName' => ['last_name', 'getLastName', 'setLastName'], 'phoneNumber' => ['phone_number', 'getPhoneNumber', 'setPhoneNumber'], 'jobTitle' => ['job_title', 'getJobTitle', 'setJobTitle']];
     }
 }
